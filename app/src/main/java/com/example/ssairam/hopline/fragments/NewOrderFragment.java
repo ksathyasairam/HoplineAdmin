@@ -4,11 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.vo.CategoryVo;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,6 +33,9 @@ public class NewOrderFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RecyclerView menuCategoryRecyclerView;
+    private RecyclerView menuItemRecyclerView;
+    private RecyclerView cartRecyclerView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -66,7 +78,22 @@ public class NewOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_order, container, false);
+        View Layout=inflater.inflate(R.layout.fragment_new_order, container, false);
+
+        menuCategoryRecyclerView=(RecyclerView) Layout.findViewById(R.id.recycler_view_menu_category);
+        menuItemRecyclerView=(RecyclerView ) Layout.findViewById(R.id.recycler_view_menu_items);
+        cartRecyclerView=(RecyclerView)Layout.findViewById(R.id.recycler_view_cart);
+
+        RecyclerView.LayoutManager linearLayoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager gridLayoutManager= new GridLayoutManager(getActivity().getApplicationContext(),3);
+
+        menuCategoryRecyclerView.setLayoutManager(linearLayoutManager);
+        menuItemRecyclerView.setLayoutManager(gridLayoutManager);
+        cartRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+
+        return Layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,4 +134,14 @@ public class NewOrderFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private List<String> getCategory() {
+
+        List<String>  list=new ArrayList<>();
+
+
+
+
+        return list ;
+    }
+
 }
