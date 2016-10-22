@@ -94,4 +94,19 @@ public class OrderVo implements java.io.Serializable {
 		this.customerOrderId = customerOrderId;
 		this.cancelReason = cancelReason;
 	}
+
+	public OrderVo() {
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		OrderVo orderVo = (OrderVo) o;
+
+		return idorder != null ? idorder.equals(orderVo.idorder) : false;
+
+	}
+
 }

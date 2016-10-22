@@ -29,6 +29,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         this.orderVoList = orderVoList;
     }
 
+    public void setData( List<OrderVo> orderVoList) {
+        this.orderVoList = orderVoList;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView title, count;
         public ImageView thumbnail, overflow;

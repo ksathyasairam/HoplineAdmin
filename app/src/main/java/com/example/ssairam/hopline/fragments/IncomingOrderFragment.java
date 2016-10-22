@@ -1,23 +1,36 @@
 package com.example.ssairam.hopline.fragments;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
+import com.example.ssairam.hopline.DataRefreshServcie;
+import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.FetchOrderTo;
 
+import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.OrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.google.gson.Gson;
@@ -37,7 +50,6 @@ import java.util.List;
 public class IncomingOrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrdersAdapter adapter;
-    private List<OrderVo> orderVoList;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,11 +97,33 @@ public class IncomingOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View Layout=inflater.inflate(R.layout.fragment_incoming_order, container, false);
+        View layout=inflater.inflate(R.layout.fragment_incoming_order, container, false);
 
-        recyclerView = (RecyclerView) Layout.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-        orderVoList = getOrders();
+
+        if (!DataStore.isDataInilitised()) {
+            new InitialiseDataFromServer(this.getActivity()){
+                @Override
+                protected void onPostExecute(Boolean success) {
+                    if (success) {
+                        initUi();
+                    } else {
+                        Toast.makeText(activity, "Error communicating with server!", Toast.LENGTH_LONG).show();
+                    }
+
+                    super.onPostExecute(success);
+                }
+            }.execute("");
+        } else {
+            initUi();
+        }
+
+        return layout ;
+}
+
+    private void initUi() {
+        List<OrderVo> orderVoList = DataStore.getIncomingOrders();
         adapter = new OrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
@@ -97,13 +131,7 @@ public class IncomingOrderFragment extends Fragment {
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-        return Layout ;
-
-
-
-
-}
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -144,23 +172,6 @@ public class IncomingOrderFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
-    private List<OrderVo> getOrders() {
-
-        String s = "{\"orderStates\":[\"CANCELLED\",\"PREPARING\"],\"orders\":[{\"cancelReason\":\"Testing\",\"customerOrderId\":190,\"idorder\":190,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":411,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"CANCELLED\",\"orderTime\":\"2016-10-14T18:31:49\",\"paidYn\":\"N\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":1,\"totalPrice\":100,\"user\":{\"iduser\":47,\"name\":\"akshansh\",\"phone\":\"9999966666\"}},{\"cancelReason\":null,\"customerOrderId\":220,\"idorder\":220,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":471,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Wow\",\"price\":130,\"productId\":9,\"quantity\":1,\"shortDesc\":\"Oriental Paneer Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}},{\"count\":1,\"idorderProduct\":472,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"PREPARING\",\"orderTime\":\"2016-10-17T02:02:13\",\"paidYn\":\"Y\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":230,\"user\":{\"iduser\":51,\"name\":\"ayush arnav\",\"phone\":\"9958675060\"}},{\"cancelReason\":null,\"customerOrderId\":227,\"idorder\":227,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":491,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}},{\"count\":1,\"idorderProduct\":492,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Wow\",\"price\":130,\"productId\":9,\"quantity\":1,\"shortDesc\":\"Oriental Paneer Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}},{\"count\":1,\"idorderProduct\":490,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"CANCELLED\",\"orderTime\":\"2016-10-17T14:04:35\",\"paidYn\":\"N\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":3,\"totalPrice\":330,\"user\":{\"iduser\":51,\"name\":\"ayush arnav\",\"phone\":\"9958675060\"}},{\"cancelReason\":null,\"customerOrderId\":228,\"idorder\":228,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":494,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}},{\"count\":1,\"idorderProduct\":493,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Wow\",\"price\":130,\"productId\":9,\"quantity\":1,\"shortDesc\":\"Oriental Paneer Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"CANCELLED\",\"orderTime\":\"2016-10-17T15:42:11\",\"paidYn\":\"N\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":230,\"user\":{\"iduser\":51,\"name\":\"ayush arnav\",\"phone\":\"9958675060\"}},{\"cancelReason\":null,\"customerOrderId\":229,\"idorder\":229,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":496,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Wow\",\"price\":130,\"productId\":9,\"quantity\":1,\"shortDesc\":\"Oriental Paneer Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}},{\"count\":1,\"idorderProduct\":495,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Asian Ratatouille\",\"price\":100,\"productId\":6,\"quantity\":1,\"shortDesc\":\"English Vegetable Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"CANCELLED\",\"orderTime\":\"2016-10-17T13:19:05\",\"paidYn\":\"N\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":230,\"user\":{\"iduser\":51,\"name\":\"ayush arnav\",\"phone\":\"9958675060\"}},{\"cancelReason\":null,\"customerOrderId\":235,\"idorder\":235,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":1,\"idorderProduct\":503,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"The Loaded Ming\",\"price\":130,\"productId\":17,\"quantity\":1,\"shortDesc\":\"Oriental Chicken Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"N\"}}],\"orderState\":\"PREPARING\",\"orderTime\":\"2016-10-17T15:34:11\",\"paidYn\":\"N\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":1,\"totalPrice\":130,\"user\":{\"iduser\":2,\"name\":\"Akshansh\",\"phone\":\"9560558203\"}},{\"cancelReason\":null,\"customerOrderId\":261,\"idorder\":261,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":2,\"idorderProduct\":581,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Mr Spicy Soyabean\",\"price\":100,\"productId\":5,\"quantity\":1,\"shortDesc\":\"Healthy Soya Chaap Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"PREPARING\",\"orderTime\":\"2016-10-19T00:19:39\",\"paidYn\":\"Y\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":200,\"user\":{\"iduser\":2,\"name\":\"Akshansh\",\"phone\":\"9560558203\"}},{\"cancelReason\":null,\"customerOrderId\":262,\"idorder\":262,\"orderCreator\":\"\",\"orderProducts\":[{\"count\":2,\"idorderProduct\":582,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Mr Spicy Soyabean\",\"price\":100,\"productId\":5,\"quantity\":1,\"shortDesc\":\"Healthy Soya Chaap Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"PREPARING\",\"orderTime\":\"2016-10-19T00:21:25\",\"paidYn\":\"Y\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":200,\"user\":{\"iduser\":54,\"name\":\"akshansh a\",\"phone\":\"9560558213\"}},{\"cancelReason\":null,\"customerOrderId\":263,\"idorder\":263,\"orderCreator\":\"vendor\",\"orderProducts\":[{\"count\":2,\"idorderProduct\":583,\"orderProductAddons\":[],\"product\":{\"addOns\":[],\"expanded\":false,\"longDesc\":\"-\",\"name\":\"Mr Spicy Soyabean\",\"price\":100,\"productId\":5,\"quantity\":1,\"shortDesc\":\"Healthy Soya Chaap Sandwich\",\"stockYn\":\"Y\",\"vegYn\":\"Y\"}}],\"orderState\":\"PREPARING\",\"orderTime\":\"2016-10-19T00:33:18\",\"paidYn\":\"Y\",\"shop\":{\"activeYn\":\"Y\",\"idshop\":1,\"imgUrl\":null,\"phone\":\"9560558201\",\"shopName\":\"Bistro 37\"},\"totalItemCount\":2,\"totalPrice\":200,\"user\":{\"iduser\":54,\"name\":\"akshansh a\",\"phone\":\"9560558213\"}}],\"shopId\":1,\"success\":true}" ;
-
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-
-
-        FetchOrderTo fetchOrderTo = gson.fromJson(s, FetchOrderTo.class);
-
-        List<OrderVo> list= fetchOrderTo.getOrders();
-
-        return list;
-    }
-
-
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -196,12 +207,36 @@ public class IncomingOrderFragment extends Fragment {
         }
     }
 
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
+                mMessageReceiver);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mMessageReceiver, new IntentFilter("newIncomingOrder"));
+        updateUi();
+
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("ManAct", "New orders!!!!!!!!!");
+            updateUi();
+        }
+    };
+
+    private void updateUi() {
+        List<OrderVo> orderVoList = DataStore.getIncomingOrders();
+        adapter.setData(orderVoList);
+        adapter.notifyDataSetChanged();
+    };
+
 }
 
