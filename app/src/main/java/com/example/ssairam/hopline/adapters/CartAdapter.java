@@ -36,6 +36,10 @@ public class CartAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public OrderVo getOrder() {
+        return order;
+    }
+
 
     @Override
     public int getCount() {
@@ -59,6 +63,19 @@ public class CartAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder(convertView);
 
         holder.cartItemName.setText(order.getOrderProducts().get(position).getProduct().getName());
+
+
+        holder.cartItemDelete.setTag(position);
+        holder.cartItemDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (Integer) v.getTag();
+                order.getOrderProducts().remove(position);
+                notifyDataSetChanged();
+
+            }
+        });
+
 //        holder.cartItemQuantity.setText((order.getOrderProducts().get(position).getProduct().getQuantity()));
 //        holder.cartItemAddon.setText((order.getOrderProducts().get(position).getOrderProductAddons().get(0).getAddOn().getName()));
 

@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <service android:name=".DataRefreshServcie"/>
-
+        <activity android:name=".ui.CreateOrderActivity"></activity>
     </application>
 
 </manifest>

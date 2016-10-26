@@ -22,6 +22,7 @@ import com.example.ssairam.hopline.adapters.MenuItemAdapter;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.ProductVo;
+import com.example.ssairam.hopline.vo.ShopVo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -147,6 +148,13 @@ public class NewOrderFragment extends Fragment {
         orderProductVo.setCount(productVo.getQuantity());
 
         return orderProductVo;
+    }
+
+    public void onCreateOrder(View view){
+        if(cartAdapter.getOrder().getOrderProducts().isEmpty()) return;
+
+        ShopVo shop = new ShopVo();
+        shop.setIdshop(1);
     }
 
 
