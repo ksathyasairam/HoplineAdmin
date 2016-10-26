@@ -8,45 +8,38 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ssairam.hopline.R;
-import com.example.ssairam.hopline.fragments.NewOrderFragment;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.ProductVo;
-
-import java.util.List;
 
 /**
  * Created by ssairam on 10/23/2016.
  */
-public class MenuItemAdapter extends RecyclerView.Adapter <MenuItemAdapter.ViewHolder> {
+public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
 
-    private CategoryVo products;
+    private final View.OnClickListener customizeButtonListner;
+    private final View.OnClickListener addButtonListner;
+    private CategoryVo category;
     private Context mContext;
-    private NewOrderFragment.MenuItemClickListener itemClickListener;
 
-    public CategoryVo getData() {
-        return products;
+    public CategoryVo getCategory() {
+        return category;
     }
 
-    public void setData(CategoryVo products) {
-        this.products = products;
-        for(ProductVo i:products.getProducts())
-        {     i.setQuantity(1);
+    public void setCategory(CategoryVo category) {
+        this.category = category;
+        for (ProductVo i : category.getProducts()) {
+            i.setQuantity(1);
         }
         notifyDataSetChanged();
     }
 
-    public MenuItemAdapter(Context mContext, CategoryVo products) {
+    public MenuItemAdapter(Context mContext, CategoryVo products, View.OnClickListener addButtonListner, View.OnClickListener customizeButtonListner) {
         this.mContext = mContext;
-        this.products = products;
-    }
-
-    public MenuItemAdapter(Context mContext, CategoryVo products, NewOrderFragment.MenuItemClickListener itemClickListener) {
-        this.mContext = mContext;
-        this.products = products;
-        this.itemClickListener = itemClickListener;
+        this.category = products;
+        this.addButtonListner = addButtonListner;
+        this.customizeButtonListner = customizeButtonListner;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,22 +47,21 @@ public class MenuItemAdapter extends RecyclerView.Adapter <MenuItemAdapter.ViewH
         public TextView itemName;
         public TextView quantity;
         public TextView price;
-        public Button addItem;
-        public Button customize;
-        public ImageButton add_button;
-        public ImageButton delete_button;
+        public Button addItemToCartButton;
+        public Button customizeButton;
+        public ImageButton increaseQuantityButton;
+        public ImageButton decreaseQuantityButton;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemName= (TextView) itemView.findViewById(R.id.item_name);
-            quantity= (TextView) itemView.findViewById(R.id.quantity);
-            price= (TextView) itemView.findViewById(R.id.price);
-            addItem= (Button) itemView.findViewById(R.id.additem_button);
-            customize=(Button) itemView.findViewById(R.id.customize_button);
-            add_button=(ImageButton)itemView.findViewById(R.id.add_button);
-
-            delete_button=(ImageButton)itemView.findViewById(R.id.delete_button);
+            itemName = (TextView) itemView.findViewById(R.id.item_name);
+            quantity = (TextView) itemView.findViewById(R.id.quantity);
+            price = (TextView) itemView.findViewById(R.id.price);
+            addItemToCartButton = (Button) itemView.findViewById(R.id.add_item_cart_button);
+            customizeButton = (Button) itemView.findViewById(R.id.customize_button);
+            increaseQuantityButton = (ImageButton) itemView.findViewById(R.id.increase_quantity_button);
+            decreaseQuantityButton = (ImageButton) itemView.findViewById(R.id.decrease_quantity_button);
 
         }
     }
@@ -85,54 +77,59 @@ public class MenuItemAdapter extends RecyclerView.Adapter <MenuItemAdapter.ViewH
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        ProductVo productVo=products.getProducts().get(position);
+        ProductVo productVo = category.getProducts().get(position);
 
         holder.itemName.setText(productVo.getName());
         holder.price.setText(String.valueOf(productVo.getPrice()));
         holder.quantity.setText(String.valueOf(productVo.getQuantity()));
-        holder.add_button.setTag(position);
-        holder.add_button.setOnClickListener(new AddQuantityListener());
 
-        holder.delete_button.setTag(position);
-        holder.delete_button.setOnClickListener(new DeleteQuantityListener());
+        holder.increaseQuantityButton.setTag(position);
+        holder.increaseQuantityButton.setOnClickListener(new IncreaseQuantityListener());
 
-        holder.addItem.setOnClickListener(itemClickListener);
-        holder.customize.setOnClickListener(itemClickListener);
+        holder.decreaseQuantityButton.setTag(position);
+        holder.decreaseQuantityButton.setOnClickListener(new DecreaseQuantityListener());
 
+        holder.addItemToCartButton.setTag(position);
+        holder.addItemToCartButton.setOnClickListener(addButtonListner);
 
+        holder.customizeButton.setTag(position);
+        holder.customizeButton.setOnClickListener(customizeButtonListner);
     }
 
     @Override
     public int getItemCount() {
-        return products.getProducts().size();
+        return category.getProducts().size();
     }
 
-    private class AddQuantityListener implements View.OnClickListener{
+    private class IncreaseQuantityListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
 
-            int quantity=products.getProducts().get((Integer) v.getTag()).getQuantity();
-            products.getProducts().get((Integer) v.getTag()).setQuantity(quantity++);
+            int position = (Integer) v.getTag();
+
+            int quantity = category.getProducts().get(position).getQuantity();
+
+            category.getProducts().get(position).setQuantity(quantity + 1);
             notifyDataSetChanged();
-
-
-//dadxsdx;
 
         }
     }
 
 
-
-    private class DeleteQuantityListener implements  View.OnClickListener{
+    private class DecreaseQuantityListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            int quantity=products.getProducts().get((Integer) v.getTag()).getQuantity();
-            if(quantity!=0) {
-                products.getProducts().get((Integer) v.getTag()).setQuantity(quantity++);
-                notifyDataSetChanged();
-            }
+
+            int position = (Integer) v.getTag();
+
+            int quantity = category.getProducts().get(position).getQuantity();
+            if (quantity == 1) return;
+
+            category.getProducts().get(position).setQuantity(quantity - 1);
+            notifyDataSetChanged();
         }
     }
 }
+
