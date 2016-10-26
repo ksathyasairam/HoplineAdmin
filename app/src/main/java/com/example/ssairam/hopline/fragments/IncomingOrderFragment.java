@@ -127,7 +127,7 @@ public class IncomingOrderFragment extends Fragment {
         List<OrderVo> orderVoList = DataStore.getIncomingOrders();
         adapter = new OrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getActivity().getApplicationContext(),2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getActivity().getApplicationContext(),3);
         recyclerView.setLayoutManager(mLayoutManager);
        // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

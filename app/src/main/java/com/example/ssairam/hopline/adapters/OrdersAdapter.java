@@ -41,8 +41,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             count = (TextView) itemView.findViewById(R.id.count);
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-            overflow = (ImageView) itemView.findViewById(R.id.overflow);
             confirm=(Button)itemView.findViewById(R.id.confirm);
 
         }
