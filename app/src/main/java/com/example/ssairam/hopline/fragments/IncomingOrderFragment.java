@@ -1,41 +1,28 @@
 package com.example.ssairam.hopline.fragments;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
-import com.example.ssairam.hopline.DataRefreshServcie;
 import com.example.ssairam.hopline.DataStore;
-import com.example.ssairam.hopline.FetchOrderTo;
-
 import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
-import com.example.ssairam.hopline.Util;
-import com.example.ssairam.hopline.adapters.OrdersAdapter;
+import com.example.ssairam.hopline.adapters.IncomingOrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -50,7 +37,7 @@ import java.util.List;
  */
 public class IncomingOrderFragment extends Fragment {
     private RecyclerView recyclerView;
-    private OrdersAdapter adapter;
+    private IncomingOrdersAdapter adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -125,7 +112,7 @@ public class IncomingOrderFragment extends Fragment {
 
     private void initUi() {
         List<OrderVo> orderVoList = DataStore.getIncomingOrders();
-        adapter = new OrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
+        adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getActivity().getApplicationContext(),3);
         recyclerView.setLayoutManager(mLayoutManager);
