@@ -2,14 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/category_layout">
+    android:id="@+id/category_layout"
+    android:layout_margin="10dp"
+    android:gravity="center">
 
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:background="@drawable/categorybg">
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:id="@+id/category_name"
+            android:gravity="center"/>
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:id="@+id/category_name"
-        android:gravity="center"/>
+    </RelativeLayout>
+
 </LinearLayout>

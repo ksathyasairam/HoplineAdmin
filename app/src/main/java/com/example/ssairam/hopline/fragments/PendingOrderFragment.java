@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -115,7 +116,8 @@ public class PendingOrderFragment extends Fragment {
         adapter = new OrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
+       RecyclerView.LayoutManager layoutManager=new GridLayoutManager(this.getActivity(),2);
+        recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
