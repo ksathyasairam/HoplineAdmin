@@ -20,14 +20,23 @@ import java.util.List;
 public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAdapter.ViewHolder> {
     private Context mContext;
     private List<OrderVo> orderVoList;
+    View.OnClickListener callListner, cancelListner, confirmListner;
 
-    public IncomingOrdersAdapter(Context mContext, List<OrderVo> orderVoList) {
+
+    public IncomingOrdersAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener callListner, View.OnClickListener cancelListner, View.OnClickListener confirmListner) {
         this.mContext = mContext;
         this.orderVoList = orderVoList;
+        this.callListner = callListner;
+        this.cancelListner = cancelListner;
+        this.confirmListner = confirmListner;
     }
 
     public void setData( List<OrderVo> orderVoList) {
         this.orderVoList = orderVoList;
+    }
+
+    public List<OrderVo> getOrders(){
+        return orderVoList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -68,20 +77,22 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         });
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
-            holder.confirm.setVisibility(View.INVISIBLE);
-            holder.cancel.setVisibility(View.INVISIBLE);
+            holder.confirm.setVisibility(View.GONE);
+            holder.cancel.setVisibility(View.GONE);
             holder.call.setVisibility(View.VISIBLE);
-            holder.call.bringToFront();
+            holder.call.setTag(position);
+            holder.call.setOnClickListener(callListner);
         }else {
             holder.confirm.setVisibility(View.VISIBLE);
             holder.cancel.setVisibility(View.VISIBLE);
-            holder.call.setVisibility(View.INVISIBLE);
-            holder.confirm.bringToFront();
-            holder.cancel.bringToFront();
+            holder.call.setVisibility(View.GONE);
+            holder.confirm.setTag(position);
+            holder.cancel.setTag(position);
+            holder.confirm.setOnClickListener(confirmListner);
+            holder.cancel.setOnClickListener(cancelListner);
         }
 
     }
-
 
     @Override
     public int getItemCount() {
