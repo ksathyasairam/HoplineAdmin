@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.ProductVo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ssairam on 10/23/2016.
@@ -20,12 +22,15 @@ import java.util.ArrayList;
 public class CartAdapter extends BaseAdapter {
 
 
+    private final View.OnClickListener removeCartListner;
     private Context mContext;
     private OrderVo order;
     private LayoutInflater mInflater;
 
-    public CartAdapter(Context mContext) {
+
+    public CartAdapter(Context mContext, View.OnClickListener removeCartListner) {
         this.mContext = mContext;
+        this.removeCartListner = removeCartListner;
         order = new OrderVo();
         order.setOrderProducts(new ArrayList<OrderProductVo>());
         mInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -33,12 +38,32 @@ public class CartAdapter extends BaseAdapter {
 
     public void addProduct(OrderProductVo orderProductVo) {
         order.getOrderProducts().add(orderProductVo);
-        notifyDataSetChanged();
     }
 
     public OrderVo getOrder() {
         return order;
     }
+
+    public List<OrderProductVo> getOrderProducts(){
+        return order.getOrderProducts();
+    }
+
+
+    public Integer getNotCustomizedOrderIndex(int productId){
+
+        for (int i=0 ; i < order.getOrderProducts().size() ; ++i){
+            OrderProductVo orderProductVo = order.getOrderProducts().get(i);
+            if (orderProductVo.getProduct().getProductId().equals(productId) && !isCustomizedOrder(orderProductVo))
+                return i;
+        }
+
+        return  null;
+    }
+
+    public boolean isCustomizedOrder(OrderProductVo orderProductVo) {
+        return orderProductVo.getOrderProductAddons() != null && orderProductVo.getOrderProductAddons().size() > 0;
+    }
+
 
 
     @Override
@@ -63,18 +88,21 @@ public class CartAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder(convertView);
 
         holder.cartItemName.setText(order.getOrderProducts().get(position).getProduct().getName());
+        holder.cartItemQuantity.setText(order.getOrderProducts().get(position).getCount()+ "");
 
 
         holder.cartItemDelete.setTag(position);
-        holder.cartItemDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = (Integer) v.getTag();
-                order.getOrderProducts().remove(position);
-                notifyDataSetChanged();
 
-            }
-        });
+        holder.cartItemDelete.setOnClickListener(removeCartListner);
+//        holder.cartItemDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int position = (Integer) v.getTag();
+//                order.getOrderProducts().remove(position);
+//                notifyDataSetChanged();
+//
+//            }
+//        });
 
 //        holder.cartItemQuantity.setText((order.getOrderProducts().get(position).getProduct().getQuantity()));
 //        holder.cartItemAddon.setText((order.getOrderProducts().get(position).getOrderProductAddons().get(0).getAddOn().getName()));

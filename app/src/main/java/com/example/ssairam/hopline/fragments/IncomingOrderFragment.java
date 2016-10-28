@@ -123,7 +123,7 @@ public class IncomingOrderFragment extends Fragment {
         List<OrderVo> orderVoList = DataStore.getIncomingOrders();
         View.OnClickListener callListner, cancelListner, confirmListner;
         callListner = new CallOnclickListner();
-        cancelListner = new CallOnclickListner();
+        cancelListner = new CancelOnClickListner();
         confirmListner = new ConfirmOnClickListner();
         adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner);
 

@@ -1,3 +1,4 @@
+
 package com.example.ssairam.hopline.adapters;
 
 import android.content.Context;
@@ -19,7 +20,8 @@ import com.example.ssairam.hopline.vo.ProductVo;
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
 
     private final View.OnClickListener customizeButtonListner;
-    private final View.OnClickListener addButtonListner;
+    private final View.OnClickListener increaseQuantityListner;
+    private final View.OnClickListener decreaseQuantityListner;
     private CategoryVo category;
     private Context mContext;
 
@@ -30,15 +32,29 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
     public void setCategory(CategoryVo category) {
         this.category = category;
         for (ProductVo i : category.getProducts()) {
-            i.setQuantity(1);
+            i.setQuantity(0);
         }
         notifyDataSetChanged();
     }
 
-    public MenuItemAdapter(Context mContext, CategoryVo products, View.OnClickListener addButtonListner, View.OnClickListener customizeButtonListner) {
+    public void resetProductCountById(int productId) {
+
+
+        for (ProductVo productVo : category.getProducts()) {
+            if (productVo.getProductId().equals(productId)){
+                productVo.setQuantity(0);
+                break;
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public MenuItemAdapter(Context mContext, CategoryVo products, View.OnClickListener increaseQuantityListner,View.OnClickListener decreaseQuantityListner, View.OnClickListener customizeButtonListner) {
         this.mContext = mContext;
-        this.category = products;
-        this.addButtonListner = addButtonListner;
+        setCategory(products);
+        this.increaseQuantityListner = increaseQuantityListner;
+        this.decreaseQuantityListner = decreaseQuantityListner;
         this.customizeButtonListner = customizeButtonListner;
     }
 
@@ -47,10 +63,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         public TextView itemName;
         public TextView quantity;
         public TextView price;
-        public Button addItemToCartButton;
         public Button customizeButton;
         public ImageButton increaseQuantityButton;
         public ImageButton decreaseQuantityButton;
+        public View cardButton;
 
 
         public ViewHolder(View itemView) {
@@ -58,10 +74,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             quantity = (TextView) itemView.findViewById(R.id.quantity);
             price = (TextView) itemView.findViewById(R.id.price);
-            addItemToCartButton = (Button) itemView.findViewById(R.id.add_item_cart_button);
             customizeButton = (Button) itemView.findViewById(R.id.customize_button);
             increaseQuantityButton = (ImageButton) itemView.findViewById(R.id.increase_quantity_button);
             decreaseQuantityButton = (ImageButton) itemView.findViewById(R.id.decrease_quantity_button);
+            cardButton  = itemView.findViewById(R.id.card_button);
 
         }
     }
@@ -84,13 +100,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         holder.quantity.setText(String.valueOf(productVo.getQuantity()));
 
         holder.increaseQuantityButton.setTag(position);
-        holder.increaseQuantityButton.setOnClickListener(new IncreaseQuantityListener());
+        holder.increaseQuantityButton.setOnClickListener(increaseQuantityListner);
+
+        holder.cardButton.setTag(position);
+        holder.cardButton.setOnClickListener(increaseQuantityListner);
 
         holder.decreaseQuantityButton.setTag(position);
-        holder.decreaseQuantityButton.setOnClickListener(new DecreaseQuantityListener());
-
-        holder.addItemToCartButton.setTag(position);
-        holder.addItemToCartButton.setOnClickListener(addButtonListner);
+        holder.decreaseQuantityButton.setOnClickListener(decreaseQuantityListner);
 
         holder.customizeButton.setTag(position);
         holder.customizeButton.setOnClickListener(customizeButtonListner);
@@ -100,36 +116,36 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
     public int getItemCount() {
         return category.getProducts().size();
     }
-
-    private class IncreaseQuantityListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-
-            int position = (Integer) v.getTag();
-
-            int quantity = category.getProducts().get(position).getQuantity();
-
-            category.getProducts().get(position).setQuantity(quantity + 1);
-            notifyDataSetChanged();
-
-        }
-    }
-
-
-    private class DecreaseQuantityListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-
-            int position = (Integer) v.getTag();
-
-            int quantity = category.getProducts().get(position).getQuantity();
-            if (quantity == 1) return;
-
-            category.getProducts().get(position).setQuantity(quantity - 1);
-            notifyDataSetChanged();
-        }
-    }
+//
+//    private class IncreaseQuantityListener implements View.OnClickListener {
+//
+//        @Override
+//        public void onClick(View v) {
+//
+//            int position = (Integer) v.getTag();
+//
+//            int quantity = category.getProducts().get(position).getQuantity();
+//
+//            category.getProducts().get(position).setQuantity(quantity + 1);
+//            notifyDataSetChanged();
+//
+//        }
+//    }
+//
+//
+//    private class DecreaseQuantityListener implements View.OnClickListener {
+//
+//        @Override
+//        public void onClick(View v) {
+//
+//            int position = (Integer) v.getTag();
+//
+//            int quantity = category.getProducts().get(position).getQuantity();
+//            if (quantity == 1) return;
+//
+//            category.getProducts().get(position).setQuantity(quantity - 1);
+//            notifyDataSetChanged();
+//        }
+//    }
 }
 

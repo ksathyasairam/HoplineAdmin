@@ -95,8 +95,22 @@ public class NewOrderFragment extends Fragment {
         itemRecyclerView.setAdapter(itemAdapter);
 
 
-        cartListView =(ListView) layout.findViewById(R.id.list_view_cart);
-        cartAdapter=new CartAdapter(getActivity().getApplicationContext());
+        cartListView = (ListView) layout.findViewById(R.id.list_view_cart);
+        cartAdapter = new CartAdapter(getActivity().getApplicationContext(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (Integer) v.getTag();
+
+                OrderProductVo orderProductVo = cartAdapter.getOrderProducts().get(position);
+
+                if(!cartAdapter.isCustomizedOrder(orderProductVo)){
+                    itemAdapter.resetProductCountById(orderProductVo.getProduct().getProductId());
+                }
+
+                cartAdapter.getOrderProducts().remove(position);
+                cartAdapter.notifyDataSetChanged();
+            }
+        });
         cartListView.setAdapter(cartAdapter);
 
 
@@ -107,37 +121,71 @@ public class NewOrderFragment extends Fragment {
         return new MenuItemAdapter(getActivity().getApplicationContext(), categoryAdapter.getCategories().get(0), new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {                   //add Button
+            public void onClick(View v) {
+                //increase quantity
+
+
                 int position = (Integer) v.getTag();
+                ProductVo productVo = itemAdapter.getCategory().getProducts().get(position);
 
-                cartAdapter.addProduct(toOrderProductVo(itemAdapter.getCategory().getProducts().get(position)));
+                int quantity = productVo.getQuantity();
+                productVo.setQuantity(quantity + 1);
+                itemAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getActivity().getApplicationContext(),"add",Toast.LENGTH_LONG).show();
+
+
+
+                Integer cartIndex = cartAdapter.getNotCustomizedOrderIndex(productVo.getProductId());
+
+                if (cartIndex == null) {
+                    cartAdapter.addProduct(toOrderProductVo(productVo));
+                } else {
+                    cartAdapter.getOrderProducts().get(cartIndex).setCount(productVo.getQuantity());
+                }
+
+                cartAdapter.notifyDataSetChanged();
 
             }
 
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {   //decrease quantity
+
+                int position = (Integer) v.getTag();
+                ProductVo productVo = itemAdapter.getCategory().getProducts().get(position);
+
+                int quantity = productVo.getQuantity();
+                if ((quantity-1) < 0) return;
+
+                productVo.setQuantity(quantity - 1);
+                itemAdapter.notifyDataSetChanged();
+
+
+
+                Integer cartIndex = cartAdapter.getNotCustomizedOrderIndex(productVo.getProductId());
+
+                if (cartIndex != null){
+                    if (productVo.getQuantity() == 0) {
+                        cartAdapter.getOrderProducts().remove((int)cartIndex);
+                    } else {
+                        cartAdapter.getOrderProducts().get(cartIndex).setCount(productVo.getQuantity());
+                    }
+                }
+
+                cartAdapter.notifyDataSetChanged();
+
+            }
         }, new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {                //customizeButton button
                 int position = (Integer) v.getTag();
 
-                Toast.makeText(getActivity().getApplicationContext(),"customizeButton",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), "customizeButton", Toast.LENGTH_LONG).show();
 
             }
 
         });
-    }
-
-    public class MenuItemClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-
-            Toast.makeText(getActivity().getApplicationContext(), "add/customizeButton", Toast.LENGTH_SHORT).show();
-
-
-        }
     }
 
 
@@ -150,13 +198,12 @@ public class NewOrderFragment extends Fragment {
         return orderProductVo;
     }
 
-    public void onCreateOrder(View view){
-        if(cartAdapter.getOrder().getOrderProducts().isEmpty()) return;
+    public void onCreateOrder(View view) {
+        if (cartAdapter.getOrder().getOrderProducts().isEmpty()) return;
 
         ShopVo shop = new ShopVo();
         shop.setIdshop(1);
     }
-
 
 
     public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {

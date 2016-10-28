@@ -42,5 +42,7 @@ public class AddOnVo implements java.io.Serializable {
 		this.selected = selected;
 	}
 
+
+
 	
 }

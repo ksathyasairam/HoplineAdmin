@@ -83,7 +83,20 @@ public class ProductVo implements java.io.Serializable {
 	public void setExpanded(boolean isExpanded) {
 		this.isExpanded = isExpanded;
 	}
-	
-	
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ProductVo productVo = (ProductVo) o;
+
+		return productId.equals(productVo.productId);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return productId.hashCode();
+	}
 }

@@ -27,6 +27,7 @@
                 android:background="@drawable/cartbg"
                 android:layout_weight="0.3"
                 android:gravity="center"
+                android:id="@+id/card_button"
                 android:orientation="vertical">
 
                 <RelativeLayout
