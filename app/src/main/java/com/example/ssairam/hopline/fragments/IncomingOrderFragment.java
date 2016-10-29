@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -329,7 +331,17 @@ public class IncomingOrderFragment extends Fragment {
             final View layout = inflater.inflate(R.layout.call_dialog,null);
             ((TextView) layout.findViewById(R.id.phone_numer)).setText(orderVo.getUser().getPhone());
             ((TextView) layout.findViewById(R.id.user_name)).setText(orderVo.getUser().getName());
-
+            String[] values = new String[] { "Android List View",
+                    "Adapter implementation",
+                    "Simple List View In Android",
+                    "Create List View Android",
+                    "Android Example",
+                    "List View Source Code",
+                    "List View Array Adapter",
+                    "Android Example List View"
+            };
+            ListView listView=(ListView)layout.findViewById(R.id.dialog_listview);
+            listView.setAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(),R.layout.order_product_item,R.id.order_item_name,values ));
 
             builder.setView(layout)
                     .setPositiveButton("Confirm Order", new DialogInterface.OnClickListener() {

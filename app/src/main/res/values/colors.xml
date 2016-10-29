@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00BCD4</color>
-    <color name="colorPrimaryDark">#00ACC1</color>
-    <color name="colorAccent">#F50057</color>
+    <color name="colorPrimary">#092937</color>
+    <color name="colorPrimaryDark">#4EB6C0</color>
+    <color name="colorAccent">#46A7AE</color>
 
     <color name="album_title">#4c4c4c</color>
     <color name="viewBg">#f1f5f8</color>

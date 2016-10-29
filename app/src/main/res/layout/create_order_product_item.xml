@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:text="Plane Jane Sandwich"
+            android:layout_weight="0.2"
+            android:gravity="left"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_order_item_name" />
+
+        <TextView
+            android:text="2"
+            android:layout_weight="0.8"
+            android:gravity="right"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_order_item_qauntity" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="0.3"
+            android:text="Add On: Extra Ketcup, Extra Mayo"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+
+            android:layout_height="wrap_content"
+            android:id="@+id/create_order_item_Addon" />
+        <TextView
+            android:layout_weight="0.7"
+            android:gravity="right"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:textSize="20sp"
+            android:text="Rs 100."
+            android:id="@+id/create_order_item_price"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#55797c7f"
+        />
+
+</LinearLayout>

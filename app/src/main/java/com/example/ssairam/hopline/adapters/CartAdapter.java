@@ -88,7 +88,7 @@ public class CartAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder(convertView);
 
         holder.cartItemName.setText(order.getOrderProducts().get(position).getProduct().getName());
-        holder.cartItemQuantity.setText(order.getOrderProducts().get(position).getCount()+ "");
+        holder.cartItemQuantity.setText("Qty : "+order.getOrderProducts().get(position).getCount()+ "");
 
 
         holder.cartItemDelete.setTag(position);
