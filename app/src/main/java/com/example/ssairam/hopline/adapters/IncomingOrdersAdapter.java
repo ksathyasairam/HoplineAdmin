@@ -41,7 +41,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView title, count;
+        public TextView title, count, customerOrderNo;
         public ImageView thumbnail, overflow;
         public Button confirm;
         public Button call;
@@ -54,6 +54,8 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
             confirm=(Button)itemView.findViewById(R.id.confirm);
             call=(Button)itemView.findViewById(R.id.call);
             cancel=(Button)itemView.findViewById(R.id.cancel);
+            customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
+
             productList = (RecyclerView) itemView.findViewById(R.id.incoming_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
             productList.setLayoutManager(layoutManager);
@@ -72,8 +74,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         OrderVo order = orderVoList.get(position);
-        holder.title.setText(order.getCustomerOrderId()+"");
-        holder.count.setText(order.getCancelReason());
+        holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
             holder.confirm.setVisibility(View.GONE);

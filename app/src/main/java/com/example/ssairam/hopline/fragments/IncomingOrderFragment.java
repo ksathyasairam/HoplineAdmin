@@ -133,7 +133,7 @@ public class IncomingOrderFragment extends Fragment {
         confirmListner = new ConfirmOnClickListner();
         adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner);
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(3,1);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
         recyclerView.setLayoutManager(mLayoutManager);
         // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -1,59 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:padding="2dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="2dp">
+
         <TextView
-            android:text="Plane Jane Sandwich"
+            android:id="@+id/order_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:gravity="left"
-            android:textSize="20sp"
+            android:text="Plane Jane Sandwich"
             android:textColor="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_item_name" />
+            android:textSize="20sp" />
 
         <TextView
-            android:text="2"
-            android:layout_weight="0.8"
-            android:gravity="right"
-            android:textColor="@color/colorPrimary"
-
-            android:textSize="20sp"
+            android:id="@+id/order_item_qauntity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/order_item_qauntity" />
+            android:layout_weight="0.8"
+
+            android:gravity="right"
+            android:text="2"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/order_item_Addon"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:padding="2dp"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="Add On: Extra Ketcup, Extra Mayo"
-            android:layout_width="match_parent"
-            android:textColor="@color/colorPrimary"
-
-            android:textSize="16sp"
-
-            android:layout_height="wrap_content"
-            android:id="@+id/order_item_Addon" />
-    </LinearLayout>
+        android:text="Add On: Extra Ketcup, Extra Mayo"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
 
     <View
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#55797c7f"
-        />
+        android:layout_margin="5dp"
+        android:background="#55797c7f" />
 
 </LinearLayout>
