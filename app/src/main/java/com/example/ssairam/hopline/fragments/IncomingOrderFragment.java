@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +133,7 @@ public class IncomingOrderFragment extends Fragment {
         confirmListner = new ConfirmOnClickListner();
         adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this.getActivity().getApplicationContext(), 3);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(3,1);
         recyclerView.setLayoutManager(mLayoutManager);
         // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

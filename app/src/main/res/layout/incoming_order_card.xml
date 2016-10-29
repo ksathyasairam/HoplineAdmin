@@ -59,11 +59,17 @@
                 android:layout_height="match_parent"
 
                 >
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/incoming_order_product_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -90,12 +96,7 @@
                         android:layout_height="match_parent"
                         >
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/incoming_order_product_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipToPadding="false"
-                            android:scrollbars="vertical" />
+
 
 
                     </LinearLayout>
@@ -107,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_weight="0.85">
+                    android:layout_weight="1">
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -140,8 +141,8 @@
 
                     <Button
                         android:text="Call"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:id="@+id/call"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
@@ -152,6 +153,7 @@
 
                 </LinearLayout>
             </LinearLayout>
+
 
         </LinearLayout>
 
