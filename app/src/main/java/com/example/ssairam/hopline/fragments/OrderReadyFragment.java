@@ -1,7 +1,9 @@
 package com.example.ssairam.hopline.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,8 +16,11 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
+import com.example.ssairam.hopline.OrderStates;
 import com.example.ssairam.hopline.R;
-import com.example.ssairam.hopline.adapters.OrdersAdapter;
+import com.example.ssairam.hopline.ServerHelper;
+import com.example.ssairam.hopline.Util;
+import com.example.ssairam.hopline.adapters.OrderReadyAdatper;
 import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
@@ -31,7 +36,7 @@ import java.util.List;
  */
 public class OrderReadyFragment extends Fragment {
     private RecyclerView recyclerView;
-    private OrdersAdapter adapter;
+    private OrderReadyAdatper adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -105,8 +110,7 @@ public class OrderReadyFragment extends Fragment {
     }
 
     private void initUi() {
-        List<OrderVo> orderVoList = DataStore.getReadyOrders();
-        adapter = new OrdersAdapter(this.getActivity().getApplicationContext(), orderVoList);
+        adapter = createOrderReadyAdatper();
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -115,7 +119,128 @@ public class OrderReadyFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    private OrderReadyAdatper createOrderReadyAdatper() {
+        List<OrderVo> orderVoList = DataStore.getReadyOrders();
+        return new OrderReadyAdatper(this.getActivity().getApplicationContext(), orderVoList, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //finalized
+                int position = (Integer) v.getTag();
+                OrderVo order = adapter.getData().get(position);
+
+                if ("Y".equals(order.getPaidYn())){
+                    markOrderComplete(order);
+                } else {
+                    if (printBill(order)){
+                        markOrderComplete(order);
+                    }
+                }
+
+            }
+
+
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //unpicked
+                int position = (Integer) v.getTag();
+                OrderVo order = adapter.getData().get(position);
+                new MarkOrderUnpicked(order.getIdorder()).execute("");
+
+            }
+        });
+    }
+
+    private boolean printBill(OrderVo order) {
+        return true;
+    }
+
+
+    private void markOrderComplete(OrderVo order) {
+        new MarkOrderComplete(order.getIdorder()).execute("");
+    }
+
+
+
+    private class MarkOrderComplete extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog dialog;
+        Integer orderId;
+
+        MarkOrderComplete(Integer orderId) {
+            this.orderId = orderId;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean success = ServerHelper.markOrderCompleted(orderId);
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (success) {
+                OrderVo deletedOrder = new OrderVo();
+                deletedOrder.setIdorder(orderId);
+                DataStore.getReadyOrders().remove(deletedOrder);
+                updateUi();
+                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+            }
+
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.showProgressDialog(getActivity());
+        }
+    }
+
+
+    private class MarkOrderUnpicked extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog dialog;
+        Integer orderId;
+
+        MarkOrderUnpicked(Integer orderId) {
+            this.orderId = orderId;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean success = ServerHelper.markOrderUnpicked(orderId);
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (success) {
+                OrderVo deletedOrder = new OrderVo();
+                deletedOrder.setIdorder(orderId);
+                DataStore.getReadyOrders().remove(deletedOrder);
+                updateUi();
+                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+            }
+
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.showProgressDialog(getActivity());
+        }
+    }
+
+    private void updateUi() {
+        adapter.updateData(DataStore.getReadyOrders());
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

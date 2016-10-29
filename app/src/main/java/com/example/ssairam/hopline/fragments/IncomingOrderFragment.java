@@ -1,7 +1,7 @@
 package com.example.ssairam.hopline.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,11 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,16 +23,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.ServerHelper;
+import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.IncomingOrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -234,10 +237,7 @@ public class IncomingOrderFragment extends Fragment {
     };
 
     private void updateUi() {
-        List<OrderVo> orderVoList = DataStore.getIncomingOrders();
-        adapter.setData(orderVoList);
-        adapter.notifyDataSetChanged();
-
+        adapter.updateData(DataStore.getIncomingOrders());
     }
 
     private class CallOnclickListner implements View.OnClickListener {
@@ -279,6 +279,8 @@ public class IncomingOrderFragment extends Fragment {
         public void onClick(View v) {
 
             int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+            new MarkOrderPreparing(order.getIdorder()).execute("");
 
 
         }
@@ -290,6 +292,9 @@ public class IncomingOrderFragment extends Fragment {
         public void onClick(View v) {
 
             int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+
+            new CancelOrder(order.getIdorder(),"reason for cancel").execute("");
 
 
         }
@@ -337,10 +342,126 @@ public class IncomingOrderFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int id) {
                             cancelListner.onClick(view);
                         }
-                    });
+                    }).setNeutralButton("Hide Dialog", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
             return builder.create();
         }
 
+    }
+
+
+
+    private class CancelOrder extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog dialog;
+        Integer orderId;
+        String cancelReason;
+
+        CancelOrder(Integer orderId, String cancelReason) {
+            this.orderId = orderId;
+            this.cancelReason = cancelReason;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return ServerHelper.markOrderCancel(orderId, cancelReason) ;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+
+            if (success) {
+                synchronizedRemoveFromIncommingOrders(orderId);
+                updateUi();
+
+                Toast.makeText(getActivity(), "Order cancelled!!", Toast.LENGTH_SHORT).show();
+                //TODO : update conromation order ui.
+            } else {
+                Toast.makeText(getActivity(), "Error communicating with server!", Toast.LENGTH_LONG).show();
+            }
+
+
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.showProgressDialog(getActivity());
+
+
+        }
+    }
+
+
+
+    private class MarkOrderPreparing extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog dialog;
+        Integer orderId;
+
+        MarkOrderPreparing(Integer orderId) {
+            this.orderId = orderId;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean success = ServerHelper.markOrderPreparing(orderId);
+
+            if (success) {
+
+                try {
+                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DataStore.setPreparingOrders(null);
+                    return  false;
+                }
+            }
+
+            return success;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (success) {
+                synchronizedRemoveFromIncommingOrders(orderId);
+                updateUi();
+                Toast.makeText(getActivity(), "Order Moved to preparing!!", Toast.LENGTH_SHORT).show();
+                //TODO : update conromation order ui.
+            } else {
+                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+            }
+
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.showProgressDialog(getActivity());
+
+
+        }
+    }
+
+
+
+
+    private void synchronizedRemoveFromIncommingOrders(Integer deletedOrderId) {
+        OrderVo deletedOrder = new OrderVo();
+        deletedOrder.setIdorder(deletedOrderId);
+
+        List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
+
+        localOrderVoCopy.remove(deletedOrder);
+        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
+        DataStore.setIncomingOrders(localOrderVoCopy);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.ssairam.hopline;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 
@@ -16,15 +17,15 @@ public class Util {
 
 
 
-    public static void synchronizedRemoveOrderFromList(Integer deletedOrderId, List<OrderVo> orderVoList) {
+    private void removeOrderFromList(Integer deletedOrderId, List<OrderVo> orderList) {
         OrderVo deletedOrder = new OrderVo();
         deletedOrder.setIdorder(deletedOrderId);
 
-        List<OrderVo> localConformationOrderCopy = new ArrayList<OrderVo>(orderVoList);
+        List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
 
-        localConformationOrderCopy.remove(deletedOrder);
-        DataRefreshServcie.setLocallyUpdated(true);
-        DataStore.setIncomingOrders(localConformationOrderCopy);
+        localOrderVoCopy.remove(deletedOrder);
+        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
+        DataStore.setIncomingOrders(localOrderVoCopy);
     }
 
     public static ProgressDialog createProgressDialog(Context context) {
@@ -34,6 +35,18 @@ public class Util {
         dialog.setMessage("Loading. Please wait...");
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+
+    }
+
+    public static ProgressDialog showProgressDialog(Activity activity) {
+
+        ProgressDialog dialog = new ProgressDialog(activity); // this = YourActivity
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Loading. Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         return dialog;
 
     }

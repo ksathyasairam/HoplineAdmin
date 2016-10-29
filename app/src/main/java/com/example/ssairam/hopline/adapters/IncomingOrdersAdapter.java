@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ssairam.hopline.OrderStates;
 import com.example.ssairam.hopline.R;
@@ -31,8 +30,9 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         this.confirmListner = confirmListner;
     }
 
-    public void setData( List<OrderVo> orderVoList) {
+    public void updateData( List<OrderVo> orderVoList) {
         this.orderVoList = orderVoList;
+        notifyDataSetChanged();
     }
 
     public List<OrderVo> getOrders(){
@@ -58,7 +58,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_card, parent, false);
+                .inflate(R.layout.incoming_order_card, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -69,12 +69,6 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         OrderVo order = orderVoList.get(position);
         holder.title.setText(order.getCustomerOrderId()+"");
         holder.count.setText(order.getCancelReason());
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,"Confirmed",Toast.LENGTH_LONG).show();
-            }
-        });
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
             holder.confirm.setVisibility(View.GONE);

@@ -23,7 +23,7 @@ import java.util.List;
  * Created by root on 20/10/16.
  */
 
-public class DataRefreshServcie extends Service {
+public class IncommingOrderBackgroudRefresh extends Service {
     private static volatile boolean locallyUpdated;
 
     @Nullable
@@ -102,7 +102,7 @@ public class DataRefreshServcie extends Service {
     }
 
     public static synchronized void setLocallyUpdated(boolean locallyUpdated) {
-        DataRefreshServcie.locallyUpdated = locallyUpdated;
+        IncommingOrderBackgroudRefresh.locallyUpdated = locallyUpdated;
     }
 
 

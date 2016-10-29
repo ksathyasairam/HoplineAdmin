@@ -16,39 +16,47 @@ import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
 
-/**
- * Created by ssairam on 10/19/2016.
- */
 
-public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
+public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.ViewHolder> {
+    private final View.OnClickListener unpickedListener;
+    private final View.OnClickListener finalizedListener;
     private Context mContext;
     private List<OrderVo> orderVoList;
 
-    public OrdersAdapter(Context mContext, List<OrderVo> orderVoList) {
+    public OrderReadyAdatper(Context mContext, List<OrderVo> orderVoList, View.OnClickListener finalizedListener, View.OnClickListener unpickedListener) {
         this.mContext = mContext;
         this.orderVoList = orderVoList;
+        this.finalizedListener = finalizedListener;
+        this.unpickedListener = unpickedListener;
     }
 
-    public void setData( List<OrderVo> orderVoList) {
+    public void updateData( List<OrderVo> orderVoList) {
         this.orderVoList = orderVoList;
+        notifyDataSetChanged();
+    }
+
+    public List<OrderVo> getData() {
+        return orderVoList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView title, count;
         public ImageView thumbnail, overflow;
-        public Button confirm;
+        public Button buttonFinalized,buttonUnpicked;
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             count = (TextView) itemView.findViewById(R.id.count);
-            confirm=(Button)itemView.findViewById(R.id.confirm);
+            buttonFinalized=(Button)itemView.findViewById(R.id.button_finalized);
+            buttonUnpicked=(Button)itemView.findViewById(R.id.button_unpicked);
+
 
         }
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_card, parent, false);
+                .inflate(R.layout.order_ready_card, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -59,14 +67,29 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         OrderVo order = orderVoList.get(position);
         holder.title.setText(order.getCustomerOrderId()+"");
         holder.count.setText(order.getCancelReason());
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,"Confirmed",Toast.LENGTH_LONG).show();
-            }
-        });
 
 
+        if("Y".equals(order.getPaidYn())) {
+            holder.buttonFinalized.setText("ORDER COMPLETE");
+        } else {
+            holder.buttonFinalized.setText("PRINT BILL    ");
+        }
+
+
+
+
+
+
+
+
+
+
+
+        holder.buttonFinalized.setTag(position);
+        holder.buttonFinalized.setOnClickListener(finalizedListener);
+
+        holder.buttonUnpicked.setTag(position);
+        holder.buttonUnpicked.setOnClickListener(unpickedListener);
     }
 
 

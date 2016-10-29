@@ -1,11 +1,8 @@
 package com.example.ssairam.hopline;
 
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -16,12 +13,12 @@ import com.example.ssairam.hopline.fragments.DefaulterFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
 import com.example.ssairam.hopline.fragments.OrderReadyFragment;
-import com.example.ssairam.hopline.fragments.PendingOrderFragment;
+import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
 
 
 public class MainActivity extends AppCompatActivity implements IncomingOrderFragment.OnFragmentInteractionListener
         , AHBottomNavigation.OnTabSelectedListener, NewOrderFragment.OnFragmentInteractionListener, DefaulterFragment.OnFragmentInteractionListener,
-        OrderReadyFragment.OnFragmentInteractionListener, PendingOrderFragment.OnFragmentInteractionListener {
+        OrderReadyFragment.OnFragmentInteractionListener, PreparingOrderFragment.OnFragmentInteractionListener {
     AHBottomNavigation bottomNavigation;
 
     @Override
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                         Toast.makeText(activity, "Error communicating with server!", Toast.LENGTH_LONG).show();
                     }
 
-                    Intent intent = new Intent(activity, DataRefreshServcie.class);
+                    Intent intent = new Intent(activity, IncommingOrderBackgroudRefresh.class);
                     startService(intent);
 
                     super.onPostExecute(success);
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 break;
             case 1:
                 if (!wasSelected) {
-                    PendingOrderFragment fragment = new PendingOrderFragment();
+                    PreparingOrderFragment fragment = new PreparingOrderFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
 
