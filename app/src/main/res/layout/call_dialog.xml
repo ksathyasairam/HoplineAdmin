@@ -26,6 +26,7 @@
         android:text="Please call the below number to confirm this order."
         android:fontFamily="sans-serif-condensed"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,6 +79,29 @@
             android:gravity="center"
             android:id="@+id/user_name"
              />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:text=" Qty : 3"
+            android:id="@+id/total_quantity"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center"
+
+            android:text=" Rs 100."
+            android:id="@+id/total_price"/>
     </LinearLayout>
 
     <ListView
