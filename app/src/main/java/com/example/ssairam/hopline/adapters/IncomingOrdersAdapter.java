@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ssairam.hopline.CustomLinearLayoutManager;
 import com.example.ssairam.hopline.OrderStates;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.vo.OrderVo;
@@ -45,6 +46,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         public Button confirm;
         public Button call;
         public Button cancel;
+        public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
@@ -52,6 +54,9 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
             confirm=(Button)itemView.findViewById(R.id.confirm);
             call=(Button)itemView.findViewById(R.id.call);
             cancel=(Button)itemView.findViewById(R.id.cancel);
+            productList = (RecyclerView) itemView.findViewById(R.id.incoming_order_product_list);
+            RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
+            productList.setLayoutManager(layoutManager);
 
         }
     }
@@ -85,6 +90,9 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
             holder.confirm.setOnClickListener(confirmListner);
             holder.cancel.setOnClickListener(cancelListner);
         }
+
+
+        holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
     }
 
