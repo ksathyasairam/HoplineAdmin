@@ -1,5 +1,6 @@
 package com.example.ssairam.hopline.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -15,11 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
-import com.example.ssairam.hopline.InitialiseDataFromServer;
-import com.example.ssairam.hopline.OrderStates;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
+import com.example.ssairam.hopline.adapters.BigOrderPayAdapter;
 import com.example.ssairam.hopline.adapters.OrderReadyAdatper;
 import com.example.ssairam.hopline.vo.OrderVo;
 
@@ -29,14 +29,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OrderReadyFragment.OnFragmentInteractionListener} interface
+ * {@link BigOrderPayFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link OrderReadyFragment#newInstance} factory method to
+ * Use the {@link BigOrderPayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OrderReadyFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private OrderReadyAdatper adapter;
+public class BigOrderPayFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,10 +44,12 @@ public class OrderReadyFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private IncomingOrderFragment.OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private BigOrderPayAdapter adapter;
 
-    public OrderReadyFragment() {
-        // Required  public constructor
+    public BigOrderPayFragment() {
+        // Required empty public constructor
     }
 
     /**
@@ -58,11 +58,11 @@ public class OrderReadyFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment IncomingOrderFragment.
+     * @return A new instance of fragment BigOrderPayFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static IncomingOrderFragment newInstance(String param1, String param2) {
-        IncomingOrderFragment fragment = new IncomingOrderFragment();
+    public static BigOrderPayFragment newInstance(String param1, String param2) {
+        BigOrderPayFragment fragment = new BigOrderPayFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,7 +77,6 @@ public class OrderReadyFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -88,29 +87,13 @@ public class OrderReadyFragment extends Fragment {
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-
-        if (!DataStore.isDataInilitised()) {
-            new InitialiseDataFromServer(this.getActivity()) {
-                @Override
-                protected void onPostExecute(Boolean success) {
-                    if (success) {
-                        initUi();
-                    } else {
-                        Toast.makeText(activity, "Error communicating with server!", Toast.LENGTH_LONG).show();
-                    }
-
-                    super.onPostExecute(success);
-                }
-            }.execute("");
-        } else {
-            initUi();
-        }
+        new LoadBigOrderPayData(getActivity()).execute("");
 
         return layout;
     }
 
-    private void initUi() {
-        adapter = createOrderReadyAdatper();
+    private void initUi(List<OrderVo> orders) {
+        adapter = createOrderReadyAdatper(orders);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -119,20 +102,15 @@ public class OrderReadyFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private OrderReadyAdatper createOrderReadyAdatper() {
-        List<OrderVo> orderVoList = DataStore.getReadyOrders();
-        return new OrderReadyAdatper(this.getActivity().getApplicationContext(), orderVoList, new View.OnClickListener() {
+    private BigOrderPayAdapter createOrderReadyAdatper(List<OrderVo> orders) {
+        return new BigOrderPayAdapter(this.getActivity().getApplicationContext(), orders, new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //finalized
+            public void onClick(View v) { //print bill
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if ("Y".equals(order.getPaidYn())){
-                    markOrderComplete(order);
-                } else {
-                    if (Util.printBill(order)){
-                        markOrderComplete(order);
-                    }
+                if (Util.printBill(order)) {
+                    markOrderPreparingAndPaid(order);
                 }
 
             }
@@ -140,33 +118,43 @@ public class OrderReadyFragment extends Fragment {
 
         }, new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //unpicked
+            public void onClick(View v) { //remove order
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
-                new MarkOrderUnpicked(order.getIdorder()).execute("");
-
+                new RemoveOrder(order.getIdorder()).execute("");
             }
         });
     }
 
 
-    private void markOrderComplete(OrderVo order) {
-        new MarkOrderComplete(order.getIdorder()).execute("");
+    private void markOrderPreparingAndPaid(OrderVo order) {
+        new MarkOrderPreparingAndPaid(order.getIdorder()).execute("");
     }
 
 
-
-    private class MarkOrderComplete extends AsyncTask<String, Void, Boolean> {
+    private class MarkOrderPreparingAndPaid extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
         Integer orderId;
 
-        MarkOrderComplete(Integer orderId) {
+        MarkOrderPreparingAndPaid(Integer orderId) {
             this.orderId = orderId;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderCompleted(orderId);
+            boolean success = ServerHelper.markOrderPreparingAndPaid(orderId);
+
+            if (success) {
+
+                try {
+                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DataStore.setPreparingOrders(null);
+                    return  false;
+                }
+            }
+
             return success;
         }
 
@@ -174,11 +162,8 @@ public class OrderReadyFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                OrderVo deletedOrder = new OrderVo();
-                deletedOrder.setIdorder(orderId);
-                DataStore.getReadyOrders().remove(deletedOrder);
-                updateUi();
-                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+               removeOrderFromUi(orderId);
+               Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
             }
@@ -194,17 +179,17 @@ public class OrderReadyFragment extends Fragment {
     }
 
 
-    private class MarkOrderUnpicked extends AsyncTask<String, Void, Boolean> {
+    private class RemoveOrder extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
         Integer orderId;
 
-        MarkOrderUnpicked(Integer orderId) {
+        RemoveOrder(Integer orderId) {
             this.orderId = orderId;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderUnpicked(orderId);
+            boolean success = ServerHelper.markOrderCancel(orderId,"Unattended Big order pay.");
             return success;
         }
 
@@ -212,10 +197,7 @@ public class OrderReadyFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                OrderVo deletedOrder = new OrderVo();
-                deletedOrder.setIdorder(orderId);
-                DataStore.getReadyOrders().remove(deletedOrder);
-                updateUi();
+                removeOrderFromUi(orderId);
                 Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
@@ -225,16 +207,20 @@ public class OrderReadyFragment extends Fragment {
                 dialog.dismiss();
         }
 
+
+
         @Override
         protected void onPreExecute() {
             dialog = Util.showProgressDialog(getActivity());
         }
     }
 
-    private void updateUi() {
-        adapter.updateData(DataStore.getReadyOrders());
+    private void removeOrderFromUi(Integer orderId) {
+        OrderVo deletedOrder = new OrderVo();
+        deletedOrder.setIdorder(orderId);
+        adapter.getData().remove(deletedOrder);
+        adapter.notifyDataSetChanged();
     }
-
     // TODO: Rename method, update argument and hook method into UI event
 
     public void onButtonPressed(Uri uri) {
@@ -247,7 +233,7 @@ public class OrderReadyFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof IncomingOrderFragment.OnFragmentInteractionListener) {
-            mListener = (IncomingOrderFragment.OnFragmentInteractionListener) context;
+            mListener = (BigOrderPayFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -274,5 +260,49 @@ public class OrderReadyFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    public class LoadBigOrderPayData extends AsyncTask<String, Void, Boolean> {
+        public final Activity activity;
+        ProgressDialog dialog;
+        List<OrderVo> orders;
+
+        public LoadBigOrderPayData(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            try {
+                orders = ServerHelper.retrieveBigOrderPayOrders();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (success) {
+                initUi(orders);
+            } else {
+                Toast.makeText(activity, "Error loading data!!", Toast.LENGTH_LONG).show();
+            }
+
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.createProgressDialog(activity);
+            dialog.show();
+        }
+    }
+
 
 }

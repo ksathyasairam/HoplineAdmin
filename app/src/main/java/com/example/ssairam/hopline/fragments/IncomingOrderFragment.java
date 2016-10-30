@@ -256,22 +256,7 @@ public class IncomingOrderFragment extends Fragment {
             newFragment.setOrderVo(order);
             newFragment.setView(v);
             newFragment.setListners(new CancelOnClickListner(),new ConfirmOnClickListner());
-
-
-//        if (mIsLargeLayout) {
-//            // The device is using a large layout, so show the fragment as a dialog
             newFragment.show(fragmentManager, "dialog");
-////        } else {
-////             The device is smaller, so show the fragment fullscreen
-//            FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            // For a little polish, specify a transition animation
-//            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//            // To make it fullscreen, use the 'content' root view as the container
-//            // for the fragment, which is always the root view for the activity
-//            transaction.add(android.R.id.content, newFragment)
-//                    .addToBackStack(null).commit();
-////
-
 
         }
     }
@@ -388,7 +373,7 @@ public class IncomingOrderFragment extends Fragment {
 
 
             if (success) {
-                synchronizedRemoveFromIncommingOrders(orderId);
+                Util.synchronizedRemoveFromIncommingOrders(orderId);
                 updateUi();
 
                 Toast.makeText(getActivity(), "Order cancelled!!", Toast.LENGTH_SHORT).show();
@@ -443,7 +428,7 @@ public class IncomingOrderFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                synchronizedRemoveFromIncommingOrders(orderId);
+                Util.synchronizedRemoveFromIncommingOrders(orderId);
                 updateUi();
                 Toast.makeText(getActivity(), "Order Moved to preparing!!", Toast.LENGTH_SHORT).show();
                 //TODO : update conromation order ui.
@@ -466,16 +451,6 @@ public class IncomingOrderFragment extends Fragment {
 
 
 
-    private void synchronizedRemoveFromIncommingOrders(Integer deletedOrderId) {
-        OrderVo deletedOrder = new OrderVo();
-        deletedOrder.setIdorder(deletedOrderId);
-
-        List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
-
-        localOrderVoCopy.remove(deletedOrder);
-        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
-        DataStore.setIncomingOrders(localOrderVoCopy);
-    }
 
 
 

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ssairam.hopline.CustomLinearLayoutManager;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.vo.OrderVo;
 
@@ -40,15 +41,18 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView title, count;
-        public ImageView thumbnail, overflow;
         public Button buttonFinalized,buttonUnpicked;
+        public TextView customerOrderNo;
+        public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            count = (TextView) itemView.findViewById(R.id.count);
             buttonFinalized=(Button)itemView.findViewById(R.id.button_finalized);
             buttonUnpicked=(Button)itemView.findViewById(R.id.button_unpicked);
+            customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
+
+            productList = (RecyclerView) itemView.findViewById(R.id.ready_order_product_list);
+            RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
+            productList.setLayoutManager(layoutManager);
 
 
         }
@@ -65,8 +69,9 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         OrderVo order = orderVoList.get(position);
-        holder.title.setText(order.getCustomerOrderId()+"");
-        holder.count.setText(order.getCancelReason());
+        holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
+
+        holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
 
         if("Y".equals(order.getPaidYn())) {

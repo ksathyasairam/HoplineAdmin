@@ -26,7 +26,7 @@
             android:inputType="textPersonName"
             android:hint="Customer Name"
             android:ems="10"
-            android:id="@+id/editText2" />
+            android:id="@+id/editTextName" />
 
         <TextView
             android:text="Enter Phone No"
@@ -40,7 +40,7 @@
             android:hint="Customer Phone No"
             android:inputType="phone"
             android:ems="10"
-            android:id="@+id/editText3" />
+            android:id="@+id/editTextPhone" />
     </LinearLayout>
 
     <ListView

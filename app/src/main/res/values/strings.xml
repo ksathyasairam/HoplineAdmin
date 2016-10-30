@@ -4,7 +4,7 @@
     <string name="tab_pendingorder">Pending Order</string>
     <string name="tab_billing">Bill</string>
     <string name="tab_neworder">new</string>
-    <string name="tab_defaulter">Defaulter</string>
+    <string name="tab_big_order_pay">Big Order Pay</string>
 
 
 </resources>

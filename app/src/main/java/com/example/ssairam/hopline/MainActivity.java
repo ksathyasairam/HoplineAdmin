@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.example.ssairam.hopline.fragments.DefaulterFragment;
+import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
 import com.example.ssairam.hopline.fragments.OrderReadyFragment;
@@ -17,7 +17,7 @@ import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
 
 
 public class MainActivity extends AppCompatActivity implements IncomingOrderFragment.OnFragmentInteractionListener
-        , AHBottomNavigation.OnTabSelectedListener, NewOrderFragment.OnFragmentInteractionListener, DefaulterFragment.OnFragmentInteractionListener,
+        , AHBottomNavigation.OnTabSelectedListener, NewOrderFragment.OnFragmentInteractionListener, BigOrderPayFragment.OnFragmentInteractionListener,
         OrderReadyFragment.OnFragmentInteractionListener, PreparingOrderFragment.OnFragmentInteractionListener {
     AHBottomNavigation bottomNavigation;
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         AHBottomNavigationItem tab_pendingorder = new AHBottomNavigationItem(getResources().getString(R.string.tab_pendingorder), R.drawable.ic_pendingorder);
         AHBottomNavigationItem tab_billing = new AHBottomNavigationItem(getResources().getString(R.string.tab_billing), R.drawable.ic_billing);
         AHBottomNavigationItem tab_neworder = new AHBottomNavigationItem(getResources().getString(R.string.tab_neworder), R.drawable.ic_neworder);
-        AHBottomNavigationItem tab_defaulter = new AHBottomNavigationItem(getResources().getString(R.string.tab_defaulter), R.drawable.ic_defaulter);
+        AHBottomNavigationItem tab_defaulter = new AHBottomNavigationItem(getResources().getString(R.string.tab_big_order_pay), R.drawable.ic_defaulter);
 
         bottomNavigation.addItem(tab_incomingorder);
         bottomNavigation.addItem(tab_pendingorder);
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 break;
             case 4:
                 if (!wasSelected) {
-                    DefaulterFragment fragment = new DefaulterFragment();
+                    BigOrderPayFragment fragment = new BigOrderPayFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 }

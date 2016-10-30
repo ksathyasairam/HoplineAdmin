@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.CustomLinearLayoutManager;
@@ -16,15 +15,17 @@ import com.example.ssairam.hopline.vo.OrderVo;
 import java.util.List;
 
 
-public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAdapter.ViewHolder> {
-    private final View.OnClickListener orderReadyListner;
+public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.ViewHolder> {
+    private final View.OnClickListener removeOrderListener;
+    private final View.OnClickListener printBillListener;
     private Context mContext;
     private List<OrderVo> orderVoList;
 
-    public PreparingOrderAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener orderReadyListner) {
+    public BigOrderPayAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener printBillListener, View.OnClickListener removeOrderListener) {
         this.mContext = mContext;
         this.orderVoList = orderVoList;
-        this.orderReadyListner = orderReadyListner;
+        this.printBillListener = printBillListener;
+        this.removeOrderListener = removeOrderListener;
     }
 
     public void updateData( List<OrderVo> orderVoList) {
@@ -37,25 +38,26 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        public Button buttonPrintBill, buttonRemoveOrder;
         public TextView customerOrderNo;
-        public Button buttonOrderReady;
         public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
+            buttonPrintBill =(Button)itemView.findViewById(R.id.button_print_bill);
+            buttonRemoveOrder =(Button)itemView.findViewById(R.id.button_remove);
             customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
-            buttonOrderReady=(Button)itemView.findViewById(R.id.button_order_ready);
 
-            productList = (RecyclerView) itemView.findViewById(R.id.preparing_order_product_list);
+            productList = (RecyclerView) itemView.findViewById(R.id.bo_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
             productList.setLayoutManager(layoutManager);
 
+
         }
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.preparing_order_card, parent, false);
+                .inflate(R.layout.big_order_pay_card, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -68,10 +70,12 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
 
         holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
-        holder.buttonOrderReady.setTag(position);
-        holder.buttonOrderReady.setOnClickListener(orderReadyListner);
 
+        holder.buttonPrintBill.setTag(position);
+        holder.buttonPrintBill.setOnClickListener(printBillListener);
 
+        holder.buttonRemoveOrder.setTag(position);
+        holder.buttonRemoveOrder.setOnClickListener(removeOrderListener);
     }
 
 

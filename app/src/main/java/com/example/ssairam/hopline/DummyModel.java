@@ -1,5 +1,7 @@
 package com.example.ssairam.hopline;
 
+import com.example.ssairam.hopline.vo.OrderVo;
+
 /**
  * Created by root on 20/10/16.
  */
@@ -7,6 +9,15 @@ package com.example.ssairam.hopline;
 public class DummyModel {
     private FetchOrderTo fetchOrder;
     private OrderStatusTo orderStatus;
+    private OrderVo order;
+
+    public OrderVo getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderVo order) {
+        this.order = order;
+    }
 
     public OrderStatusTo getOrderStatus() {
         return orderStatus;

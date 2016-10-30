@@ -1,11 +1,17 @@
 package com.example.ssairam.hopline;
 
+import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.google.gson.reflect.TypeToken;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -33,6 +39,37 @@ public class ServerHelper {
 
         return fetchOrderTo.getOrders();
     }
+
+    public static List<CategoryVo> retrieveMenu() throws Exception {
+
+        DummyModel dm = new DummyModel();
+
+        final String url = BASE_REST_URL + "retrieveMenu";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+        CategoryVo[] categoryVos= restTemplate.postForObject(url,dm, CategoryVo[].class);
+        if (categoryVos == null ) return new ArrayList<CategoryVo>();
+
+        return Arrays.asList(categoryVos);
+    }
+
+    public static OrderVo createWalkInOrder(OrderVo order) throws Exception {
+
+        DummyModel dm = new DummyModel();
+        dm.setOrder(order);
+
+        final String url = BASE_REST_URL + "createWalkinOrder";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+        order= restTemplate.postForObject(url,dm, OrderVo.class);
+
+        if (order == null || order.getIdorder() == null) throw new Exception();
+
+        return order;
+    }
+
 
 
     private static boolean updateOrderStatus(OrderStatusTo orderStatusTo){
@@ -69,6 +106,15 @@ public class ServerHelper {
         OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
         ordrOrderStatusTo.setOrderId(orderId);
         ordrOrderStatusTo.setOrderStatus(OrderStates.PREPARING);
+
+        return updateOrderStatus(ordrOrderStatusTo);
+    }
+
+    public static boolean markOrderPreparingAndPaid(Integer orderId){
+        OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
+        ordrOrderStatusTo.setOrderId(orderId);
+        ordrOrderStatusTo.setOrderStatus(OrderStates.PREPARING);
+        ordrOrderStatusTo.setPaidYN("Y");
 
         return updateOrderStatus(ordrOrderStatusTo);
     }

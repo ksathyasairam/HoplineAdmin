@@ -1,5 +1,6 @@
 package com.example.ssairam.hopline;
 
+import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
@@ -15,6 +16,16 @@ public class DataStore {
     private static List<OrderVo> incomingOrders;
     private static List<OrderVo> preparingOrders;
     private static List<OrderVo> readyOrders;
+
+    private static List<CategoryVo> menuCategories;
+
+    public static synchronized List<CategoryVo> getMenuCategories() {
+        return menuCategories;
+    }
+
+    public static synchronized void setMenuCategories(List<CategoryVo> menuCategories) {
+        DataStore.menuCategories = menuCategories;
+    }
 
     public static synchronized List<OrderVo> getIncomingOrders() {
         return incomingOrders;
@@ -46,6 +57,7 @@ public class DataStore {
         setIncomingOrders(ServerHelper.retrieveIncomingOrders());
         setPreparingOrders(ServerHelper.retrievePreparingOrders());
         setReadyOrders(ServerHelper.retrieveReadyOrders());
+        setMenuCategories(ServerHelper.retrieveMenu());
     }
 
     public static boolean isDataInilitised() {

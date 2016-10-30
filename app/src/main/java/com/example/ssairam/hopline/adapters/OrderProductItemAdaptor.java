@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.vo.OrderProductAddonVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 
@@ -36,7 +37,7 @@ public class OrderProductItemAdaptor extends RecyclerView.Adapter<OrderProductIt
         holder.itemName.setText(orderProduct.getProduct().getName());
         holder.itemQuantity.setText(orderProduct.getCount()+"");
         if (orderProduct.getOrderProductAddons() != null && !orderProduct.getOrderProductAddons().isEmpty()){
-            holder.addonsString.setText(getAddonString(orderProduct.getOrderProductAddons()));
+            holder.addonsString.setText(Util.getAddonString(orderProduct.getOrderProductAddons()));
             holder.addonsString.setVisibility(View.VISIBLE);
         } else {
             holder.addonsString.setVisibility(View.GONE);
@@ -44,16 +45,6 @@ public class OrderProductItemAdaptor extends RecyclerView.Adapter<OrderProductIt
 
     }
 
-    private CharSequence getAddonString(List<OrderProductAddonVo> orderProductAddons) {
-        if (orderProductAddons == null || orderProductAddons.isEmpty()) return "";
-
-        String result = "";
-        for(OrderProductAddonVo orderProductAddonVo : orderProductAddons) {
-            result += "," + orderProductAddonVo.getAddOn().getName();
-        }
-
-        return result.substring(1);
-    }
 
     @Override
     public int getItemCount() {

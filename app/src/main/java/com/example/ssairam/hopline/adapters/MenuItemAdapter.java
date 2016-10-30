@@ -2,6 +2,7 @@
 package com.example.ssairam.hopline.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         public TextView itemName;
         public TextView quantity;
         public TextView price;
-        public Button customizeButton;
+        public ImageButton customizeButton;
         public ImageButton increaseQuantityButton;
         public ImageButton decreaseQuantityButton;
         public View cardButton;
@@ -74,7 +75,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             quantity = (TextView) itemView.findViewById(R.id.quantity);
             price = (TextView) itemView.findViewById(R.id.price);
-            customizeButton = (Button) itemView.findViewById(R.id.customize_button);
+            customizeButton = (ImageButton) itemView.findViewById(R.id.customize_icn_button);
             increaseQuantityButton = (ImageButton) itemView.findViewById(R.id.increase_quantity_button);
             decreaseQuantityButton = (ImageButton) itemView.findViewById(R.id.decrease_quantity_button);
             cardButton  = itemView.findViewById(R.id.card_button);
@@ -116,36 +117,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
     public int getItemCount() {
         return category.getProducts().size();
     }
-//
-//    private class IncreaseQuantityListener implements View.OnClickListener {
-//
-//        @Override
-//        public void onClick(View v) {
-//
-//            int position = (Integer) v.getTag();
-//
-//            int quantity = category.getProducts().get(position).getQuantity();
-//
-//            category.getProducts().get(position).setQuantity(quantity + 1);
-//            notifyDataSetChanged();
-//
-//        }
-//    }
-//
-//
-//    private class DecreaseQuantityListener implements View.OnClickListener {
-//
-//        @Override
-//        public void onClick(View v) {
-//
-//            int position = (Integer) v.getTag();
-//
-//            int quantity = category.getProducts().get(position).getQuantity();
-//            if (quantity == 1) return;
-//
-//            category.getProducts().get(position).setQuantity(quantity - 1);
-//            notifyDataSetChanged();
-//        }
-//    }
+
 }
 
