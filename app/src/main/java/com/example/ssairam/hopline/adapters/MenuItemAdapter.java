@@ -51,6 +51,16 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void resetAllProductCount() {
+
+        for (ProductVo productVo : category.getProducts()) {
+                productVo.setQuantity(0);
+        }
+        notifyDataSetChanged();
+    }
+
+
+
     public MenuItemAdapter(Context mContext, CategoryVo products, View.OnClickListener increaseQuantityListner,View.OnClickListener decreaseQuantityListner, View.OnClickListener customizeButtonListner) {
         this.mContext = mContext;
         setCategory(products);

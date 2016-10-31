@@ -317,6 +317,9 @@ public class IncomingOrderFragment extends Fragment {
             final View layout = inflater.inflate(R.layout.call_dialog,null);
             ((TextView) layout.findViewById(R.id.phone_numer)).setText(orderVo.getUser().getPhone());
             ((TextView) layout.findViewById(R.id.user_name)).setText(orderVo.getUser().getName());
+            ((TextView) layout.findViewById(R.id.total_price)).setText(orderVo.getTotalPrice() + "");
+            ((TextView) layout.findViewById(R.id.total_quantity)).setText(orderVo.getTotalItemCount() + "");
+
 //            String[] values = new String[] { "Android List View",
 //                    "Adapter implementation",
 //                    "Simple List View In Android",

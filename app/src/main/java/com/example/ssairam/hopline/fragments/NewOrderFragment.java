@@ -320,6 +320,7 @@ public class NewOrderFragment extends Fragment {
             if (success) {
                 Util.printBill(orderFromServer);
                 DataStore.getPreparingOrders().add(orderFromServer);
+                clearAll();
                 Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();
             } else {
                 createCompletOfflineOrder(order);
@@ -329,6 +330,8 @@ public class NewOrderFragment extends Fragment {
                 dialog.dismiss();
         }
 
+
+
         @Override
         protected void onPreExecute() {
             dialog = Util.showProgressDialog(getActivity());
@@ -336,7 +339,11 @@ public class NewOrderFragment extends Fragment {
 
         }
     }
+    private void clearAll() {
+        itemAdapter.resetAllProductCount();
+        cartAdapter.clearCart();
 
+    }
     private void createCompletOfflineOrder(OrderVo order) {
         Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
     }

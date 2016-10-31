@@ -40,6 +40,11 @@ public class CartAdapter extends BaseAdapter {
         order.getOrderProducts().add(orderProductVo);
     }
 
+    public void clearCart(){
+        order = new OrderVo();
+        order.setOrderProducts(new ArrayList<OrderProductVo>());
+    }
+
     public OrderVo getOrder() {
         return order;
     }

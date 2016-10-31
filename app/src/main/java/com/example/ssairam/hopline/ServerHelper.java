@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ServerHelper {
 
-
-    private static final String BASE_REST_URL = "http://hopline.5fypzgp2y7.us-east-1.elasticbeanstalk.com/rest/";
+    public static final String BASE_URL = "http://hopline.5fypzgp2y7.us-east-1.elasticbeanstalk.com/";
+    public static final String BASE_REST_URL = BASE_URL + "rest/";
 
     private static List<OrderVo> retrieveOrdersFromServer(List<String> orderStates) throws Exception {
 

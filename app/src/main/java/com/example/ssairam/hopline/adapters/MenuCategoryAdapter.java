@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.vo.CategoryVo;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -51,7 +54,10 @@ public class MenuCategoryAdapter  extends BaseAdapter{
         convertView = mInflater.inflate(R.layout.menu_category_item, null);//set layout for displaying items
 
         ((TextView)convertView.findViewById(R.id.category_name)).setText(categories.get(position).getName() + " " +
-                categories.get(0).getSubCategoryName());
+                categories.get(position).getSubCategoryName());
+        ImageView catImg = ((ImageView) convertView.findViewById(R.id.category_image));
+        Picasso.with(mContext).load(ServerHelper.BASE_URL+ categories.get(position).getImgUrl()).into(catImg);
+
 
         return convertView;
     }
