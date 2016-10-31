@@ -2,6 +2,7 @@ package com.example.ssairam.hopline;
 
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.Stock;
 import com.google.gson.reflect.TypeToken;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -87,6 +88,26 @@ public class ServerHelper {
             if (orderStatusTo == null) return false;
 
             return orderStatusTo.isSuccess();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean updateStock(Stock stock){
+        try {
+
+            DummyModel dm = new DummyModel();
+            dm.setStock(stock);
+
+            final String url = BASE_REST_URL + "updateStock";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            stock = restTemplate.postForObject(url, dm, Stock.class);
+
+            if (stock == null) return false;
+
+            return stock.isSuccess();
         }catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -1,6 +1,7 @@
 package com.example.ssairam.hopline;
 
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.Stock;
 
 /**
  * Created by root on 20/10/16.
@@ -10,6 +11,16 @@ public class DummyModel {
     private FetchOrderTo fetchOrder;
     private OrderStatusTo orderStatus;
     private OrderVo order;
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
+
+    private Stock stock;
 
     public OrderVo getOrder() {
         return order;
