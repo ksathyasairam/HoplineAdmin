@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +114,7 @@ public class PreparingOrderFragment extends Fragment {
         adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList,new OrderReadyListener());
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
-       RecyclerView.LayoutManager layoutManager=new GridLayoutManager(this.getActivity(),2);
+       RecyclerView.LayoutManager layoutManager=new StaggeredGridLayoutManager(4,1);
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

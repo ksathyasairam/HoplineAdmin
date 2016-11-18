@@ -42,15 +42,13 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView title, count, customerOrderNo;
-        public ImageView thumbnail, overflow;
         public Button confirm;
         public Button call;
         public Button cancel;
         public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            count = (TextView) itemView.findViewById(R.id.count);
+
             confirm=(Button)itemView.findViewById(R.id.confirm);
             call=(Button)itemView.findViewById(R.id.call);
             cancel=(Button)itemView.findViewById(R.id.cancel);
@@ -75,6 +73,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
 
         OrderVo order = orderVoList.get(position);
         holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
+
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
             holder.confirm.setVisibility(View.GONE);

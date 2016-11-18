@@ -3,6 +3,7 @@ package com.example.ssairam.hopline;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -60,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         if (findViewById(R.id.fragment_container) != null) {
             IncomingOrderFragment Fragment = new IncomingOrderFragment();
             Fragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, Fragment).commit();
+                    .add(R.id.fragment_container, Fragment).addToBackStack(null).commit();
+
         }
 
     }
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         bottomNavigation.addItem(tab_neworder);
         bottomNavigation.addItem(tab_defaulter);
         bottomNavigation.setOnTabSelectedListener(this);
+        bottomNavigation.setBehaviorTranslationEnabled(false);
     }
 
     @Override
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case 0:
                 if (!wasSelected) {
                     IncomingOrderFragment fragment = new IncomingOrderFragment();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 }
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case 1:
                 if (!wasSelected) {
                     PreparingOrderFragment fragment = new PreparingOrderFragment();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
 
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case 2:
                 if (!wasSelected) {
                     OrderReadyFragment fragment = new OrderReadyFragment();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 }
@@ -119,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case 3:
                 if (!wasSelected) {
                     NewOrderFragment fragment = new NewOrderFragment();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 }
@@ -126,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case 4:
                 if (!wasSelected) {
                     BigOrderPayFragment fragment = new BigOrderPayFragment();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
                 }
