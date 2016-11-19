@@ -21,7 +21,7 @@ import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
-import com.example.ssairam.hopline.adapters.PreparingOrderAdapter;
+import com.example.ssairam.hopline.adapters.OfflineOrderAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
@@ -30,14 +30,14 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PreparingOrderFragment.OnFragmentInteractionListener} interface
+ * {@link OfflineOrderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PreparingOrderFragment#newInstance} factory method to
+ * Use the {@link OfflineOrderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PreparingOrderFragment extends Fragment {
+public class OfflineOrderFragment extends Fragment {
     private RecyclerView recyclerView;
-    private PreparingOrderAdapter adapter;
+    private OfflineOrderAdapter adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -47,9 +47,9 @@ public class PreparingOrderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private IncomingOrderFragment.OnFragmentInteractionListener mListener;
+    private OfflineOrderFragment.OnFragmentInteractionListener mListener;
 
-    public PreparingOrderFragment() {
+    public OfflineOrderFragment() {
         // Required empty public constructor
     }
 
@@ -88,32 +88,14 @@ public class PreparingOrderFragment extends Fragment {
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-
-        if (!DataStore.isDataInilitised()) {
-            new InitialiseDataFromServer(this.getActivity()) {
-                @Override
-                protected void onPostExecute(Boolean success) {
-                    if (success) {
-                        initUi();
-                    } else {
-                        Toast.makeText(activity, "Error communicating with server!", Toast.LENGTH_LONG).show();
-                    }
-
-                    super.onPostExecute(success);
-                }
-            }.execute("");
-        } else {
-            initUi();
-        }
-
+        initUi();
         return layout;
     }
 
     private void initUi() {
-        List<OrderVo> orderVoList = DataStore.getPreparingOrders();
-        adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList,new OrderReadyListener());
+        List<OrderVo> orderVoList = DataStore.getCompleteOfflineOrders(getActivity().getApplicationContext());
+        adapter = new OfflineOrderAdapter(this.getActivity().getApplicationContext(), orderVoList,new OfflineOrderListener());
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
        RecyclerView.LayoutManager layoutManager=new StaggeredGridLayoutManager(4,1);
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -122,75 +104,21 @@ public class PreparingOrderFragment extends Fragment {
     }
 
 
-    private class OrderReadyListener implements View.OnClickListener {
+    private class OfflineOrderListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-
             int position = (Integer) v.getTag();
-            OrderVo order = adapter.getData().get(position);
-            new MarkOrderReady(order.getIdorder()).execute("");
-
-
+            DataStore.removeOfflineOrder(adapter.getData().get(position),getActivity().getApplicationContext());
+            adapter.updateData(DataStore.getCompleteOfflineOrders(getActivity().getApplicationContext()));
         }
     }
 
 
 
-    private class MarkOrderReady extends AsyncTask<String, Void, Boolean> {
-        ProgressDialog dialog;
-        Integer orderId;
-
-        MarkOrderReady(Integer orderId) {
-            this.orderId = orderId;
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderReadyForPickup(orderId);
-
-            if (success) {
-
-                try {
-                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DataStore.setReadyOrders(null);
-                    return  false;
-                }
-            }
-
-            return success;
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-
-            if (success) {
-                OrderVo deletedOrder = new OrderVo();
-                deletedOrder.setIdorder(orderId);
-                DataStore.getPreparingOrders().remove(deletedOrder);
-                updateUi();
-                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
-            }
-
-            if (dialog != null)
-                dialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            dialog = Util.showProgressDialog(getActivity());
-
-
-        }
-    }
 
     private void updateUi() {
-        if(adapter != null) adapter.updateData(DataStore.getPreparingOrders());
+        if(adapter != null) adapter.updateData(DataStore.getCompleteOfflineOrders(getActivity().getApplicationContext()));
     }
 
     @Override
@@ -206,16 +134,16 @@ public class PreparingOrderFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IncomingOrderFragment.OnFragmentInteractionListener) {
-            mListener = (IncomingOrderFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OfflineOrderFragment.OnFragmentInteractionListener) {
+//            mListener = (OfflineOrderFragment.OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
 
     @Override
     public void onDetach() {

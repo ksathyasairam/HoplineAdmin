@@ -2,9 +2,7 @@ package com.example.ssairam.hopline;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 /**
  * Created by root on 23/10/16.
@@ -23,7 +21,7 @@ public class InitialiseDataFromServer extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... params) {
 
         try {
-            DataStore.loadEverythingFromServer();
+            DataStore.loadEverythingFromServer(activity.getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

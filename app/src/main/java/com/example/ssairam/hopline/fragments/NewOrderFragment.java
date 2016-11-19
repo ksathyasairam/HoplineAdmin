@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.Dialogs.CreateOrderDialogFragment;
+import com.example.ssairam.hopline.MainPrefs;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
@@ -87,7 +87,7 @@ public class NewOrderFragment extends Fragment {
         });
 
         categoryListView = (ListView) layout.findViewById(R.id.list_view_menu_category);
-        categoryAdapter = new MenuCategoryAdapter(getActivity().getApplicationContext(), DataStore.getMenuCategories());
+        categoryAdapter = new MenuCategoryAdapter(getActivity().getApplicationContext(), DataStore.getMenuCategories(getActivity().getApplicationContext()));
         categoryListView.setAdapter(categoryAdapter);
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -323,7 +323,7 @@ public class NewOrderFragment extends Fragment {
                 clearAll();
                 Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();
             } else {
-                createCompletOfflineOrder(order);
+                createCompleteOfflineOrder(order);
             }
 
             if (dialog != null)
@@ -344,8 +344,10 @@ public class NewOrderFragment extends Fragment {
         cartAdapter.clearCart();
 
     }
-    private void createCompletOfflineOrder(OrderVo order) {
-        Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+    private void createCompleteOfflineOrder(OrderVo order) {
+        order.setCustomerOrderId(MainPrefs.getNewOfflineOrderNumber(getActivity().getApplicationContext()));
+        DataStore.addOfflineOrder(order,getActivity().getApplicationContext());
+        Toast.makeText(getActivity(), "Unable to connect to server, OFFLINE ORDER CREATED!!", Toast.LENGTH_SHORT).show();
     }
 
     public interface PrintBillListner{

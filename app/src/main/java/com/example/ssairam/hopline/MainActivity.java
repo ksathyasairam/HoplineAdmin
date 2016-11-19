@@ -6,6 +6,10 @@ import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -13,6 +17,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
+import com.example.ssairam.hopline.fragments.OfflineOrderFragment;
 import com.example.ssairam.hopline.fragments.OrderReadyFragment;
 import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
 
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                         initUi();
                     } else {
                         Toast.makeText(activity, "Error communicating with server!", Toast.LENGTH_LONG).show();
+                        initUi();
                     }
 
                     Intent intent = new Intent(activity, IncommingOrderBackgroudRefresh.class);
@@ -148,5 +154,41 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         }
 
         return true;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.offline_orders:
+                OfflineOrderFragment fragment = new OfflineOrderFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            View decorView = getWindow().getDecorView();
+//
+//            decorView.setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
     }
 }

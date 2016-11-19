@@ -62,7 +62,7 @@ public class IncommingOrderBackgroudRefresh extends Service {
                         setLocallyUpdated(false);
                         if (DataStore.getIncomingOrders() == null) {
                             Log.d("servcie", "Local data null!! going to refresh everyting");
-                            DataStore.loadEverythingFromServer();
+                            DataStore.loadEverythingFromServer(getApplicationContext());
                         }
 
                         Log.d("servcie", "Going to refresh Conformation List");

@@ -240,7 +240,7 @@ public class IncomingOrderFragment extends Fragment {
     };
 
     private void updateUi() {
-        adapter.updateData(DataStore.getIncomingOrders());
+        if (adapter != null) adapter.updateData(DataStore.getIncomingOrders());
     }
 
     private class CallOnclickListner implements View.OnClickListener {

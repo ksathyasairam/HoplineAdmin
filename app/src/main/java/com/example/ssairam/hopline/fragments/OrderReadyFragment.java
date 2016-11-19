@@ -233,7 +233,7 @@ public class OrderReadyFragment extends Fragment {
     }
 
     private void updateUi() {
-        adapter.updateData(DataStore.getReadyOrders());
+        if(adapter != null) adapter.updateData(DataStore.getReadyOrders());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
