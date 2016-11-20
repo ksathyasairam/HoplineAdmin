@@ -109,7 +109,7 @@ public class BigOrderPayFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if (Util.printBill(order)) {
+                if (Util.printBill(order,getActivity())) {
                     markOrderPreparingAndPaid(order);
                 }
 

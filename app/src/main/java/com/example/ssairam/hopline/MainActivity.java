@@ -1,15 +1,17 @@
 package com.example.ssairam.hopline;
 
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -38,8 +40,12 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             }
         }
 
+        new PrinterConnector(this).execute("");
+
         if (!DataStore.isDataInilitised()) {
             new InitialiseDataFromServer(this){
+
+
                 @Override
                 protected void onPostExecute(Boolean success) {
                     if (success) {
@@ -54,11 +60,50 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
 
                     super.onPostExecute(success);
                 }
+
             }.execute("");
         } else {
             initUi();
         }
 
+    }
+
+
+    public class PrinterConnector extends AsyncTask<String, Void, Boolean> {
+        public final Activity activity;
+        ProgressDialog dialog;
+        boolean canConnectToPrinter;
+
+        public PrinterConnector(Activity activity){
+            this.activity = activity;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            if (canConnectToPrinter)
+                return PrinterHelper.get().connectToPrinter();
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (dialog != null)
+                dialog.dismiss();
+
+            if (!canConnectToPrinter) return;
+
+            if (success)
+                Toast.makeText(activity, "Printer Connected!", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(activity, "Unable to connect to printer!, Please contact Hopline.", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            canConnectToPrinter = PrinterHelper.get().canConnectToPrinter(activity);
+            dialog = Util.createProgressDialog(activity);
+            dialog.show();
+        }
     }
 
     private void initUi() {

@@ -318,7 +318,7 @@ public class NewOrderFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                Util.printBill(orderFromServer);
+                Util.printBill(orderFromServer,getActivity());
                 DataStore.getPreparingOrders().add(orderFromServer);
                 clearAll();
                 Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();

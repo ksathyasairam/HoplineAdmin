@@ -131,7 +131,7 @@ public class OrderReadyFragment extends Fragment {
                 if ("Y".equals(order.getPaidYn())){
                     markOrderComplete(order);
                 } else {
-                    if (Util.printBill(order)){
+                    if (Util.printBill(order,getActivity())){
                         markOrderComplete(order);
                     }
                 }

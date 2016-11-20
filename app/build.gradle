@@ -42,5 +42,9 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    compile files('libs/AnalogicsVersa2TBTPrinterAPI.jar')
+    compile files('libs/common-lang3.jar')
+    compile files('libs/org-apache-commons-codec.jar')
+
     testCompile 'junit:junit:4.12'
 }

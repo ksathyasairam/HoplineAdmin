@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Base64;
+import android.widget.Toast;
 
 import java.io.*;
 
@@ -90,21 +91,39 @@ public class Util {
             }
         }
 
-        return orderProduct.getCount() * (orderProduct.getProduct().getPrice().doubleValue() + addonPrice ) ;
+        return orderProduct.getCount() * (orderProduct.getProduct().getPrice().doubleValue() + addonPrice);
     }
 
     public static CharSequence getAddonString(List<OrderProductAddonVo> orderProductAddons) {
         if (orderProductAddons == null || orderProductAddons.isEmpty()) return "";
 
         String result = "";
-        for(OrderProductAddonVo orderProductAddonVo : orderProductAddons) {
+        for (OrderProductAddonVo orderProductAddonVo : orderProductAddons) {
             result += "," + orderProductAddonVo.getAddOn().getName();
         }
 
         return result.substring(1);
     }
 
-    public static boolean printBill(OrderVo order) {
-        return true;
+    public static boolean printBill(OrderVo order, Activity activity) {
+        String printText = "        Bistro 37\nShop No. 11, Godavari Complex, Arun Vihar\n Sector 37, Noida";
+
+        if (PrinterHelper.get().print(printText)){
+            Toast.makeText(activity, "Printer connected!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        Toast.makeText(activity, "Printer connection lost!, Retrying", Toast.LENGTH_SHORT).show();
+        if (!PrinterHelper.get().canConnectToPrinter(activity)) return false;
+
+        if (PrinterHelper.get().connectToPrinter()) {
+            Toast.makeText(activity, "Printer connected!", Toast.LENGTH_SHORT).show();
+            return PrinterHelper.get().print(printText);
+        } else {
+            Toast.makeText(activity, "Unable to connect to printer!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+
     }
 }
