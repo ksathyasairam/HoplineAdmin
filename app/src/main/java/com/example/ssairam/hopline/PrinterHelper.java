@@ -1,9 +1,11 @@
 package com.example.ssairam.hopline;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
@@ -31,30 +33,33 @@ public class PrinterHelper {
         }
         return printerHelper;
     }
+//    PrinterHelper.get().print("        Bistro 37\n        Shop No.11\nGodavari Complex,Arun Vihar\n     Sector 37, Noida\n   Ph. No. : 011 33105995\n________________________\nQty   Item          Amounthello world");
 
-    public boolean canConnectToPrinter(Activity activity) {
-        Context context = activity.getBaseContext();
+    public void reFeed() {
+        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
 
+        String feeddata = "";
+        feeddata = printer.variable_Size_Reverse_Line_Feed(150);
+
+        conn.printData(feeddata);
+
+    }
+
+    public boolean canConnectToPrinter() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-            Toast.makeText(context, "Bluetooth is NOT Enabled",
-                    Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-
-        if (bluetoothAdapter.isDiscovering()) {
-            Toast.makeText(
-                    context,
-                    "Bluetooth is currently in device discovery process.",
-                    Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        return  true;
+        return !(bluetoothAdapter == null || !bluetoothAdapter.isEnabled() || bluetoothAdapter.isDiscovering());
     }
 
     public boolean connectToPrinter() {
+        if (conn == null)
+            conn = new AnalogicsThermalPrinter();
+
+        try {
+            conn.closeBT();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try {
             conn.openBT("00:04:3E:93:41:13");
             return true;
@@ -65,16 +70,16 @@ public class PrinterHelper {
     }
 
 
-    public boolean print(String data) {
-        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
+    public boolean print(String printerFormattedData) {
+//        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
 
-        String printdata = "";
+//        String printdata = "";
 //        printdata = printer.font_Courier_10(data);
 //        printdata += printer.font_Courier_19(data);
 //        printdata += printer.font_Courier_20(data);
 //        printdata += printer.font_Courier_24(data);
 //        printdata += printer.font_Courier_25(data);
-        printdata += printer.font_Courier_29(data);
+//        printdata += printer.font_Courier_29(data);
 //        printdata += printer.font_Courier_32(data);
 //        printdata += printer.font_Courier_34(data);
 //        printdata += printer.font_Courier_38(data);
@@ -82,12 +87,15 @@ public class PrinterHelper {
 //        printdata += printer.font_Courier_48(data);
 //
         try {
-            return conn.printData(printdata);
-        }catch (Exception e) {
+            return conn.printData(printerFormattedData);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-
 }
+
+
+
+

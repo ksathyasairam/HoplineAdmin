@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
-import com.example.ssairam.hopline.OrderStates;
+import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
@@ -128,13 +127,12 @@ public class OrderReadyFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if ("Y".equals(order.getPaidYn())){
+                if (PrinterHelper.get().canConnectToPrinter()){
                     markOrderComplete(order);
                 } else {
-                    if (Util.printBill(order,getActivity())){
-                        markOrderComplete(order);
-                    }
+                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
                 }
+
 
             }
 
@@ -152,22 +150,23 @@ public class OrderReadyFragment extends Fragment {
 
 
     private void markOrderComplete(OrderVo order) {
-        new MarkOrderComplete(order.getIdorder()).execute("");
+        new MarkOrderComplete(order).execute("");
     }
 
 
 
     private class MarkOrderComplete extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-        Integer orderId;
+        OrderVo order;
+        boolean printBill;
 
-        MarkOrderComplete(Integer orderId) {
-            this.orderId = orderId;
+        MarkOrderComplete(OrderVo order) {
+            this.order = order;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderCompleted(orderId);
+            boolean success = ServerHelper.markOrderCompleted(order.getIdorder());
             return success;
         }
 
@@ -176,9 +175,14 @@ public class OrderReadyFragment extends Fragment {
 
             if (success) {
                 OrderVo deletedOrder = new OrderVo();
-                deletedOrder.setIdorder(orderId);
+                deletedOrder.setIdorder(order.getIdorder());
                 DataStore.getReadyOrders().remove(deletedOrder);
                 updateUi();
+
+                if (printBill) {
+                    Util.printBill(order,getActivity());
+                }
+
                 Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
@@ -190,6 +194,7 @@ public class OrderReadyFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            printBill = "N".equals(order.getPaidYn());
             dialog = Util.showProgressDialog(getActivity());
         }
     }

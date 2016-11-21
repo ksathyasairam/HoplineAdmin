@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
+import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.BigOrderPayAdapter;
-import com.example.ssairam.hopline.adapters.OrderReadyAdatper;
 import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
@@ -109,8 +109,10 @@ public class BigOrderPayFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if (Util.printBill(order,getActivity())) {
+                if (PrinterHelper.get().canConnectToPrinter()){
                     markOrderPreparingAndPaid(order);
+                } else {
+                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -128,21 +130,21 @@ public class BigOrderPayFragment extends Fragment {
 
 
     private void markOrderPreparingAndPaid(OrderVo order) {
-        new MarkOrderPreparingAndPaid(order.getIdorder()).execute("");
+        new MarkOrderPreparingAndPaid(order).execute("");
     }
 
 
     private class MarkOrderPreparingAndPaid extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-        Integer orderId;
+        OrderVo order;
 
-        MarkOrderPreparingAndPaid(Integer orderId) {
-            this.orderId = orderId;
+        MarkOrderPreparingAndPaid(OrderVo order) {
+            this.order = order;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderPreparingAndPaid(orderId);
+            boolean success = ServerHelper.markOrderPreparingAndPaid(order.getIdorder());
 
             if (success) {
 
@@ -162,7 +164,8 @@ public class BigOrderPayFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-               removeOrderFromUi(orderId);
+               removeOrderFromUi(order.getIdorder());
+               Util.printBill(order,getActivity());
                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();

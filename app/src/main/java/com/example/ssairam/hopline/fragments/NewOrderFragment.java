@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.Dialogs.CreateOrderDialogFragment;
 import com.example.ssairam.hopline.MainPrefs;
+import com.example.ssairam.hopline.PrinterConnector;
+import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
@@ -223,7 +225,14 @@ public class NewOrderFragment extends Fragment {
         newFragment.setData(order, new PrintBillListner() {
             @Override
             public void OnPrintBill(OrderVo order) {
+
+                if (PrinterHelper.get().canConnectToPrinter()){
                     new CreateWalkInOrder(order).execute("");
+                } else {
+                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
         newFragment.show(fragmentManager, "createOrderDialog");
@@ -324,6 +333,7 @@ public class NewOrderFragment extends Fragment {
                 Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();
             } else {
                 createCompleteOfflineOrder(order);
+                Util.printBill(order,getActivity());
             }
 
             if (dialog != null)
