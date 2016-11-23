@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -127,14 +128,15 @@ public class ServerHelper {
         OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
         ordrOrderStatusTo.setOrderId(orderId);
         ordrOrderStatusTo.setOrderStatus(OrderStates.PREPARING);
-
+//        ordrOrderStatusTo.setUpdateOrderTime(true);
         return updateOrderStatus(ordrOrderStatusTo);
     }
 
-    public static boolean markOrderPreparingAndPaid(Integer orderId){
+    public static boolean markOrderPreparingAndPaidAndUdpateDate(Integer orderId){
         OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
         ordrOrderStatusTo.setOrderId(orderId);
         ordrOrderStatusTo.setOrderStatus(OrderStates.PREPARING);
+        ordrOrderStatusTo.setUpdateOrderTime(true);
         ordrOrderStatusTo.setPaidYN("Y");
 
         return updateOrderStatus(ordrOrderStatusTo);

@@ -144,7 +144,7 @@ public class BigOrderPayFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderPreparingAndPaid(order.getIdorder());
+            boolean success = ServerHelper.markOrderPreparingAndPaidAndUdpateDate(order.getIdorder());
 
             if (success) {
 
