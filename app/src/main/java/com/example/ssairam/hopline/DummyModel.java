@@ -10,7 +10,9 @@ import com.example.ssairam.hopline.vo.Stock;
 public class DummyModel {
     private FetchOrderTo fetchOrder;
     private OrderStatusTo orderStatus;
+    private Stock stock;
     private OrderVo order;
+    private OfflineOrderLogTo offlineOrderLogTo;
 
     public Stock getStock() {
         return stock;
@@ -19,8 +21,6 @@ public class DummyModel {
     public void setStock(Stock stock) {
         this.stock = stock;
     }
-
-    private Stock stock;
 
     public OrderVo getOrder() {
         return order;
@@ -44,5 +44,13 @@ public class DummyModel {
 
     public void setFetchOrder(FetchOrderTo fetchOrder) {
         this.fetchOrder = fetchOrder;
+    }
+
+    public OfflineOrderLogTo getOfflineOrderLogTo() {
+        return offlineOrderLogTo;
+    }
+
+    public void setOfflineOrderLogTo(OfflineOrderLogTo offlineOrderLogTo) {
+        this.offlineOrderLogTo = offlineOrderLogTo;
     }
 }

@@ -9,10 +9,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.R;
+import com.example.ssairam.hopline.fragments.NewOrderFragment;
+import com.example.ssairam.hopline.vo.OrderProductAddonVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.ProductVo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,26 +26,63 @@ public class CartAdapter extends BaseAdapter {
 
 
     private final View.OnClickListener removeCartListner;
+    private final NewOrderFragment.TotalItemCountPriceChangeListener totalItemCountPrinceChangeListener;
     private Context mContext;
     private OrderVo order;
     private LayoutInflater mInflater;
 
 
-    public CartAdapter(Context mContext, View.OnClickListener removeCartListner) {
+
+    public CartAdapter(Context mContext, View.OnClickListener removeCartListner, NewOrderFragment.TotalItemCountPriceChangeListener totalItemCountPriceChangeListener) {
         this.mContext = mContext;
         this.removeCartListner = removeCartListner;
+        this.totalItemCountPrinceChangeListener = totalItemCountPriceChangeListener;
         order = new OrderVo();
         order.setOrderProducts(new ArrayList<OrderProductVo>());
         mInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        populateItemCountAndPrice(order);
+        totalItemCountPrinceChangeListener.onChange(order.getTotalItemCount(), order.getTotalPrice());
+        super.notifyDataSetChanged();
+    }
+
+    private void populateItemCountAndPrice(OrderVo orderVo) {
+        int totalItemCount = 0 ;
+        double totalPrice = 0;
+        for (OrderProductVo orderProduct : orderVo.getOrderProducts()) {
+            totalItemCount += orderProduct.getCount();
+
+            double addonPrice = 0;
+            if (orderProduct.getOrderProductAddons() != null) {
+                for (OrderProductAddonVo orderProductAddon : orderProduct.getOrderProductAddons()) {
+                    addonPrice += orderProductAddon.getAddOn().getPrice().doubleValue();
+                }
+            }
+
+            totalPrice += orderProduct.getCount() * (orderProduct.getProduct().getPrice().doubleValue() + addonPrice ) ;
+        }
+
+        orderVo.setTotalItemCount(totalItemCount);
+        orderVo.setTotalPrice(totalPrice);
+    }
+
+
+
     public void addProduct(OrderProductVo orderProductVo) {
         order.getOrderProducts().add(orderProductVo);
+    }
+
+    public void removeProduct(int index) {
+        order.getOrderProducts().remove(index);
     }
 
     public void clearCart(){
         order = new OrderVo();
         order.setOrderProducts(new ArrayList<OrderProductVo>());
+        notifyDataSetChanged();
     }
 
     public OrderVo getOrder() {

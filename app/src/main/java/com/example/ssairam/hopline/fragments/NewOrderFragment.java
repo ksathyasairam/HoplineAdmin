@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
@@ -35,6 +36,10 @@ import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.ProductVo;
 import com.example.ssairam.hopline.vo.ShopVo;
 
+import org.w3c.dom.Text;
+
+import java.util.Date;
+
 public class NewOrderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -45,6 +50,7 @@ public class NewOrderFragment extends Fragment {
 
 
     //Views
+    private View layout;
     private ListView categoryListView;
     private RecyclerView itemRecyclerView;
     private ListView cartListView;
@@ -52,7 +58,6 @@ public class NewOrderFragment extends Fragment {
     MenuCategoryAdapter categoryAdapter;
     MenuItemAdapter itemAdapter;
     CartAdapter cartAdapter;
-
 
     public NewOrderFragment() {
         // Required empty public constructor
@@ -79,7 +84,7 @@ public class NewOrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_new_order, container, false);
+        layout = inflater.inflate(R.layout.fragment_new_order, container, false);
 
         ((Button) layout.findViewById(R.id.create_order_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +123,10 @@ public class NewOrderFragment extends Fragment {
                     itemAdapter.resetProductCountById(orderProductVo.getProduct().getProductId());
                 }
 
-                cartAdapter.getOrderProducts().remove(position);
+                cartAdapter.removeProduct(position);
                 cartAdapter.notifyDataSetChanged();
             }
-        });
+        }, new TotalItemCountPriceChangeListener());
         cartListView.setAdapter(cartAdapter);
 
 
@@ -177,7 +182,7 @@ public class NewOrderFragment extends Fragment {
 
                 if (cartIndex != null){
                     if (productVo.getQuantity() == 0) {
-                        cartAdapter.getOrderProducts().remove((int)cartIndex);
+                        cartAdapter.removeProduct(cartIndex);
                     } else {
                         cartAdapter.getOrderProducts().get(cartIndex).setCount(productVo.getQuantity());
                     }
@@ -210,7 +215,7 @@ public class NewOrderFragment extends Fragment {
     }
 
     public void createOrderOnClick() {
-        if (cartAdapter.getOrder().getOrderProducts().isEmpty()) return;
+        if (cartAdapter.getOrder().getOrderProducts() == null || cartAdapter.getOrder().getOrderProducts().isEmpty()) return;
 
         OrderVo order = cartAdapter.getOrder();
 
@@ -329,12 +334,13 @@ public class NewOrderFragment extends Fragment {
             if (success) {
                 Util.printBill(orderFromServer,getActivity());
                 DataStore.getPreparingOrders().add(orderFromServer);
-                clearAll();
-                Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();
+                 Toast.makeText(getActivity(), "Success!!", Toast.LENGTH_SHORT).show();
             } else {
                 createCompleteOfflineOrder(order);
                 Util.printBill(order,getActivity());
             }
+
+            clearAll();
 
             if (dialog != null)
                 dialog.dismiss();
@@ -354,8 +360,16 @@ public class NewOrderFragment extends Fragment {
         cartAdapter.clearCart();
 
     }
+
+    //TOTO : Modify for multiple Vendor;
     private void createCompleteOfflineOrder(OrderVo order) {
-        order.setCustomerOrderId(MainPrefs.getNewOfflineOrderNumber(getActivity().getApplicationContext()));
+        int offlineOrderId = MainPrefs.getNewOfflineOrderNumber(getActivity().getApplicationContext());
+        order.setCustomerOrderId(offlineOrderId);
+        order.setIdorder(offlineOrderId);
+        order.setOrderCreator("bistro 37");
+        order.setOrderState("COMPLETE_OFFLINE_ORDER");
+        order.setPaidYn("Y");
+        order.setOrderTime(new Date());
         DataStore.addOfflineOrder(order,getActivity().getApplicationContext());
         Toast.makeText(getActivity(), "Unable to connect to server, OFFLINE ORDER CREATED!!", Toast.LENGTH_SHORT).show();
     }
@@ -365,5 +379,11 @@ public class NewOrderFragment extends Fragment {
     }
 
 
+    public class TotalItemCountPriceChangeListener {
+        public void onChange(int totalItem, double totalPrice) {
+            ((TextView) layout.findViewById(R.id.total_item)).setText(totalItem+"");
+            ((TextView) layout.findViewById(R.id.total_price)).setText(totalPrice+"");
+        }
+    }
 
 }

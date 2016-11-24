@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 
 public class PrinterHelper {
+    private static final boolean DISABLE_PRINTER = true;
 
     private static PrinterHelper printerHelper;
 
@@ -46,11 +47,15 @@ public class PrinterHelper {
     }
 
     public boolean canConnectToPrinter() {
+        if (DISABLE_PRINTER) return true;
+
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return !(bluetoothAdapter == null || !bluetoothAdapter.isEnabled() || bluetoothAdapter.isDiscovering());
     }
 
     public boolean connectToPrinter() {
+        if (DISABLE_PRINTER) return true;
+
         if (conn == null)
             conn = new AnalogicsThermalPrinter();
 
@@ -71,6 +76,7 @@ public class PrinterHelper {
 
 
     public boolean print(String printerFormattedData) {
+        if (DISABLE_PRINTER) return true;
 //        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
 
 //        String printdata = "";
@@ -87,8 +93,11 @@ public class PrinterHelper {
 //        printdata += printer.font_Courier_48(data);
 //
         try {
-            return conn.printData(printerFormattedData);
+            boolean result = conn.printData(printerFormattedData);
+            M.log("PrinterHelper", "print result " + result);
+            return result;
         } catch (Exception e) {
+            M.log("PrinterHelper", "Exception raised in printing" + e.toString());
             e.printStackTrace();
             return false;
         }

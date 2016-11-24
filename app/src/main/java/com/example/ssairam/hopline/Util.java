@@ -139,6 +139,7 @@ public class Util {
 
     public static boolean printBill(OrderVo order, Activity activity) {
 
+        M.log("Util","Enter printBill");
 
         Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
 
@@ -159,11 +160,13 @@ public class Util {
 
         printData += printer.font_Courier_29("-----------------------------");
 
+        if (order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) return  true;
         for (OrderProductVo orderProductVo : order.getOrderProducts()) {
 
             printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
                     orderProductVo.getProduct().getName(), orderProductVo.getProduct().getPrice().doubleValue() * orderProductVo.getCount()));
 
+            if (orderProductVo.getOrderProductAddons() == null) continue;
             for(OrderProductAddonVo addon : orderProductVo.getOrderProductAddons()){
                 printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
                         addon.getAddOn().getName(), addon.getAddOn().getPrice()));
@@ -183,13 +186,17 @@ public class Util {
 
         if (PrinterHelper.get().print(printData)) {
             return true;
+        } else {
         }
 
 
+        M.log("Util","Retrying connection to printer");
         if (PrinterHelper.get().canConnectToPrinter()){
+            M.log("Util","Printer can be connected");
             new PrinterConnector(activity).execute("");
             return PrinterHelper.get().print(printData);
         } else {
+            M.log("Util","Printer cannot be connected");
             Toast.makeText(activity, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
             return  false;
         }

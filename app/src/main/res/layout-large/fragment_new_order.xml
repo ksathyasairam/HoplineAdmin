@@ -71,6 +71,20 @@
             style="@style/Widget.AppCompat.Button.Colored"
             />
 
+        <TextView
+            android:text="0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/total_item"
+            android:layout_weight="0.01" />
+
+        <TextView
+            android:text="0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/total_price"
+            android:layout_weight="0.01" />
+
         <ListView
             android:layout_weight="0.98"
             android:layout_alignParentLeft="true"

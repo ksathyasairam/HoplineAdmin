@@ -59,6 +59,12 @@ public class IncommingOrderBackgroudRefresh extends Service {
                     try {
                         Thread.sleep(10000);
 
+                        List<OrderVo> offlineOrdersServerLog = MainPrefs.getOfflineOrdersForServerLog(getBaseContext());
+                        if (offlineOrdersServerLog != null && !offlineOrdersServerLog.isEmpty()){
+                            boolean res = ServerHelper.logCompleteOfflineOrder(offlineOrdersServerLog);
+                            if (res) MainPrefs.saveOfflineOrderForServerLog(new ArrayList<OrderVo>(), getBaseContext());
+                        }
+
                         setLocallyUpdated(false);
                         if (DataStore.getIncomingOrders() == null) {
                             Log.d("servcie", "Local data null!! going to refresh everyting");

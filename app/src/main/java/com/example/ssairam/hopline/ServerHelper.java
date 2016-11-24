@@ -3,6 +3,7 @@ package com.example.ssairam.hopline;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.Stock;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -109,6 +110,30 @@ public class ServerHelper {
             if (stock == null) return false;
 
             return stock.isSuccess();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean logCompleteOfflineOrder(List<OrderVo> orderVos){
+
+        OfflineOrderLogTo offlineOrderLogTo = new OfflineOrderLogTo();
+        offlineOrderLogTo.setOrdersJson(new Gson().toJson(orderVos));
+
+        try {
+
+            DummyModel dm = new DummyModel();
+            dm.setOfflineOrderLogTo(offlineOrderLogTo);
+
+            final String url = BASE_REST_URL + "createOfflineOrderLog";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            offlineOrderLogTo = restTemplate.postForObject(url, dm, OfflineOrderLogTo.class);
+
+            if (offlineOrderLogTo == null) return false;
+
+            return offlineOrderLogTo.isSuccess();
         }catch (Exception e) {
             e.printStackTrace();
             return false;

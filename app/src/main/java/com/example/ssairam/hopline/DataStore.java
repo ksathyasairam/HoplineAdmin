@@ -1,6 +1,5 @@
 package com.example.ssairam.hopline;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.example.ssairam.hopline.vo.CategoryVo;
@@ -72,7 +71,7 @@ public class DataStore {
 
     public static List<OrderVo> getCompleteOfflineOrders(Context applicationContext) {
         if (completeOfflineOrders.isEmpty())
-            completeOfflineOrders = new ArrayList(MainPrefs.getOfflineOrders(applicationContext));
+            completeOfflineOrders = MainPrefs.getOfflineOrders(applicationContext);
 
         return completeOfflineOrders;
     }
@@ -80,6 +79,14 @@ public class DataStore {
     public static void addOfflineOrder(OrderVo orderVo, Context applicationContext){
         completeOfflineOrders.add(orderVo);
         MainPrefs.saveOfflineOrders(completeOfflineOrders,applicationContext);
+        addToOfflineOrderServerLog(orderVo, applicationContext);
+    }
+
+    private static void addToOfflineOrderServerLog(OrderVo orderVo, Context applicationContext) {
+
+        List<OrderVo> ordersVos = MainPrefs.getOfflineOrdersForServerLog(applicationContext);
+        ordersVos.add(orderVo);
+        MainPrefs.saveOfflineOrderForServerLog(ordersVos,applicationContext);
     }
 
     public static void removeOfflineOrder(OrderVo orderVo, Context applicationContext){

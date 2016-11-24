@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +63,28 @@ public class MainPrefs {
 
         String json = prefs.getString("offlineOrderList", "[]");
         Gson gson = new Gson();
-        OrderVo[] orderVos = gson.fromJson(json, OrderVo[].class);
-        return Arrays.asList(orderVos);
+        Type listType = new TypeToken<List<OrderVo>>() {}.getType();
+        List<OrderVo> orderVos = gson.fromJson(json, listType);
+        return orderVos;
     }
+
+    public static void saveOfflineOrderForServerLog(List<OrderVo> orderVoList, Context context) {
+        initPrefInstance(context);
+        Gson gson = new Gson();
+        String json = gson.toJson(orderVoList);
+        prefs.edit().putString("offlineOrdersForServerLog", json).commit();
+    }
+
+    public static List<OrderVo> getOfflineOrdersForServerLog(Context context) {
+        initPrefInstance(context);
+
+        String json = prefs.getString("offlineOrdersForServerLog", "[]");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<OrderVo>>() {}.getType();
+        List<OrderVo> orderVos = gson.fromJson(json, listType);
+        return orderVos;
+    }
+
+
+
 }
