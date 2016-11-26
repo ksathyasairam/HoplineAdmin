@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 
 public class PrinterHelper {
-    private static final boolean DISABLE_PRINTER = true;
+    private static final boolean DISABLE_PRINTER = false;
 
     private static PrinterHelper printerHelper;
 

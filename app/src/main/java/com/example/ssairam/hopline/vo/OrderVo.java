@@ -17,6 +17,20 @@ public class OrderVo implements java.io.Serializable {
 	private Double totalPrice;
 	private List<OrderProductVo> orderProducts;
 	private String orderCreator;
+
+
+	private Integer numUnitInProgressBar;
+	private Integer currentProgress;
+	private Integer orderCompleteTime;
+
+
+
+	public Integer getCurrentProgress() {
+		return currentProgress;
+	}
+	public void setCurrentProgress(Integer currentProgress) {
+		this.currentProgress = currentProgress;
+	}
 	public Integer getIdorder() {
 		return idorder;
 	}
@@ -89,24 +103,17 @@ public class OrderVo implements java.io.Serializable {
 	public void setOrderCreator(String orderCreator) {
 		this.orderCreator = orderCreator;
 	}
-
-	public OrderVo(Integer customerOrderId, String cancelReason) {
-		this.customerOrderId = customerOrderId;
-		this.cancelReason = cancelReason;
+	public Integer getNumUnitInProgressBar() {
+		return numUnitInProgressBar;
 	}
-
-	public OrderVo() {
+	public void setNumUnitInProgressBar(Integer numUnitInProgressBar) {
+		this.numUnitInProgressBar = numUnitInProgressBar;
 	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		OrderVo orderVo = (OrderVo) o;
-
-		return idorder != null ? idorder.equals(orderVo.idorder) : false;
-
+	public Integer getOrderCompleteTime() {
+		return orderCompleteTime;
+	}
+	public void setOrderCompleteTime(Integer orderCompleteTime) {
+		this.orderCompleteTime = orderCompleteTime;
 	}
 
 }

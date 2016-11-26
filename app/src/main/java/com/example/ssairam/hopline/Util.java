@@ -184,6 +184,7 @@ public class Util {
         printData += printer.font_Courier_24("***Powered by Hopline***") + printer.carriage_Return();
         printData += printer.carriage_Return() + printer.carriage_Return() + printer.carriage_Return() +  printer.carriage_Return();
 
+        PrinterHelper.get().connectToPrinter();
         if (PrinterHelper.get().print(printData)) {
             return true;
         } else {
