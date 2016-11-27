@@ -5,7 +5,9 @@
     <string name="tab_billing">Bill</string>
     <string name="tab_neworder">new</string>
     <string name="tab_big_order_pay">Big Order Pay</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="price">Rs.</string>
+    <string name="orderSuccess">Order Success!</string>
+    <string name="printFailedOrderSuccess">Order Success, Print Bill Failed!, Retry printing bill from All orders Screen.</string>
 
 
 </resources>

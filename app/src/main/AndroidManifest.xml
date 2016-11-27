@@ -27,6 +27,7 @@
 
         <activity android:name=".activity_ui.Inventory" />
         <activity android:name=".activity_ui.OfflineOrder"></activity>
+        <activity android:name=".activity_ui.OrderHistoryActivity"></activity>
     </application>
 
 </manifest>

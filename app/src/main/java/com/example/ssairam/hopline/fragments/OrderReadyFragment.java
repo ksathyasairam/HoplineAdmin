@@ -112,7 +112,7 @@ public class OrderReadyFragment extends Fragment {
     private void initUi() {
         adapter = createOrderReadyAdatper();
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5, 1);
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -127,7 +127,7 @@ public class OrderReadyFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if (PrinterHelper.get().canConnectToPrinter()){
+                if (PrinterHelper.get().isBluetoothOn()) {
                     markOrderComplete(order);
                 } else {
                     Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
@@ -152,7 +152,6 @@ public class OrderReadyFragment extends Fragment {
     private void markOrderComplete(OrderVo order) {
         new MarkOrderComplete(order).execute("");
     }
-
 
 
     private class MarkOrderComplete extends AsyncTask<String, Void, Boolean> {
@@ -180,10 +179,16 @@ public class OrderReadyFragment extends Fragment {
                 updateUi();
 
                 if (printBill) {
-                    Util.printBill(order,getActivity());
+
+                    if (Util.printBill(order, getActivity())) {
+                        Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
                 }
 
-                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
             }
@@ -238,7 +243,7 @@ public class OrderReadyFragment extends Fragment {
     }
 
     private void updateUi() {
-        if(adapter != null) adapter.updateData(DataStore.getReadyOrders());
+        if (adapter != null) adapter.updateData(DataStore.getReadyOrders());
     }
 
     // TODO: Rename method, update argument and hook method into UI event

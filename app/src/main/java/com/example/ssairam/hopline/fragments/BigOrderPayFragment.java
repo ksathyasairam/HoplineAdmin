@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -110,7 +109,7 @@ public class BigOrderPayFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if (PrinterHelper.get().canConnectToPrinter()){
+                if (PrinterHelper.get().isBluetoothOn()){
                     markOrderPreparingAndPaid(order);
                 } else {
                     Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
@@ -166,8 +165,13 @@ public class BigOrderPayFragment extends Fragment {
 
             if (success) {
                removeOrderFromUi(order.getIdorder());
-               Util.printBill(order,getActivity());
-               Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+
+               if (Util.printBill(order,getActivity())) {
+                   Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
+               } else {
+                   Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
+               }
+
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
             }
@@ -290,6 +294,11 @@ public class BigOrderPayFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success) {
+            if (BigOrderPayFragment.this == null || BigOrderPayFragment.this.getActivity() == null) {
+                if (dialog != null)
+                    dialog.dismiss();
+                return;
+            }
 
             if (success) {
                 initUi(orders);

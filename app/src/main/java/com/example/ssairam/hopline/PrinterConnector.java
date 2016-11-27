@@ -15,7 +15,8 @@ public class PrinterConnector extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            return PrinterHelper.get().connectToPrinter();
+            boolean result = PrinterHelper.get().connectToPrinter();
+            return result;
         }
 
         @Override

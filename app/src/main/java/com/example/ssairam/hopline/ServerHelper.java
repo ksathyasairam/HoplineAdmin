@@ -43,6 +43,25 @@ public class ServerHelper {
         return fetchOrderTo.getOrders();
     }
 
+    public static List<OrderVo> retrieveOrderHistory() throws Exception {
+
+        FetchOrderTo fetchOrderTo = new FetchOrderTo();
+        fetchOrderTo.setShopId(1);
+
+        DummyModel dm = new DummyModel();
+        dm.setFetchOrder(fetchOrderTo);
+
+
+        final String url = BASE_REST_URL + "fetchOrderHistory";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        fetchOrderTo = restTemplate.postForObject(url,dm, FetchOrderTo.class);
+
+        if (fetchOrderTo == null || fetchOrderTo.getOrders() == null) return new ArrayList<OrderVo>();
+
+        return fetchOrderTo.getOrders();
+    }
+
     public static List<CategoryVo> retrieveMenu() throws Exception {
 
         DummyModel dm = new DummyModel();

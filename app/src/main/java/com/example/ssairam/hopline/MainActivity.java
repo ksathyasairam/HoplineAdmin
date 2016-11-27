@@ -9,19 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.ssairam.hopline.activity_ui.Inventory;
 import com.example.ssairam.hopline.activity_ui.OfflineOrder;
+import com.example.ssairam.hopline.activity_ui.OrderHistoryActivity;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
-import com.example.ssairam.hopline.fragments.OfflineOrderFragment;
 import com.example.ssairam.hopline.fragments.OrderReadyFragment;
 import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
 
@@ -55,14 +52,14 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             }
         }
 
-        if (PrinterHelper.get().canConnectToPrinter()){
+        if (PrinterHelper.get().isBluetoothOn()) {
             new PrinterConnector(this).execute("");
         } else {
             Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
         }
 
         if (!DataStore.isDataInilitised()) {
-            new InitialiseDataFromServer(this){
+            new InitialiseDataFromServer(this) {
 
 
                 @Override
@@ -193,19 +190,16 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.offline_orders:
-                Intent intent_new = new Intent(this, OfflineOrder.class);
+                startActivity(new Intent(this, OfflineOrder.class));
+                return true;
 
-                startActivity(intent_new);
-                    return true;
-//
-//                OfflineOrderFragment fragment = new OfflineOrderFragment();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-//                return true;
             case R.id.inventory:
-                Intent intent = new Intent(this, Inventory.class);
+                startActivity(new Intent(this, Inventory.class));
+                return true;
 
-                startActivity(intent);
-                    return true;
+            case R.id.order_history:
+                startActivity(new Intent(this, OrderHistoryActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -235,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
 
     @Override
     protected void onResume() {
-
 
 
         super.onResume();

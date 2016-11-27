@@ -3,32 +3,19 @@ package com.example.ssairam.hopline;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Base64;
 import android.widget.Toast;
-
-import java.io.*;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
 import com.example.ssairam.hopline.vo.OrderProductAddonVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static android.R.attr.pivotX;
-import static android.R.attr.x;
 
 /**
  * Created by root on 22/10/16.
@@ -184,24 +171,8 @@ public class Util {
         printData += printer.font_Courier_24("***Powered by Hopline***") + printer.carriage_Return();
         printData += printer.carriage_Return() + printer.carriage_Return() + printer.carriage_Return() +  printer.carriage_Return();
 
-        PrinterHelper.get().connectToPrinter();
-        if (PrinterHelper.get().print(printData)) {
-            return true;
-        } else {
-        }
 
-
-        M.log("Util","Retrying connection to printer");
-        if (PrinterHelper.get().canConnectToPrinter()){
-            M.log("Util","Printer can be connected");
-            new PrinterConnector(activity).execute("");
-            return PrinterHelper.get().print(printData);
-        } else {
-            M.log("Util","Printer cannot be connected");
-            Toast.makeText(activity, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
-            return  false;
-        }
-
+        return PrinterHelper.get().print(printData);
 
     }
 }

@@ -6,10 +6,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
-import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 
 import java.io.IOException;
 
@@ -46,7 +46,7 @@ public class PrinterHelper {
 
     }
 
-    public boolean canConnectToPrinter() {
+    public boolean isBluetoothOn() {
         if (DISABLE_PRINTER) return true;
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -56,6 +56,7 @@ public class PrinterHelper {
     public boolean connectToPrinter() {
         if (DISABLE_PRINTER) return true;
 
+        boolean result;
         if (conn == null)
             conn = new AnalogicsThermalPrinter();
 
@@ -67,16 +68,21 @@ public class PrinterHelper {
 
         try {
             conn.openBT("00:04:3E:93:41:13");
+            Log.d("tag","hogya connect");
             return true;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            Log.d("tag","Exception aa gya");
             ex.printStackTrace();
             return false;
         }
+
+//        return result;
     }
 
 
     public boolean print(String printerFormattedData) {
         if (DISABLE_PRINTER) return true;
+
 //        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
 
 //        String printdata = "";
@@ -92,15 +98,24 @@ public class PrinterHelper {
 //        printdata += printer.font_Courier_42(data);
 //        printdata += printer.font_Courier_48(data);
 //
-        try {
-            boolean result = conn.printData(printerFormattedData);
-            M.log("PrinterHelper", "print result " + result);
-            return result;
-        } catch (Exception e) {
-            M.log("PrinterHelper", "Exception raised in printing" + e.toString());
-            e.printStackTrace();
+        if (conn.printData(printerFormattedData)) {
+            M.log("PrinterHelper", "print success");
+            return  true;
+        }
+
+
+        if (connectToPrinter() && conn.printData(printerFormattedData)) {
+            M.log("PrinterHelper", "print success");
+            return  true;
+        } else {
+            M.log("PrinterHelper", "print failed!");
             return false;
         }
+
+
+
+
+
     }
 
 }
