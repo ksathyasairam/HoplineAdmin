@@ -39,14 +39,15 @@ public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public Button buttonPrintBill, buttonRemoveOrder;
-        public TextView customerOrderNo;
+        public TextView customerOrderNo,customerPhone,customerName;
         public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
             buttonPrintBill =(Button)itemView.findViewById(R.id.button_print_bill);
             buttonRemoveOrder =(Button)itemView.findViewById(R.id.button_remove);
             customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
-
+            customerName = (TextView) itemView.findViewById(R.id.customer_name);
+            customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
             productList = (RecyclerView) itemView.findViewById(R.id.bo_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
             productList.setLayoutManager(layoutManager);
@@ -67,7 +68,8 @@ public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.
 
         OrderVo order = orderVoList.get(position);
         holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
-
+        holder.customerPhone.setText(order.getUser().getPhone());
+        holder.customerName.setText(order.getUser().getName());
         holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
 

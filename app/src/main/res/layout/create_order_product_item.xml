@@ -14,7 +14,7 @@
             android:text="Plane Jane Sandwich"
             android:layout_weight="0.2"
             android:gravity="left"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/create_order_item_name" />
@@ -23,7 +23,7 @@
             android:text="2"
             android:layout_weight="0.8"
             android:gravity="right"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/colorPrimary"
 
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_weight="0.3"
             android:text="Add On: Extra Ketcup, Extra Mayo"
             android:layout_width="match_parent"
-            android:textSize="16sp"
+            android:textSize="14sp"
 
             android:layout_height="wrap_content"
             android:id="@+id/create_order_item_Addon" />
@@ -52,7 +52,7 @@
             android:gravity="right"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Rs 100."
             android:id="@+id/create_order_item_price"
             android:layout_height="wrap_content" />

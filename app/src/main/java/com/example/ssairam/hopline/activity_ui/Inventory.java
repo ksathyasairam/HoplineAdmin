@@ -111,7 +111,11 @@ ListView inventoryList;
 
         @Override
         protected void onPostExecute(Boolean success) {
-
+            if(adapter!=null) {
+                getInventory();
+                adapter.setMenu(data);
+                adapter.notifyDataSetChanged();
+            }
             if (success) {
 
                 Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show();

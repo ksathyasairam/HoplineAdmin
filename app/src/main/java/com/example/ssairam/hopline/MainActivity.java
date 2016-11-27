@@ -226,5 +226,18 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
 //                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
     }
 
+    @Override
+    protected void onPause() {
 
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+
+
+
+        super.onResume();
+    }
 }

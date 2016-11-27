@@ -48,7 +48,7 @@
             android:text="@android:string/emptyPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="right"
             android:layout_weight="1"
             android:textSize="20sp"
             android:id="@+id/phone_numer" />
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:gravity="center"
+            android:gravity="right"
             android:id="@+id/user_name"
              />
     </LinearLayout>
@@ -89,6 +89,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:layout_weight="1"
             android:textSize="20sp"
             android:text=" Qty : 3"
@@ -98,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:gravity="center"
+            android:gravity="right"
 
             android:text=" Rs 100."
             android:id="@+id/total_price"/>

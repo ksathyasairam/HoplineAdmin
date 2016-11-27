@@ -37,12 +37,14 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView customerOrderNo;
+        public TextView customerOrderNo,customerName,customerPhone;
         public Button buttonOrderReady;
         public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
             customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
+            customerName = (TextView) itemView.findViewById(R.id.customer_name);
+            customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
             buttonOrderReady=(Button)itemView.findViewById(R.id.button_order_ready);
 
             productList = (RecyclerView) itemView.findViewById(R.id.preparing_order_product_list);
@@ -65,7 +67,8 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
 
         OrderVo order = orderVoList.get(position);
         holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
-
+        holder.customerPhone.setText(order.getUser().getPhone());
+        holder.customerName.setText(order.getUser().getName());
         holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
         holder.buttonOrderReady.setTag(position);

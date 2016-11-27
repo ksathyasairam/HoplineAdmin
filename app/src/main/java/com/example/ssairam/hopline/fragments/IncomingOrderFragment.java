@@ -35,6 +35,7 @@ import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
+import com.example.ssairam.hopline.adapters.CreateOrder_OrderProductAdaptor;
 import com.example.ssairam.hopline.adapters.IncomingOrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
 
@@ -317,9 +318,10 @@ public class IncomingOrderFragment extends Fragment {
             final View layout = inflater.inflate(R.layout.call_dialog,null);
             ((TextView) layout.findViewById(R.id.phone_numer)).setText(orderVo.getUser().getPhone());
             ((TextView) layout.findViewById(R.id.user_name)).setText(orderVo.getUser().getName());
-            ((TextView) layout.findViewById(R.id.total_price)).setText(orderVo.getTotalPrice() + "");
-            ((TextView) layout.findViewById(R.id.total_quantity)).setText(orderVo.getTotalItemCount() + "");
-
+            ((TextView) layout.findViewById(R.id.total_price)).setText("Rs."+orderVo.getTotalPrice());
+            ((TextView) layout.findViewById(R.id.total_quantity)).setText("Qty :"+orderVo.getTotalItemCount());
+            ListView listView = (ListView) layout.findViewById(R.id.dialog_listview);
+            listView.setAdapter(new CreateOrder_OrderProductAdaptor(getActivity(),orderVo.getOrderProducts()));
 //            String[] values = new String[] { "Android List View",
 //                    "Adapter implementation",
 //                    "Simple List View In Android",

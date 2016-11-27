@@ -41,11 +41,12 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView title, count, customerOrderNo;
+        public TextView title, count, customerOrderNo,customerName,customerPhone;
         public Button confirm;
         public Button call;
         public Button cancel;
         public RecyclerView productList;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -53,6 +54,8 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
             call=(Button)itemView.findViewById(R.id.call);
             cancel=(Button)itemView.findViewById(R.id.cancel);
             customerOrderNo = (TextView) itemView.findViewById(R.id.customer_order_number);
+            customerName = (TextView) itemView.findViewById(R.id.customer_name);
+            customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
 
             productList = (RecyclerView) itemView.findViewById(R.id.incoming_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
@@ -73,6 +76,8 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
 
         OrderVo order = orderVoList.get(position);
         holder.customerOrderNo.setText("#" + order.getCustomerOrderId());
+        holder.customerPhone.setText(order.getUser().getPhone());
+        holder.customerName.setText(order.getUser().getName());
 
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
