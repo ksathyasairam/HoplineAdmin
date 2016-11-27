@@ -52,9 +52,16 @@ public class MenuCategoryAdapter  extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         convertView = mInflater.inflate(R.layout.menu_category_item, null);//set layout for displaying items
+        if(categories.get(position).getSubCategoryName().isEmpty() || categories.get(position).getSubCategoryName() == null){
+            ((TextView)convertView.findViewById(R.id.category_name)).setText(categories.get(position).getName());
 
-        ((TextView)convertView.findViewById(R.id.category_name)).setText(categories.get(position).getName() + " " +
-                categories.get(position).getSubCategoryName());
+        }else {
+            ((TextView)convertView.findViewById(R.id.category_name)).setText(categories.get(position).getSubCategoryName());
+
+        }
+
+
+
         ImageView catImg = ((ImageView) convertView.findViewById(R.id.category_image));
         Picasso.with(mContext).load(ServerHelper.BASE_URL+ categories.get(position).getImgUrl()).into(catImg);
 

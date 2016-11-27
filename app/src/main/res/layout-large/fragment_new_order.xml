@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.6"
         android:orientation="vertical"
-        android:background="@drawable/border"
+
         android:layout_marginTop="5dp"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="5dp"
@@ -58,7 +58,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:orientation="vertical"
-            android:background="@drawable/cartbg">
+            >
 
 
         <Button

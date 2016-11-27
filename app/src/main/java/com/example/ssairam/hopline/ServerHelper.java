@@ -96,7 +96,7 @@ public class ServerHelper {
         }
     }
 
-    private static boolean updateStock(Stock stock){
+    public static boolean updateStock(Stock stock){
         try {
 
             DummyModel dm = new DummyModel();

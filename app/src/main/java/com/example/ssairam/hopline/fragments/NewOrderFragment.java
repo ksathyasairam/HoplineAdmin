@@ -105,7 +105,7 @@ public class NewOrderFragment extends Fragment {
 
 
         itemRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_menu_items);
-        RecyclerView.LayoutManager menuItemLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 3);
+        RecyclerView.LayoutManager menuItemLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 4);
         itemRecyclerView.setLayoutManager(menuItemLayoutManager);
         itemAdapter = createMenuItemAdaptor();
         itemRecyclerView.setAdapter(itemAdapter);

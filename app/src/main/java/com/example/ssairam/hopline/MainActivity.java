@@ -9,10 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.example.ssairam.hopline.activity_ui.Inventory;
+import com.example.ssairam.hopline.activity_ui.OfflineOrder;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
@@ -29,6 +34,19 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        View decorView = getWindow().getDecorView();
+//// Hide both the navigation bar and the status bar.
+//// SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+//// a general rule, you should design your app to hide the status bar whenever you
+//// hide the navigation bar.
+//        int uiOptions =  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE;
+//        decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_main);
 
         if (findViewById(R.id.fragment_container) != null) {
@@ -77,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             Fragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, Fragment).addToBackStack(null).commit();
+                    .add(R.id.fragment_container, Fragment).commit();
 
         }
 
@@ -117,15 +135,13 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                     IncomingOrderFragment fragment = new IncomingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-
                 }
                 break;
             case 1:
                 if (!wasSelected) {
                     PreparingOrderFragment fragment = new PreparingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                 }
                 break;
@@ -133,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 if (!wasSelected) {
                     OrderReadyFragment fragment = new OrderReadyFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                 }
                 break;
@@ -141,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 if (!wasSelected) {
                     NewOrderFragment fragment = new NewOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                 }
                 break;
@@ -149,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 if (!wasSelected) {
                     BigOrderPayFragment fragment = new BigOrderPayFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                 }
                 break;
@@ -177,9 +193,19 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.offline_orders:
-                OfflineOrderFragment fragment = new OfflineOrderFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-                return true;
+                Intent intent_new = new Intent(this, OfflineOrder.class);
+
+                startActivity(intent_new);
+                    return true;
+//
+//                OfflineOrderFragment fragment = new OfflineOrderFragment();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+//                return true;
+            case R.id.inventory:
+                Intent intent = new Intent(this, Inventory.class);
+
+                startActivity(intent);
+                    return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -199,4 +225,6 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
 //                            | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
     }
+
+
 }

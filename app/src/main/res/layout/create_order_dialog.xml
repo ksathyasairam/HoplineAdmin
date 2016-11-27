@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:hint="Customer Name"
+            android:imeOptions="actionDone"
             android:ems="10"
             android:id="@+id/editTextName" />
 
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Customer Phone No"
+            android:imeOptions="actionDone"
             android:inputType="phone"
             android:ems="10"
             android:id="@+id/editTextPhone" />
