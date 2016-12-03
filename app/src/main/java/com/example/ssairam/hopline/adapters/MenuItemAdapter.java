@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.R;
@@ -78,6 +79,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         public ImageButton increaseQuantityButton;
         public ImageButton decreaseQuantityButton;
         public View cardButton;
+        public ImageView vegNonVeg;
 
 
         public ViewHolder(View itemView) {
@@ -89,6 +91,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
             increaseQuantityButton = (ImageButton) itemView.findViewById(R.id.increase_quantity_button);
             decreaseQuantityButton = (ImageButton) itemView.findViewById(R.id.decrease_quantity_button);
             cardButton  = itemView.findViewById(R.id.card_button);
+            vegNonVeg=(ImageView) itemView.findViewById(R.id.veg_non_veg_image);
 
         }
     }
@@ -121,6 +124,16 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
         holder.customizeButton.setTag(position);
         holder.customizeButton.setOnClickListener(customizeButtonListner);
+
+
+
+        if("Y".equals(productVo.getVegYn())) {
+            holder.vegNonVeg.setImageResource(R.drawable.veg_icon);
+        }
+        else
+        {
+            holder.vegNonVeg.setImageResource(R.drawable.nonvegicon);
+        }
     }
 
     @Override

@@ -55,7 +55,7 @@ public class CreateOrder_OrderProductAdaptor extends BaseAdapter {
         OrderProductVo orderProduct = orderProductVoList.get(position);
         holder.itemName.setText(orderProduct.getProduct().getName());
         holder.itemQuantity.setText(orderProduct.getCount()+"");
-        holder.itemPrice.setText("Rs " + Util.calculatePrice(orderProduct));
+        holder.itemPrice.setText("Rs" + Util.calculatePrice(orderProduct));
         if (orderProduct.getOrderProductAddons() != null && !orderProduct.getOrderProductAddons().isEmpty()){
             holder.addonsString.setText(Util.getAddonString(orderProduct.getOrderProductAddons()));
             holder.addonsString.setVisibility(View.VISIBLE);

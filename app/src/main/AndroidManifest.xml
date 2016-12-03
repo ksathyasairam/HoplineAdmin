@@ -26,8 +26,9 @@
         <service android:name=".IncommingOrderBackgroudRefresh" />
 
         <activity android:name=".activity_ui.Inventory" />
-        <activity android:name=".activity_ui.OfflineOrder"></activity>
-        <activity android:name=".activity_ui.OrderHistoryActivity"></activity>
+        <activity android:name=".activity_ui.OfflineOrder" />
+        <activity android:name=".activity_ui.OrderHistoryActivity" />
+        <activity android:name=".activity_ui.FeedbackForm"></activity>
     </application>
 
 </manifest>

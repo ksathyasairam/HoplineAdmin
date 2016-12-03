@@ -91,7 +91,7 @@
                         android:id="@+id/button_order_completed"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp" />

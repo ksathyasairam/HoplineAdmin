@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.example.ssairam.hopline.activity_ui.FeedbackForm;
 import com.example.ssairam.hopline.activity_ui.Inventory;
 import com.example.ssairam.hopline.activity_ui.OfflineOrder;
 import com.example.ssairam.hopline.activity_ui.OrderHistoryActivity;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
         , AHBottomNavigation.OnTabSelectedListener, NewOrderFragment.OnFragmentInteractionListener, BigOrderPayFragment.OnFragmentInteractionListener,
         OrderReadyFragment.OnFragmentInteractionListener, PreparingOrderFragment.OnFragmentInteractionListener {
     AHBottomNavigation bottomNavigation;
-
+    Menu actionBarMenu;
+    NewOrderFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 break;
             case 3:
                 if (!wasSelected) {
-                    NewOrderFragment fragment = new NewOrderFragment();
+                     fragment = new NewOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        actionBarMenu=menu;
         return true;
     }
 
@@ -200,9 +203,29 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
             case R.id.order_history:
                 startActivity(new Intent(this, OrderHistoryActivity.class));
                 return true;
+            case R.id.feed_back :
+                startActivity(new Intent(this, FeedbackForm.class));
+                return true;
+            case R.id.action_clear_cart:
+                if(fragment!=null){
+                    fragment.clearAll();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void updateMenuPrice(String title) {
+        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
+        totalPrice.setTitle(title);
+
+    }
+    public void updateMenuQty(String title) {
+        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
+        totalQty.setTitle(title);
+
+
     }
 
     @Override

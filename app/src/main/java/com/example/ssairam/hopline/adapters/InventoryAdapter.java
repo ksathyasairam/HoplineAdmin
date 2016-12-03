@@ -27,7 +27,7 @@ import java.util.List;
  * Created by ssairam on 11/20/2016.
  */
 
-public class InventoryAdapter extends BaseAdapter  {
+public class InventoryAdapter extends BaseAdapter {
     List<ProductVo> menu;
     LayoutInflater mInflater;
     CompoundButton.OnCheckedChangeListener onCheckChangeListener;
@@ -80,4 +80,6 @@ public class InventoryAdapter extends BaseAdapter  {
     public void setMenu(List<ProductVo> menu) {
         this.menu = menu;
     }
+
+
 }

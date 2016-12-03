@@ -80,7 +80,7 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
         if("Y".equals(order.getPaidYn())) {
             holder.buttonFinalized.setText("ORDER COMPLETE");
         } else {
-            holder.buttonFinalized.setText("PRINT BILL    ");
+            holder.buttonFinalized.setText("PRINT BILL");
         }
 
 

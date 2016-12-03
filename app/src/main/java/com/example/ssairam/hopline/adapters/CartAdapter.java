@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
+import com.example.ssairam.hopline.vo.AddOnVo;
 import com.example.ssairam.hopline.vo.OrderProductAddonVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.OrderVo;
@@ -135,6 +136,16 @@ public class CartAdapter extends BaseAdapter {
         holder.cartItemName.setText(order.getOrderProducts().get(position).getProduct().getName());
         holder.cartItemQuantity.setText("Qty : "+order.getOrderProducts().get(position).getCount()+ "");
 
+        String str="";
+        List<OrderProductAddonVo> addons=order.getOrderProducts().get(position).getOrderProductAddons();
+        if (addons!=null) {
+            for (OrderProductAddonVo addon : addons) {
+                str=str.concat(", "+addon.getAddOn().getName());
+            }
+            holder.cartItemAddon.setVisibility(View.VISIBLE);
+            holder.cartItemAddon.setText(str.substring(1));
+
+        }
 
         holder.cartItemDelete.setTag(position);
 

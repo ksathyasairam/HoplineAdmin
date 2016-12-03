@@ -76,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/total_item"
+            android:visibility="gone"
             android:layout_weight="0.01" />
 
         <TextView
@@ -83,6 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/total_price"
+            android:visibility="gone"
             android:layout_weight="0.01" />
 
         <ListView

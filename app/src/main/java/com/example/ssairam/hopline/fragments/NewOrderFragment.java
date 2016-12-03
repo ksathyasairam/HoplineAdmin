@@ -1,14 +1,18 @@
 package com.example.ssairam.hopline.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,20 +26,27 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.Dialogs.CreateOrderDialogFragment;
+import com.example.ssairam.hopline.MainActivity;
 import com.example.ssairam.hopline.MainPrefs;
 import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.CartAdapter;
+import com.example.ssairam.hopline.adapters.CreateOrder_OrderProductAdaptor;
+import com.example.ssairam.hopline.adapters.CustomizeAddOnAdapter;
 import com.example.ssairam.hopline.adapters.MenuCategoryAdapter;
 import com.example.ssairam.hopline.adapters.MenuItemAdapter;
+import com.example.ssairam.hopline.vo.AddOnVo;
+import com.example.ssairam.hopline.vo.OrderProductAddonVo;
 import com.example.ssairam.hopline.vo.OrderProductVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.ProductVo;
 import com.example.ssairam.hopline.vo.ShopVo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class NewOrderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -194,19 +205,147 @@ public class NewOrderFragment extends Fragment {
             public void onClick(View v) {                //customizeButton button
                 int position = (Integer) v.getTag();
 
-                Toast.makeText(getActivity().getApplicationContext(), "customizeButton", Toast.LENGTH_LONG).show();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                CustomizeDialogFragment newFragment = new CustomizeDialogFragment();
+                OrderVo order=cartAdapter.getOrder();
+                ProductVo productVo=itemAdapter.getCategory().getProducts().get(position);
+                newFragment.setOrderVo(order,productVo);
+                newFragment.setListners(new OkOnClickListner());
+                newFragment.show(fragmentManager, "dialog");
+//                Toast.makeText(getActivity().getApplicationContext(), "customizeButton", Toast.LENGTH_LONG).show();
 
             }
 
         });
     }
 
+    private class OkOnClickListner implements  View.OnClickListener{
 
-    private OrderProductVo toOrderProductVo(ProductVo productVo) {
+        OrderVo order;
+        ProductVo productVo;
+        List<AddOnVo> addOnVos;
+
+        public List<AddOnVo> getAddOnVos() {
+            return addOnVos;
+        }
+
+        public void setAddOnVos(List<AddOnVo> addOnVos) {
+            this.addOnVos = addOnVos;
+        }
+
+        public ProductVo getProductVo() {
+            return productVo;
+        }
+
+        public void setProductVo(ProductVo productVo) {
+            this.productVo = productVo;
+        }
+
+        public OrderVo getOrder() {
+            return order;
+        }
+
+        public void setOrder(OrderVo order) {
+            this.order = order;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "Ok customized", Toast.LENGTH_SHORT).show();
+            productVo.setQuantity(productVo.getQuantity() + 1);
+            order.getOrderProducts().add(toOrderProductVoWithAddons(productVo, addOnVos));
+            itemAdapter.notifyDataSetChanged();
+            cartAdapter.notifyDataSetChanged();
+        }
+    }
+
+
+    public static class CustomizeDialogFragment extends DialogFragment {
+
+        OrderVo orderVo;
+        List<AddOnVo> addOnVos;
+        ProductVo productVo;
+        public void setOrderVo(OrderVo orderVo,ProductVo productVo) {
+            this.orderVo = orderVo;
+            this.productVo=productVo;
+        }
+
+        View view;
+        private OkOnClickListner okListener;
+
+
+        public void setView(View view){
+            this.view = view;
+        }
+        public void setListners(OkOnClickListner okListener){
+            this.okListener = okListener;
+
+        }
+        private List<AddOnVo> getaddOns(ProductVo productVo) {
+            List<AddOnVo> addOnVos= new ArrayList<>();
+            List<AddOnVo> addons=productVo.getAddOns();
+            for (AddOnVo addon : addons){
+                if(addon.isSelected()){
+                    addOnVos.add(addon);
+                }
+            }
+
+            return addOnVos;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            final View layout = inflater.inflate(R.layout.customization_dialog,null);
+            ((TextView) layout.findViewById(R.id.product_name)).setText(productVo.getName());
+            ListView listView = (ListView) layout.findViewById(R.id.list_view);
+            listView.setAdapter(new CustomizeAddOnAdapter(getActivity().getApplicationContext(),productVo));
+
+            builder.setView(layout)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            addOnVos=getaddOns(productVo);
+                            okListener.setProductVo(productVo);
+                            okListener.setAddOnVos(addOnVos);
+                            okListener.setOrder(orderVo);
+                            okListener.onClick(view);
+                        }
+
+
+                    })
+            ;
+            return builder.create();
+        }
+
+    }
+
+
+
+   public OrderProductVo toOrderProductVo(ProductVo productVo) {
 
         OrderProductVo orderProductVo = new OrderProductVo();
         orderProductVo.setProduct(productVo);
         orderProductVo.setCount(productVo.getQuantity());
+
+        return orderProductVo;
+    }
+
+    public OrderProductVo toOrderProductVoWithAddons(ProductVo productVo, List<AddOnVo> addons) {
+
+        OrderProductVo orderProductVo = toOrderProductVo(productVo);
+        orderProductVo.setCount(1);
+
+        if (addons != null && !addons.isEmpty()) {
+            orderProductVo.setOrderProductAddons(new ArrayList<OrderProductAddonVo>());
+            for (AddOnVo addon : addons){
+                OrderProductAddonVo orderProductAddonVo = new OrderProductAddonVo();
+                orderProductAddonVo.setAddOn(addon);
+                orderProductVo.getOrderProductAddons().add(orderProductAddonVo);
+            }
+        }
 
         return orderProductVo;
     }
@@ -363,11 +502,15 @@ public class NewOrderFragment extends Fragment {
 
         }
     }
-    private void clearAll() {
-        itemAdapter.resetAllProductCount();
-        cartAdapter.clearCart();
-
+    public void clearAll() {
+        if(itemAdapter!=null){
+            itemAdapter.resetAllProductCount();
+        }
+        if(cartAdapter!=null) {
+            cartAdapter.clearCart();
+        }
     }
+
 
     //TOTO : Modify for multiple Vendor;
     private void createCompleteOfflineOrder(OrderVo order) {
@@ -390,7 +533,10 @@ public class NewOrderFragment extends Fragment {
     public class TotalItemCountPriceChangeListener {
         public void onChange(int totalItem, double totalPrice) {
             ((TextView) layout.findViewById(R.id.total_item)).setText(totalItem+"");
-            ((TextView) layout.findViewById(R.id.total_price)).setText(totalPrice+"");
+            ( (MainActivity)getActivity()).updateMenuQty("Qty : "+totalItem);
+
+                        ((TextView) layout.findViewById(R.id.total_price)).setText(totalPrice+"");
+            ( (MainActivity)getActivity()).updateMenuPrice("Total : "+totalPrice);
         }
     }
 

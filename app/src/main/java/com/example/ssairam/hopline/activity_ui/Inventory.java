@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class Inventory extends AppCompatActivity implements CompoundButton.OnChe
 ListView inventoryList;
     List<ProductVo> data;
     InventoryAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ ListView inventoryList;
         getInventory();
         adapter= new InventoryAdapter(data,this.getApplicationContext(),this);
         inventoryList.setAdapter(adapter);
+
 
 
         }

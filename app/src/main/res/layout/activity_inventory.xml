@@ -15,6 +15,11 @@
     <ListView
         android:id="@+id/inventory_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:fastScrollEnabled="true"
+        android:fastScrollAlwaysVisible="true"
+
+        />
+
 
 </LinearLayout>

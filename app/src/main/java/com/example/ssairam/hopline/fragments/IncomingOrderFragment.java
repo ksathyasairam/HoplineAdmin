@@ -283,8 +283,44 @@ public class IncomingOrderFragment extends Fragment {
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getOrders().get(position);
 
-            new CancelOrder(order.getIdorder(),"reason for cancel").execute("");
 
+
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            CancelDialogFragment newFragment = new CancelDialogFragment();
+            newFragment.setOrderVo(order);
+            newFragment.setListners(new OkOnClickListner());
+            newFragment.show(fragmentManager, "dialog");
+
+
+
+        }
+    }
+
+    private class OkOnClickListner implements  View.OnClickListener{
+
+        OrderVo order;
+        String reason;
+
+        public OrderVo getOrder() {
+            return order;
+        }
+
+        public void setOrder(OrderVo order) {
+            this.order = order;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "Ok Cancelled", Toast.LENGTH_SHORT).show();
+            new CancelOrder(order.getIdorder(),reason).execute("");
 
         }
     }
@@ -318,7 +354,7 @@ public class IncomingOrderFragment extends Fragment {
             final View layout = inflater.inflate(R.layout.call_dialog,null);
             ((TextView) layout.findViewById(R.id.phone_numer)).setText(orderVo.getUser().getPhone());
             ((TextView) layout.findViewById(R.id.user_name)).setText(orderVo.getUser().getName());
-            ((TextView) layout.findViewById(R.id.total_price)).setText("Rs."+orderVo.getTotalPrice());
+            ((TextView) layout.findViewById(R.id.total_price)).setText("Rs"+orderVo.getTotalPrice());
             ((TextView) layout.findViewById(R.id.total_quantity)).setText("Qty :"+orderVo.getTotalItemCount());
             ListView listView = (ListView) layout.findViewById(R.id.dialog_listview);
             listView.setAdapter(new CreateOrder_OrderProductAdaptor(getActivity(),orderVo.getOrderProducts()));
@@ -351,6 +387,57 @@ public class IncomingOrderFragment extends Fragment {
 
                 }
             });
+            return builder.create();
+        }
+
+    }
+
+
+
+    public static class CancelDialogFragment extends DialogFragment {
+       String cancelReason;
+        OrderVo orderVo;
+        public void setOrderVo(OrderVo orderVo) {
+            this.orderVo = orderVo;
+        }
+        public String getCancelReason() {
+            return cancelReason;
+        }
+
+        public void setCancelReason(String cancelReason) {
+            this.cancelReason = cancelReason;
+        }
+
+        View view;
+        private OkOnClickListner okListener;
+
+
+        public void setView(View view){
+            this.view = view;
+        }
+        public void setListners(OkOnClickListner okListener){
+            this.okListener = okListener;
+
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            final View layout = inflater.inflate(R.layout.cancel_dialog_fragment,null);
+
+
+            builder.setView(layout)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            okListener.setOrder(orderVo);
+                            okListener.setReason(cancelReason);
+                            okListener.onClick(view);
+                        }
+                    })
+                    ;
             return builder.create();
         }
 

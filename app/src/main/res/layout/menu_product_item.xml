@@ -41,6 +41,7 @@
                         android:layout_height="15dp"
                         android:layout_alignParentLeft="true"
                         android:layout_margin="10dp"
+                        android:id="@+id/veg_non_veg_image"
                         android:src="@drawable/veg_icon" />
                 </RelativeLayout>
 
@@ -101,6 +102,7 @@
                             android:background="#ffffff"
 
                             android:layout_weight="1"
+                            android:visibility="visible"
                             android:src="@drawable/custom_icon" />
 
                         <ImageButton

@@ -115,8 +115,9 @@
                         android:text="FINALIZED"
                         android:id="@+id/button_finalized"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp"
@@ -128,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:id="@+id/button_unpicked"
-
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         style="@style/Widget.AppCompat.Button.Colored"
 
@@ -136,7 +137,7 @@
                         android:text="UNPICKED"
                         android:fontFamily="sans-serif-medium"
 
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         />
 
 

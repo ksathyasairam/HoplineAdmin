@@ -101,24 +101,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         />
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/album_title_padding"
-                        android:paddingRight="@dimen/album_title_padding"
-                        android:paddingTop="@dimen/album_title_padding"
-                        android:textColor="@color/album_title"
-                        android:textSize="@dimen/album_title" />
-
-                    <TextView
-                        android:id="@+id/count"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/songs_count_padding_bottom"
-                        android:paddingLeft="@dimen/album_title_padding"
-                        android:paddingRight="@dimen/album_title_padding"
-                        android:textSize="@dimen/songs_count" />
+                   
 
                 </LinearLayout>
 
@@ -134,7 +117,7 @@
                         android:id="@+id/button_print_bill"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp"
@@ -154,7 +137,7 @@
                         android:text="REMOVE"
                         android:fontFamily="sans-serif-medium"
 
-                        android:textSize="14sp"
+                        android:textSize="10sp"
                         />
 
 

@@ -8,6 +8,11 @@
     <string name="price">Rs.</string>
     <string name="orderSuccess">Order Success!</string>
     <string name="printFailedOrderSuccess">Order Success, Print Bill Failed!, Retry printing bill from All orders Screen.</string>
-
+    <string name="customer_support_hint">Share your ideas on how we can improve.</string>
+    <string name="clear_cart">clear cart</string>
+    <string name="offline_orders">Offline Orders</string>
+    <string name="inventory">Inventory</string>
+    <string name="order_history">Order History</string>
+    <string name="feedback">Feedback</string>
 
 </resources>
