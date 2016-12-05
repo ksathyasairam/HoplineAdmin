@@ -1,6 +1,6 @@
 package com.example.ssairam.hopline.fragments;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,10 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,15 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
-import com.example.ssairam.hopline.Dialogs.CreateOrderDialogFragment;
-import com.example.ssairam.hopline.MainActivity;
+import com.example.ssairam.hopline.Dialogs.CreateOrderDialog;
+import com.example.ssairam.hopline.activity_ui.MainActivity;
 import com.example.ssairam.hopline.MainPrefs;
 import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.CartAdapter;
-import com.example.ssairam.hopline.adapters.CreateOrder_OrderProductAdaptor;
 import com.example.ssairam.hopline.adapters.CustomizeAddOnAdapter;
 import com.example.ssairam.hopline.adapters.MenuCategoryAdapter;
 import com.example.ssairam.hopline.adapters.MenuItemAdapter;
@@ -206,12 +203,13 @@ public class NewOrderFragment extends Fragment {
                 int position = (Integer) v.getTag();
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                CustomizeDialogFragment newFragment = new CustomizeDialogFragment();
+                CustomizeDialog dialog = new CustomizeDialog();
                 OrderVo order=cartAdapter.getOrder();
                 ProductVo productVo=itemAdapter.getCategory().getProducts().get(position);
-                newFragment.setOrderVo(order,productVo);
-                newFragment.setListners(new OkOnClickListner());
-                newFragment.show(fragmentManager, "dialog");
+                dialog.setOrderVo(order,productVo);
+                dialog.setListners(new OkOnClickListner());
+                Util.showDialogImmersive(getActivity(),dialog.createDialog());
+
 //                Toast.makeText(getActivity().getApplicationContext(), "customizeButton", Toast.LENGTH_LONG).show();
 
             }
@@ -260,7 +258,7 @@ public class NewOrderFragment extends Fragment {
     }
 
 
-    public static class CustomizeDialogFragment extends DialogFragment {
+    public  class CustomizeDialog {
 
         OrderVo orderVo;
         List<AddOnVo> addOnVos;
@@ -293,9 +291,8 @@ public class NewOrderFragment extends Fragment {
             return addOnVos;
         }
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        public AlertDialog createDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(NewOrderFragment.this.getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
 
             final View layout = inflater.inflate(R.layout.customization_dialog,null);
@@ -362,8 +359,8 @@ public class NewOrderFragment extends Fragment {
 
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        CreateOrderDialogFragment newFragment = new CreateOrderDialogFragment();
-        newFragment.setData(order, new PrintBillListner() {
+        CreateOrderDialog dialog = new CreateOrderDialog();
+        dialog.setData(order, new PrintBillListner() {
             @Override
             public void OnPrintBill(OrderVo order) {
 
@@ -375,9 +372,8 @@ public class NewOrderFragment extends Fragment {
 
 
             }
-        });
-        newFragment.show(fragmentManager, "createOrderDialog");
-
+        },getActivity());
+        Util.showDialogImmersive(getActivity(),dialog.creatDialog());
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.ssairam.hopline;
+package com.example.ssairam.hopline.activity_ui;
 
 
 import android.content.Intent;
@@ -9,10 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.example.ssairam.hopline.DataStore;
+import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
+import com.example.ssairam.hopline.InitialiseDataFromServer;
+import com.example.ssairam.hopline.PrinterConnector;
+import com.example.ssairam.hopline.PrinterHelper;
+import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.activity_ui.FeedbackForm;
 import com.example.ssairam.hopline.activity_ui.Inventory;
 import com.example.ssairam.hopline.activity_ui.OfflineOrder;
@@ -24,7 +33,7 @@ import com.example.ssairam.hopline.fragments.OrderReadyFragment;
 import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
 
 
-public class MainActivity extends AppCompatActivity implements IncomingOrderFragment.OnFragmentInteractionListener
+public class MainActivity extends BaseActivity implements IncomingOrderFragment.OnFragmentInteractionListener
         , AHBottomNavigation.OnTabSelectedListener, NewOrderFragment.OnFragmentInteractionListener, BigOrderPayFragment.OnFragmentInteractionListener,
         OrderReadyFragment.OnFragmentInteractionListener, PreparingOrderFragment.OnFragmentInteractionListener {
     AHBottomNavigation bottomNavigation;
@@ -208,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 return true;
             case R.id.action_clear_cart:
                 if(fragment!=null){
+
                     fragment.clearAll();
                 }
                 return true;
@@ -215,6 +225,28 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
                 return super.onOptionsItemSelected(item);
         }
     }
+//
+//    public void showPopup(){
+//        View menuItemView = findViewById(R.id.action_clear_cart);
+//
+//        PopupMenu popup =new PopupMenu(this, menuItemView) {
+//            @Override
+//            public void show() {
+//                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//                super.show();
+//            }};
+//
+//        popup.get
+//        MenuInflater inflate = popup.getMenuInflater();
+//        inflate.inflate(R.menu.menu, popup.getMenu());
+//        popup.show();
+//
+//    }
+//
+//
 
     public void updateMenuPrice(String title) {
         MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
@@ -228,20 +260,9 @@ public class MainActivity extends AppCompatActivity implements IncomingOrderFrag
 
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-//        if (hasFocus) {
-//            View decorView = getWindow().getDecorView();
-//
-//            decorView.setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
-    }
+
+
+
 
     @Override
     protected void onPause() {

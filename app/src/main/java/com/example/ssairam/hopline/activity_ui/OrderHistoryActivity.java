@@ -21,7 +21,7 @@ import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
 
-public class OrderHistoryActivity extends AppCompatActivity {
+public class OrderHistoryActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private OrderHistoryAdapter adapter;
     @Override
@@ -99,8 +99,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog = Util.createProgressDialog(context);
-            dialog.show();
+            dialog = Util.showProgressDialog(OrderHistoryActivity.this);
         }
     }
 
@@ -132,8 +131,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog = Util.createProgressDialog(activity);
-            dialog.show();
+            dialog = Util.showProgressDialog(OrderHistoryActivity.this);
         }
     }
 }

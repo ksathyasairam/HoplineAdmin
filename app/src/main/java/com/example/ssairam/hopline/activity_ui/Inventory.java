@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Inventory extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class Inventory extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 ListView inventoryList;
     List<ProductVo> data;
     InventoryAdapter adapter;

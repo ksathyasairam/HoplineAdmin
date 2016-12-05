@@ -87,9 +87,15 @@ public class BigOrderPayFragment extends Fragment {
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-        new LoadBigOrderPayData(getActivity()).execute("");
 
         return layout;
+
+    }
+
+    @Override
+    public void onResume() {
+        new LoadBigOrderPayData(getActivity()).execute("");
+        super.onResume();
     }
 
     private void initUi(List<OrderVo> orders) {
@@ -312,8 +318,7 @@ public class BigOrderPayFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            dialog = Util.createProgressDialog(activity);
-            dialog.show();
+            dialog = Util.showProgressDialog(activity);
         }
     }
 

@@ -1,8 +1,11 @@
 package com.example.ssairam.hopline;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
@@ -54,17 +57,17 @@ public class Util {
         IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
         DataStore.setIncomingOrders(localOrderVoCopy);
     }
-
-    public static ProgressDialog createProgressDialog(Context context) {
-
-        ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Loading. Please wait...");
-        dialog.setIndeterminate(true);
-        dialog.setCanceledOnTouchOutside(false);
-        return dialog;
-
-    }
+//
+//    public static ProgressDialog createProgressDialog(Context context) {
+//
+//        ProgressDialog dialog = new ProgressDialog(context);
+//        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        dialog.setMessage("Loading. Please wait...");
+//        dialog.setIndeterminate(true);
+//        dialog.setCanceledOnTouchOutside(false);
+//        return dialog;
+//
+//    }
 
     public static ProgressDialog showProgressDialog(Activity activity) {
 
@@ -73,9 +76,22 @@ public class Util {
         dialog.setMessage("Loading. Please wait...");
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        return dialog;
+        return (ProgressDialog) showDialogImmersive(activity,(AlertDialog) dialog);
+    }
 
+    public static AlertDialog showDialogImmersive(Activity activity,AlertDialog dialog) {
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+//Show the dialog!
+        dialog.show();
+
+//Set the dialog to immersive
+        dialog.getWindow().getDecorView().setSystemUiVisibility(
+                activity.getWindow().getDecorView().getSystemUiVisibility());
+
+//Clear the not focusable flag from the window
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        return dialog;
     }
 
     public static double calculatePrice(OrderProductVo orderProduct) {

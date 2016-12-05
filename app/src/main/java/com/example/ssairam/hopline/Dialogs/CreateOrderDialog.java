@@ -2,11 +2,11 @@ package com.example.ssairam.hopline.Dialogs;
 
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,29 +20,30 @@ import com.example.ssairam.hopline.fragments.NewOrderFragment;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.UserVo;
 
-public class CreateOrderDialogFragment extends DialogFragment {
+public class CreateOrderDialog {
         OrderVo orderVo;
         NewOrderFragment.PrintBillListner printBillListener;
+        Activity activity;
 
-        public void setData(OrderVo orderVo, NewOrderFragment.PrintBillListner printBillListner) {
+        public void setData(OrderVo orderVo, NewOrderFragment.PrintBillListner printBillListner, Activity activity) {
             this.orderVo = orderVo;
             this.printBillListener = printBillListner;
+            this.activity = activity;
         }
 
 
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        public AlertDialog creatDialog() {
 
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            LayoutInflater inflater = activity.getLayoutInflater();
 
             final View layout = inflater.inflate(R.layout.create_order_dialog,null);
 
             ListView listView = (ListView) layout.findViewById(R.id.create_order_list);
-            listView.setAdapter(new CreateOrder_OrderProductAdaptor(getActivity(),orderVo.getOrderProducts()));
+            listView.setAdapter(new CreateOrder_OrderProductAdaptor(activity,orderVo.getOrderProducts()));
 
 
-            final AlertDialog d = new AlertDialog.Builder(getActivity())
+            final AlertDialog d = new AlertDialog.Builder(activity)
                     .setView(layout)
                     .setPositiveButton("PRINT BILL", null) //Set to null. We override the onclick
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -67,11 +68,11 @@ public class CreateOrderDialogFragment extends DialogFragment {
                             String phoneInput = ((EditText) layout.findViewById(R.id.editTextPhone)).getText().toString();
 
                             if (nameInput == null || nameInput.length() < 3) {
-                                Toast.makeText(getActivity(),"Invalid name",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity,"Invalid name",Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             if (phoneInput == null || phoneInput.length() != 10){
-                                Toast.makeText(getActivity(),"Invalid phone number",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity,"Invalid phone number",Toast.LENGTH_SHORT).show();
                                 return;
                             }
 

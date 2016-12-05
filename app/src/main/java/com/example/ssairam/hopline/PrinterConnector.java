@@ -32,7 +32,6 @@ public class PrinterConnector extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
-            dialog = Util.createProgressDialog(activity);
-            dialog.show();
+            dialog = Util.showProgressDialog(activity);
         }
     }

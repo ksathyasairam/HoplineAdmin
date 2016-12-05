@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.R;
 
-public class FeedbackForm extends AppCompatActivity {
+public class FeedbackForm extends BaseActivity {
     public static final String OUR_EMAIL = "mail.hopline@gmail.com";
     String mailSubject = "Bugs/Feedback";
     @Override

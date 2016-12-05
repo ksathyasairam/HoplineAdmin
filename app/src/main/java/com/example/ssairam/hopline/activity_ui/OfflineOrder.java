@@ -15,7 +15,7 @@ import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
 
-public class OfflineOrder extends AppCompatActivity {
+public class OfflineOrder extends BaseActivity {
     private RecyclerView recyclerView;
     private OfflineOrderAdapter adapter;
     @Override

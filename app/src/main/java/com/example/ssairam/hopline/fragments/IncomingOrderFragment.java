@@ -1,6 +1,7 @@
 package com.example.ssairam.hopline.fragments;
 
-import android.app.Dialog;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,25 +12,20 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
@@ -39,7 +35,6 @@ import com.example.ssairam.hopline.adapters.CreateOrder_OrderProductAdaptor;
 import com.example.ssairam.hopline.adapters.IncomingOrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -253,11 +248,8 @@ public class IncomingOrderFragment extends Fragment {
             OrderVo order = adapter.getOrders().get(position);
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            CallDialogFragment newFragment = new CallDialogFragment();
-            newFragment.setOrderVo(order);
-            newFragment.setView(v);
-            newFragment.setListners(new CancelOnClickListner(),new ConfirmOnClickListner());
-            newFragment.show(fragmentManager, "dialog");
+            CallDialog dialog = new CallDialog(new CancelOnClickListner(),new ConfirmOnClickListner(),getActivity(),order,v);
+            Util.showDialogImmersive(getActivity(),dialog.createDialog());
 
         }
     }
@@ -286,10 +278,8 @@ public class IncomingOrderFragment extends Fragment {
 
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            CancelDialogFragment newFragment = new CancelDialogFragment();
-            newFragment.setOrderVo(order);
-            newFragment.setListners(new OkOnClickListner());
-            newFragment.show(fragmentManager, "dialog");
+            CancelDialog dialog = new CancelDialog(new OkOnClickListner(),v,getActivity());
+            Util.showDialogImmersive(getActivity(),dialog.createDialog());
 
 
 
@@ -327,29 +317,23 @@ public class IncomingOrderFragment extends Fragment {
 
 
 
-    public static class CallDialogFragment extends DialogFragment {
+    public static class CallDialog {
         OrderVo orderVo;
         View view;
         private View.OnClickListener cancelListner,confirmListner;
+        private Activity activity;
 
-        public void setOrderVo(OrderVo orderVo) {
+        CallDialog(View.OnClickListener cancelListner, View.OnClickListener confirmListner, Activity activity, OrderVo orderVo, View view){
+            this.cancelListner = cancelListner;
+            this.confirmListner = confirmListner;
+            this.activity = activity;
             this.orderVo = orderVo;
-        }
-
-        public void setView(View view){
             this.view = view;
         }
 
-        public void setListners(View.OnClickListener cancelListner, View.OnClickListener confirmListner){
-            this.cancelListner = cancelListner;
-            this.confirmListner = confirmListner;
-        }
-
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+        public AlertDialog createDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            LayoutInflater inflater = activity.getLayoutInflater();
 
             final View layout = inflater.inflate(R.layout.call_dialog,null);
             ((TextView) layout.findViewById(R.id.phone_numer)).setText(orderVo.getUser().getPhone());
@@ -357,7 +341,7 @@ public class IncomingOrderFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.total_price)).setText("Rs"+orderVo.getTotalPrice());
             ((TextView) layout.findViewById(R.id.total_quantity)).setText("Qty :"+orderVo.getTotalItemCount());
             ListView listView = (ListView) layout.findViewById(R.id.dialog_listview);
-            listView.setAdapter(new CreateOrder_OrderProductAdaptor(getActivity(),orderVo.getOrderProducts()));
+            listView.setAdapter(new CreateOrder_OrderProductAdaptor(activity,orderVo.getOrderProducts()));
 //            String[] values = new String[] { "Android List View",
 //                    "Adapter implementation",
 //                    "Simple List View In Android",
@@ -394,12 +378,14 @@ public class IncomingOrderFragment extends Fragment {
 
 
 
-    public static class CancelDialogFragment extends DialogFragment {
-       String cancelReason;
+    public static class CancelDialog {
+        private final Activity activity;
+        String cancelReason;
         OrderVo orderVo;
         public void setOrderVo(OrderVo orderVo) {
             this.orderVo = orderVo;
         }
+
         public String getCancelReason() {
             return cancelReason;
         }
@@ -411,19 +397,15 @@ public class IncomingOrderFragment extends Fragment {
         View view;
         private OkOnClickListner okListener;
 
-
-        public void setView(View view){
+        CancelDialog(OkOnClickListner okListener, View view, Activity activity) {
             this.view = view;
-        }
-        public void setListners(OkOnClickListner okListener){
             this.okListener = okListener;
-
+            this.activity = activity;
         }
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+        public AlertDialog createDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            LayoutInflater inflater = activity.getLayoutInflater();
 
             final View layout = inflater.inflate(R.layout.cancel_dialog_fragment,null);
 
