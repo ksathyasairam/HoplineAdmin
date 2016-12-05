@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -278,7 +279,7 @@ public class IncomingOrderFragment extends Fragment {
 
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            CancelDialog dialog = new CancelDialog(new OkOnClickListner(),v,getActivity());
+            CancelDialog dialog = new CancelDialog(new OkOnClickListner(),v,getActivity(),order);
             Util.showDialogImmersive(getActivity(),dialog.createDialog());
 
 
@@ -397,10 +398,11 @@ public class IncomingOrderFragment extends Fragment {
         View view;
         private OkOnClickListner okListener;
 
-        CancelDialog(OkOnClickListner okListener, View view, Activity activity) {
+        CancelDialog(OkOnClickListner okListener, View view, Activity activity,OrderVo orderVo) {
             this.view = view;
             this.okListener = okListener;
             this.activity = activity;
+            this.orderVo=orderVo;
         }
 
         public AlertDialog createDialog() {
@@ -409,14 +411,23 @@ public class IncomingOrderFragment extends Fragment {
 
             final View layout = inflater.inflate(R.layout.cancel_dialog_fragment,null);
 
+            final EditText editText= (EditText) layout.findViewById(R.id.cancel_edit_text);
 
             builder.setView(layout)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            okListener.setOrder(orderVo);
-                            okListener.setReason(cancelReason);
-                            okListener.onClick(view);
+
+                            if( !(String.valueOf(editText.getText()).isEmpty())){
+                                cancelReason=String.valueOf(editText.getText());
+                                okListener.setOrder(orderVo);
+                                okListener.setReason(cancelReason);
+                                okListener.onClick(view);
+                            }
+                            else {
+                                Toast.makeText(activity.getApplication(),"Reason cannot be empty",Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     })
                     ;

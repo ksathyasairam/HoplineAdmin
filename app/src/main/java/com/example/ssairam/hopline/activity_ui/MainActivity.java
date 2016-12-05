@@ -140,6 +140,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 
             case 0:
                 if (!wasSelected) {
+                    restPriceAndQty();
                     IncomingOrderFragment fragment = new IncomingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -147,6 +148,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 1:
                 if (!wasSelected) {
+                    restPriceAndQty();
                     PreparingOrderFragment fragment = new PreparingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -155,6 +157,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 2:
                 if (!wasSelected) {
+                    restPriceAndQty();
                     OrderReadyFragment fragment = new OrderReadyFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -163,6 +166,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 3:
                 if (!wasSelected) {
+                    restPriceAndQty();
                      fragment = new NewOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -171,6 +175,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 4:
                 if (!wasSelected) {
+                    restPriceAndQty();
                     BigOrderPayFragment fragment = new BigOrderPayFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -258,6 +263,12 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
         totalQty.setTitle(title);
 
 
+    }
+    public void  restPriceAndQty (){
+        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
+        totalPrice.setTitle("Total : ");
+        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
+        totalQty.setTitle("Qty : ");
     }
 
 

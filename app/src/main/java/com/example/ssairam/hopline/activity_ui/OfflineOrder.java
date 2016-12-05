@@ -6,11 +6,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.adapters.OfflineOrderAdapter;
-import com.example.ssairam.hopline.fragments.OfflineOrderFragment;
 import com.example.ssairam.hopline.vo.OrderVo;
 
 import java.util.List;
@@ -49,7 +49,11 @@ public class OfflineOrder extends BaseActivity {
     }
 
     private void updateUi() {
-        if(adapter != null) adapter.updateData(DataStore.getCompleteOfflineOrders(getApplicationContext()));
+        if(adapter != null){
+            adapter.updateData(DataStore.getCompleteOfflineOrders(getApplicationContext()));
+
+        }
+
     }
     @Override
     public void onResume() {

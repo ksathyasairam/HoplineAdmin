@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +53,7 @@
 
         <TextView
             android:id="@+id/cart_item_name"
+            android:padding="3dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
@@ -69,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="3dp">
 
         <TextView
             android:id="@+id/cart_item_addon"
