@@ -15,8 +15,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
-import com.example.ssairam.hopline.PrinterConnector;
-import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
@@ -43,11 +41,11 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             }
         }
 
-        if (PrinterHelper.get().isBluetoothOn()) {
-            new PrinterConnector(this).execute("");
-        } else {
-            Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
-        }
+//        if (PrinterHelperBackup.get().isBluetoothOn()) {
+//            new PrinterConnectorBackup(this).execute("");
+//        } else {
+//            Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
+//        }
 
         if (!DataStore.isDataInilitised()) {
             new InitialiseDataFromServer(this) {

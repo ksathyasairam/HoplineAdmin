@@ -115,16 +115,17 @@ public class OrderHistoryActivity extends BaseActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            return Util.printBill(order,getParent());
+//            return Util.printBill(order,getParent());
+            return true;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (success) {
-                Toast.makeText(activity,"Print Success!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(activity, "Print Failed! Make sure device is connected to Printer.", Toast.LENGTH_SHORT).show();
-            }
+//            if (success) {
+//                Toast.makeText(activity,"Print Success!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(activity, "Print Failed! Make sure device is connected to Printer.", Toast.LENGTH_SHORT).show();
+//            }
             if (dialog != null)
                 dialog.dismiss();
         }

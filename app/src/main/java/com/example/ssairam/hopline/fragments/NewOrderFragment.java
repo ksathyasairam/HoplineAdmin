@@ -24,12 +24,11 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.Dialogs.CreateOrderDialog;
-import com.example.ssairam.hopline.activity_ui.MainActivity;
 import com.example.ssairam.hopline.MainPrefs;
-import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
+import com.example.ssairam.hopline.activity_ui.MainActivity;
 import com.example.ssairam.hopline.adapters.CartAdapter;
 import com.example.ssairam.hopline.adapters.CustomizeAddOnAdapter;
 import com.example.ssairam.hopline.adapters.MenuCategoryAdapter;
@@ -364,11 +363,11 @@ public class NewOrderFragment extends Fragment {
             @Override
             public void OnPrintBill(OrderVo order) {
 
-                if (PrinterHelper.get().isBluetoothOn()){
+//                if (PrinterHelperBackup.get().isBluetoothOn()){
                     new CreateWalkInOrder(order).execute("");
-                } else {
-                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
-                }
+//                } else {
+//                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
+//                }
 
 
             }
@@ -465,21 +464,21 @@ public class NewOrderFragment extends Fragment {
 
             if (success) {
 
-                if (Util.printBill(orderFromServer,getActivity())) {
+//                if (Util.printBill(orderFromServer,getActivity())) {
                     Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
-                }
+//                } else {
+//                    Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
+//                }
 
                 DataStore.getPreparingOrders().add(orderFromServer);
             } else {
                 createCompleteOfflineOrder(order);
 
-                if (Util.printBill(order,getActivity())) {
+//                if (Util.printBill(order,getActivity())) {
                     Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
-                }
+//                } else {
+//                    Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
+//                }
 
             }
 

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
-import com.example.ssairam.hopline.PrinterHelper;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
@@ -115,11 +114,11 @@ public class BigOrderPayFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
-                if (PrinterHelper.get().isBluetoothOn()){
+//                if (PrinterHelperBackup.get().isBluetoothOn()){
                     markOrderPreparingAndPaid(order);
-                } else {
-                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
-                }
+//                } else {
+//                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
+//                }
 
             }
 
@@ -172,11 +171,11 @@ public class BigOrderPayFragment extends Fragment {
             if (success) {
                removeOrderFromUi(order.getIdorder());
 
-               if (Util.printBill(order,getActivity())) {
+//               if (Util.printBill(order,getActivity())) {
                    Toast.makeText(getActivity(), R.string.orderSuccess, Toast.LENGTH_SHORT).show();
-               } else {
-                   Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
-               }
+//               } else {
+//                   Toast.makeText(getActivity(), R.string.printFailedOrderSuccess, Toast.LENGTH_SHORT).show();
+//               }
 
             } else {
                 Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();

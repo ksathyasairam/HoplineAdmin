@@ -4,17 +4,12 @@ import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.Stock;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 
@@ -168,11 +163,12 @@ public class ServerHelper {
         return updateOrderStatus(ordrOrderStatusTo);
     }
 
-    public static boolean markOrderPreparing(Integer orderId){
+    public static boolean markOrderPreparing(Integer orderId, Integer orderCompletionTime){
         OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
         ordrOrderStatusTo.setOrderId(orderId);
         ordrOrderStatusTo.setOrderStatus(OrderStates.PREPARING);
 //        ordrOrderStatusTo.setUpdateOrderTime(true);
+        ordrOrderStatusTo.setOrderCompletionTime(orderCompletionTime);
         return updateOrderStatus(ordrOrderStatusTo);
     }
 

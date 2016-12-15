@@ -2,11 +2,8 @@ package com.example.ssairam.hopline;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
 import com.example.ssairam.hopline.vo.OrderProductAddonVo;
@@ -118,77 +115,77 @@ public class Util {
     }
 
 
-    private static String formatPrice2Decimal(double price){
-        return  new DecimalFormat("#.00", DecimalFormatSymbols.getInstance( Locale.ENGLISH )).format(price);
-    }
+//    private static String formatPrice2Decimal(double price){
+//        return  new DecimalFormat("#.00", DecimalFormatSymbols.getInstance( Locale.ENGLISH )).format(price);
+//    }
+//
+//    private static String getFormattedProductPrintString29(String quantityString, String productName, double price){
+//
+//        String str =  quantityString + " " + productName;
+//
+//        if (str.length() > 19)
+//            str = str.substring(0, 19);
+//
+//        int numSpaces = 19 - str.length();
+//
+//        String priceString = formatPrice2Decimal(price);
+//
+//
+//        String finalString = str + "                  ".substring(0, numSpaces) + "  " +    "            ".substring(0,8-priceString.length()) + priceString;
+//
+//        return  finalString;
+//
+//    }
 
-    private static String getFormattedProductPrintString29(String quantityString, String productName, double price){
-
-        String str =  quantityString + " " + productName;
-
-        if (str.length() > 19)
-            str = str.substring(0, 19);
-
-        int numSpaces = 19 - str.length();
-
-        String priceString = formatPrice2Decimal(price);
-
-
-        String finalString = str + "                  ".substring(0, numSpaces) + "  " +    "            ".substring(0,8-priceString.length()) + priceString;
-
-        return  finalString;
-
-    }
-
-    public static boolean printBill(OrderVo order, Activity activity) {
-
-        M.log("Util","Enter printBill");
-
-        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
-
-        String printData = "";
-        printData += printer.font_Courier_29("          Bistro 37") + printer.carriage_Return();
-        printData += printer.font_Courier_29("          Shop No.11") + printer.carriage_Return();
-        printData += printer.font_Courier_29("Godavari Complex,Arun Vihar") + printer.carriage_Return();
-        printData += printer.font_Courier_29("       Sector 37, Noida") + printer.carriage_Return();
-        printData += printer.font_Courier_29("   Ph. No. : 011 33105995") + printer.carriage_Return();
-        printData += printer.font_Courier_29("   Tin No. : 29110326308") + printer.carriage_Return();
-        printData += printer.font_Courier_29("-----------------------------");
-
-        printData += printer.font_Courier_20("   Order No : " + order.getCustomerOrderId()) + printer.carriage_Return() + printer.carriage_Return();
-
-        String date = new SimpleDateFormat("dd/MM/yyyy").format(order.getOrderTime());
-        String time = new SimpleDateFormat("hh:mm a").format(order.getOrderTime());
-        printData += printer.font_Courier_29(date + "         " + time) + printer.carriage_Return();
-
-        printData += printer.font_Courier_29("-----------------------------");
-
-        if (order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) return  true;
-        for (OrderProductVo orderProductVo : order.getOrderProducts()) {
-
-            printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
-                    orderProductVo.getProduct().getName(), orderProductVo.getProduct().getPrice().doubleValue() * orderProductVo.getCount()));
-
-            if (orderProductVo.getOrderProductAddons() == null) continue;
-            for(OrderProductAddonVo addon : orderProductVo.getOrderProductAddons()){
-                printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
-                        addon.getAddOn().getName(), addon.getAddOn().getPrice()));
-            }
-
-        }
-
-        printData += printer.carriage_Return();
-        printData += printer.font_Courier_29(getFormattedProductPrintString29(" ","Total", order.getTotalPrice()));
-        printData += printer.font_Courier_29("-----------------------------");
-
-        printData += printer.font_Courier_29("Thank you for dining with us ") + printer.carriage_Return();
-
-
-        printData += printer.font_Courier_24("***Powered by Hopline***") + printer.carriage_Return();
-        printData += printer.carriage_Return() + printer.carriage_Return() + printer.carriage_Return() +  printer.carriage_Return();
-
-
-        return PrinterHelper.get().print(printData);
-
-    }
+//    public static boolean printBill(OrderVo order, Activity activity) {
+//
+//        M.log("Util","Enter printBill");
+//
+//        Bluetooth_Printer_2inch_ThermalAPI printer = new Bluetooth_Printer_2inch_ThermalAPI();
+//
+//        String printData = "";
+//        printData += printer.font_Courier_29("          Bistro 37") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("          Shop No.11") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("Godavari Complex,Arun Vihar") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("       Sector 37, Noida") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("   Ph. No. : 011 33105995") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("   Tin No. : 29110326308") + printer.carriage_Return();
+//        printData += printer.font_Courier_29("-----------------------------");
+//
+//        printData += printer.font_Courier_20("   Order No : " + order.getCustomerOrderId()) + printer.carriage_Return() + printer.carriage_Return();
+//
+//        String date = new SimpleDateFormat("dd/MM/yyyy").format(order.getOrderTime());
+//        String time = new SimpleDateFormat("hh:mm a").format(order.getOrderTime());
+//        printData += printer.font_Courier_29(date + "         " + time) + printer.carriage_Return();
+//
+//        printData += printer.font_Courier_29("-----------------------------");
+//
+//        if (order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) return  true;
+//        for (OrderProductVo orderProductVo : order.getOrderProducts()) {
+//
+//            printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
+//                    orderProductVo.getProduct().getName(), orderProductVo.getProduct().getPrice().doubleValue() * orderProductVo.getCount()));
+//
+//            if (orderProductVo.getOrderProductAddons() == null) continue;
+//            for(OrderProductAddonVo addon : orderProductVo.getOrderProductAddons()){
+//                printData += printer.font_Courier_29(getFormattedProductPrintString29(orderProductVo.getCount()+"",
+//                        addon.getAddOn().getName(), addon.getAddOn().getPrice()));
+//            }
+//
+//        }
+//
+//        printData += printer.carriage_Return();
+//        printData += printer.font_Courier_29(getFormattedProductPrintString29(" ","Total", order.getTotalPrice()));
+//        printData += printer.font_Courier_29("-----------------------------");
+//
+//        printData += printer.font_Courier_29("Thank you for dining with us ") + printer.carriage_Return();
+//
+//
+//        printData += printer.font_Courier_24("***Powered by Hopline***") + printer.carriage_Return();
+//        printData += printer.carriage_Return() + printer.carriage_Return() + printer.carriage_Return() +  printer.carriage_Return();
+//
+//
+//        return PrinterHelperBackup.get().print(printData);
+//
+//    }
 }

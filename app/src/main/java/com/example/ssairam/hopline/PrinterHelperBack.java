@@ -1,13 +1,7 @@
 package com.example.ssairam.hopline;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_2inch_ThermalAPI;
 
@@ -17,20 +11,20 @@ import java.io.IOException;
  * Created by root on 19/11/16.
  */
 
-public class PrinterHelper {
+public class PrinterHelperBack {
     private static final boolean DISABLE_PRINTER = false;
 
-    private static PrinterHelper printerHelper;
+    private static PrinterHelperBack printerHelper;
 
     AnalogicsThermalPrinter conn = new AnalogicsThermalPrinter();
 
-    private PrinterHelper() {
+    private PrinterHelperBack() {
 
     }
 
-    public static PrinterHelper get() {
+    public static PrinterHelperBack get() {
         if (printerHelper == null) {
-            printerHelper = new PrinterHelper();
+            printerHelper = new PrinterHelperBack();
         }
         return printerHelper;
     }

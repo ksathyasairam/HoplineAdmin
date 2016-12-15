@@ -262,7 +262,7 @@ public class IncomingOrderFragment extends Fragment {
 
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getOrders().get(position);
-            new MarkOrderPreparing(order.getIdorder()).execute("");
+            new MarkOrderPreparing(order.getIdorder(),46).execute("");
 
 
         }
@@ -484,15 +484,16 @@ public class IncomingOrderFragment extends Fragment {
 
     private class MarkOrderPreparing extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-        Integer orderId;
+        Integer orderId, orderCompletionTime;
 
-        MarkOrderPreparing(Integer orderId) {
+        MarkOrderPreparing(Integer orderId, Integer orderCompletionTime) {
             this.orderId = orderId;
+            this.orderCompletionTime = orderCompletionTime;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderPreparing(orderId);
+            boolean success = ServerHelper.markOrderPreparing(orderId, orderCompletionTime);
 
             if (success) {
 

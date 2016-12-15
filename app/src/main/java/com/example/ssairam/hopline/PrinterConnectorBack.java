@@ -5,17 +5,17 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class PrinterConnector extends AsyncTask<String, Void, Boolean> {
+public class PrinterConnectorBack extends AsyncTask<String, Void, Boolean> {
         public final Activity activity;
         ProgressDialog dialog;
 
-        public PrinterConnector(Activity activity){
+        public PrinterConnectorBack(Activity activity){
             this.activity = activity;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean result = PrinterHelper.get().connectToPrinter();
+            boolean result = PrinterHelperBack.get().connectToPrinter();
             return result;
         }
 
