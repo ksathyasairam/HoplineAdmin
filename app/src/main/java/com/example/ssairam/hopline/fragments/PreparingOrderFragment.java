@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
+import com.example.ssairam.hopline.OrderStates;
+import com.example.ssairam.hopline.OrderStatusTo;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
@@ -111,10 +112,10 @@ public class PreparingOrderFragment extends Fragment {
 
     private void initUi() {
         List<OrderVo> orderVoList = DataStore.getPreparingOrders();
-        adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList,new OrderReadyListener());
+        adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList, new OrderReadyListener());
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
-       RecyclerView.LayoutManager layoutManager=new StaggeredGridLayoutManager(5,1);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(5, 1);
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -129,38 +130,40 @@ public class PreparingOrderFragment extends Fragment {
 
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getData().get(position);
-            new MarkOrderReady(order.getIdorder()).execute("");
+            new MarkOrderReady(order).execute("");
 
 
         }
     }
 
 
-
     private class MarkOrderReady extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-        Integer orderId;
+        OrderVo orderVo;
+        OrderStatusTo orderStatusFromServer;
 
-        MarkOrderReady(Integer orderId) {
-            this.orderId = orderId;
+        MarkOrderReady(OrderVo orderVo) {
+            this.orderVo = orderVo;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            boolean success = ServerHelper.markOrderReadyForPickup(orderId);
+            OrderStatusTo orderStatusTo = ServerHelper.markItemsPrepared(orderVo);
+            orderStatusFromServer = orderStatusTo;
+            if (!orderStatusTo.isSuccess()) return false;
 
-            if (success) {
-
+            if (orderStatusTo.getOrderStatus().equals(OrderStates.READY_FOR_PICKUP))
+            {
                 try {
                     DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
                 } catch (Exception e) {
                     e.printStackTrace();
                     DataStore.setReadyOrders(null);
-                    return  false;
+                    return false;
                 }
             }
 
-            return success;
+            return true;
 
         }
 
@@ -168,9 +171,14 @@ public class PreparingOrderFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                OrderVo deletedOrder = new OrderVo();
-                deletedOrder.setIdorder(orderId);
-                DataStore.getPreparingOrders().remove(deletedOrder);
+                orderVo.setOrderProducts(orderStatusFromServer.getOrderProductVoList());
+
+                if (OrderStates.READY_FOR_PICKUP.equals(orderStatusFromServer.getOrderStatus())) {
+                    OrderVo deletedOrder = new OrderVo();
+                    deletedOrder.setIdorder(orderVo.getIdorder());
+                    DataStore.getPreparingOrders().remove(deletedOrder);
+                }
+
                 updateUi();
                 Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
@@ -190,7 +198,7 @@ public class PreparingOrderFragment extends Fragment {
     }
 
     private void updateUi() {
-        if(adapter != null) adapter.updateData(DataStore.getPreparingOrders());
+        if (adapter != null) adapter.updateData(DataStore.getPreparingOrders());
     }
 
     @Override

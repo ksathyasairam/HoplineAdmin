@@ -1,5 +1,6 @@
 package com.example.ssairam.hopline;
 
+import com.example.ssairam.hopline.adapters.OrderReadyAdatper;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.Stock;
@@ -110,6 +111,30 @@ public class ServerHelper {
         }
     }
 
+    public static OrderStatusTo markItemsPrepared(OrderVo orderVo){
+
+        OrderStatusTo orderStatusTo = new OrderStatusTo();
+        orderStatusTo.setOrderId(orderVo.getIdorder());
+        orderStatusTo.setOrderProductVoList(orderVo.getOrderProducts());
+        orderStatusTo.setAction("markItemsPrepared");
+
+        try {
+            DummyModel dm = new DummyModel();
+            dm.setOrderStatus(orderStatusTo);
+
+
+            final String url = BASE_REST_URL + "udpateOrderStatus";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            orderStatusTo = restTemplate.postForObject(url, dm, OrderStatusTo.class);
+
+            return orderStatusTo;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return orderStatusTo;
+        }
+    }
+
     public static boolean updateStock(Stock stock){
         try {
 
@@ -182,13 +207,7 @@ public class ServerHelper {
         return updateOrderStatus(ordrOrderStatusTo);
     }
 
-    public static boolean markOrderReadyForPickup(Integer orderId) {
-        OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();
-        ordrOrderStatusTo.setOrderId(orderId);
-        ordrOrderStatusTo.setOrderStatus(OrderStates.READY_FOR_PICKUP);
 
-        return updateOrderStatus(ordrOrderStatusTo);
-    }
 
     public static boolean markOrderUnpicked(Integer orderId){
         OrderStatusTo ordrOrderStatusTo = new OrderStatusTo();

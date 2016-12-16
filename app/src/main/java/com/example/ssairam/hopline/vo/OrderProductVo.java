@@ -8,8 +8,13 @@ public class OrderProductVo implements java.io.Serializable {
 	private Integer idorderProduct;
 	private ProductVo product;
 	private Integer count;
+	private String preparedYN;
 	private List<OrderProductAddonVo> orderProductAddons;
-	
+
+
+	//UI FLAG
+	private boolean isChecked;
+
 	public Integer getIdorderProduct() {
 		return idorderProduct;
 	}
@@ -34,8 +39,21 @@ public class OrderProductVo implements java.io.Serializable {
 	public void setOrderProductAddons(List<OrderProductAddonVo> orderProductAddons) {
 		this.orderProductAddons = orderProductAddons;
 	}
-	
-	
 
-	
+
+	public String getPreparedYN() {
+		return preparedYN;
+	}
+
+	public void setPreparedYN(String preparedYN) {
+		this.preparedYN = preparedYN;
+	}
+
+	public boolean isChecked() {
+		return isChecked;
+	}
+
+	public void setChecked(boolean checked) {
+		isChecked = checked;
+	}
 }
