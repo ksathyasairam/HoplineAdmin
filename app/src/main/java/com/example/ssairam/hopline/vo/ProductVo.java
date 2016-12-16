@@ -13,10 +13,11 @@ public class ProductVo implements java.io.Serializable {
 	private String vegYn;
 	private String stockYn;
 	private List<AddOnVo> addOns;
-	
-	
-	
-	
+	private String singleAddonYN;
+
+
+
+
 	//For UI frontEnd
 	private boolean isExpanded;
 	private int quantity = 1;
@@ -98,5 +99,13 @@ public class ProductVo implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		return productId.hashCode();
+	}
+
+	public String getSingleAddonYN() {
+		return singleAddonYN;
+	}
+
+	public void setSingleAddonYN(String singleAddonYN) {
+		this.singleAddonYN = singleAddonYN;
 	}
 }
