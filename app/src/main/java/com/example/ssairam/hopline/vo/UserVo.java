@@ -5,6 +5,8 @@ public class UserVo implements java.io.Serializable {
 	private Integer iduser;
 	private String phone;
 	private String name;
+	private String mac;
+
 	public Integer getIduser() {
 		return iduser;
 	}
@@ -25,7 +27,11 @@ public class UserVo implements java.io.Serializable {
 	}
 
 
+	public String getMac() {
+		return mac;
+	}
 
-
-	
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
 }
