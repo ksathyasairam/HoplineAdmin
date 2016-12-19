@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_weight="0.85"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/cardheaderdimen_small"
                 android:background="@drawable/round_bg"
                 android:gravity="center"
                 >
@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/largetext"
                         android:gravity="center"
                         android:id="@+id/customer_order_number"
                         android:text="Order No #234"
@@ -54,7 +54,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:textColor="@android:color/white"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/mediumtext"
                             android:gravity="left"
                             android:ellipsize="marquee"
                             android:id="@+id/customer_name"
@@ -65,7 +65,7 @@
                             android:layout_margin="5dp"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/mediumtext"
                             android:gravity="right"
                             android:id="@+id/customer_phone"
                             android:text="9871398153"/>
@@ -112,16 +112,29 @@
                     android:layout_weight="0.85">
 
                     <Button
-                        android:text="ORDER READY"
+                        android:text="NOTIFY USER"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/button_order_ready"
+                        android:id="@+id/button_notify_customer"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="10sp"
+                        android:textSize="@dimen/buttontext"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp" />
+
+                    <Button
+                    android:text="ORDER COMPLETE"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/button_order_ready"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="@dimen/buttontext"
+                    android:theme="@style/AppTheme.Button"
+                    android:textColor="@android:color/white"
+                    android:layout_margin="5dp" />
+
 
                 </LinearLayout>
             </LinearLayout>

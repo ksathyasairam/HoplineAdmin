@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,13 +126,20 @@ public class IncomingOrderFragment extends Fragment {
 
     private void initUi() {
         List<OrderVo> orderVoList = DataStore.getIncomingOrders();
-        View.OnClickListener callListner, cancelListner, confirmListner;
+        View.OnClickListener callListner, cancelListner, confirmListner,increaseTimeListner,decreaseTimeListner;
         callListner = new CallOnclickListner();
         cancelListner = new CancelOnClickListner();
         confirmListner = new ConfirmOnClickListner();
-        adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner);
+        increaseTimeListner=new IncreaseTimeOnClickListener();
+        decreaseTimeListner=new DecreaseTimeOnClickListener();
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
+
+
+        adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner,increaseTimeListner,decreaseTimeListner);
+
+//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+
         recyclerView.setLayoutManager(mLayoutManager);
         // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -249,7 +258,7 @@ public class IncomingOrderFragment extends Fragment {
             OrderVo order = adapter.getOrders().get(position);
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            CallDialog dialog = new CallDialog(new CancelOnClickListner(),new ConfirmOnClickListner(),getActivity(),order,v);
+            CallDialog dialog = new CallDialog(new CancelOnClickListner(),new ConfirmOnClickListner(),new HideOnClickListner() ,getActivity(),order,v);
             Util.showDialogImmersive(getActivity(),dialog.createDialog());
 
         }
@@ -262,9 +271,56 @@ public class IncomingOrderFragment extends Fragment {
 
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getOrders().get(position);
-            new MarkOrderPreparing(order.getIdorder(),46).execute("");
+
+            if(order.getOrderCompleteTime()!=0){
+                new MarkOrderPreparing(order.getIdorder(),order.getOrderCompleteTime()).execute("");
+            }
+            else
+            {
+                Toast.makeText(getActivity().getApplicationContext(),"Estimated time for preparation cannot be 0 mins",Toast.LENGTH_SHORT).show();
+            }
 
 
+        }
+    }
+
+
+    private class HideOnClickListner implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            adapter.notifyDataSetChanged();
+
+        }
+    }
+
+    private class IncreaseTimeOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+            int time=order.getOrderCompleteTime();
+
+
+            order.setOrderCompleteTime(time+5);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class DecreaseTimeOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+            int time=order.getOrderCompleteTime();
+
+            if((time-5)>0){
+                order.setOrderCompleteTime(time-5);
+                adapter.notifyDataSetChanged();
+
+            }
         }
     }
 
@@ -321,15 +377,42 @@ public class IncomingOrderFragment extends Fragment {
     public static class CallDialog {
         OrderVo orderVo;
         View view;
-        private View.OnClickListener cancelListner,confirmListner;
+        ImageButton increaseTime;
+        ImageButton decreaseTime;
+        TextView time;
+        private View.OnClickListener cancelListner,confirmListner,hideListner;
         private Activity activity;
+        private class IncreaseTimeOnClickListener implements View.OnClickListener{
 
-        CallDialog(View.OnClickListener cancelListner, View.OnClickListener confirmListner, Activity activity, OrderVo orderVo, View view){
+            @Override
+            public void onClick(View v) {
+                int timeval=orderVo.getOrderCompleteTime();
+                orderVo.setOrderCompleteTime(timeval+5);
+                time.setText(String.valueOf(orderVo.getOrderCompleteTime()));
+
+            }
+        }
+
+        private class DecreaseTimeOnClickListener implements View.OnClickListener{
+
+            @Override
+            public void onClick(View v) {
+                int timeval=orderVo.getOrderCompleteTime();
+                if((timeval-5)>0){
+                    orderVo.setOrderCompleteTime(timeval-5);
+                    time.setText(String.valueOf(orderVo.getOrderCompleteTime()));
+
+                }
+            }
+        }
+        CallDialog(View.OnClickListener cancelListner, View.OnClickListener confirmListner,View.OnClickListener hideListner, Activity activity, OrderVo orderVo, View view){
             this.cancelListner = cancelListner;
             this.confirmListner = confirmListner;
+            this.hideListner=hideListner;
             this.activity = activity;
             this.orderVo = orderVo;
             this.view = view;
+
         }
 
         public AlertDialog createDialog() {
@@ -341,6 +424,25 @@ public class IncomingOrderFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.user_name)).setText(orderVo.getUser().getName());
             ((TextView) layout.findViewById(R.id.total_price)).setText("Rs"+orderVo.getTotalPrice());
             ((TextView) layout.findViewById(R.id.total_quantity)).setText("Qty :"+orderVo.getTotalItemCount());
+
+
+            increaseTime=(ImageButton) layout.findViewById(R.id.increase_time_button) ;
+            decreaseTime=(ImageButton)layout.findViewById(R.id.decrease_time_button);
+            time=(TextView) layout.findViewById(R.id.time_display_dialog);
+            increaseTime.setOnClickListener(new CallDialog.IncreaseTimeOnClickListener());
+            decreaseTime.setOnClickListener(new CallDialog.DecreaseTimeOnClickListener());
+
+
+            if(orderVo.getOrderCompleteTime()!=null){
+                time.setText(String.valueOf(orderVo.getOrderCompleteTime()));
+            }
+            else {
+                orderVo.setOrderCompleteTime(0);
+                time.setText(String.valueOf(orderVo.getOrderCompleteTime()));
+
+            }
+
+
             ListView listView = (ListView) layout.findViewById(R.id.dialog_listview);
             listView.setAdapter(new CreateOrder_OrderProductAdaptor(activity,orderVo.getOrderProducts()));
 //            String[] values = new String[] { "Android List View",
@@ -370,6 +472,7 @@ public class IncomingOrderFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+                    hideListner.onClick(view);
                 }
             });
             return builder.create();

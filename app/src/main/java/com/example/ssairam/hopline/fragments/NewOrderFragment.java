@@ -528,10 +528,10 @@ public class NewOrderFragment extends Fragment {
     public class TotalItemCountPriceChangeListener {
         public void onChange(int totalItem, double totalPrice) {
             ((TextView) layout.findViewById(R.id.total_item)).setText(totalItem+"");
-            ( (MainActivity)getActivity()).updateMenuQty("Qty : "+totalItem);
+//            ( (MainActivity)getActivity()).updateMenuQty("Qty : "+totalItem);
 
                         ((TextView) layout.findViewById(R.id.total_price)).setText(totalPrice+"");
-            ( (MainActivity)getActivity()).updateMenuPrice("Total : "+totalPrice);
+//            ( (MainActivity)getActivity()).updateMenuPrice("Total : "+totalPrice);
         }
     }
 

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -111,7 +112,9 @@ public class OrderReadyFragment extends Fragment {
     private void initUi() {
         adapter = createOrderReadyAdatper();
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5, 1);
+//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5, 1);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

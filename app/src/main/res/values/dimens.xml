@@ -17,5 +17,11 @@
     <dimen name="ic_album_overflow_width">20dp</dimen>
     <dimen name="ic_album_overflow_height">30dp</dimen>
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
+    <dimen name="smalltext">18sp</dimen>
+    <dimen name="largetext">24sp</dimen>
+    <dimen name="mediumtext">20sp</dimen>
+    <dimen name="cardheaderdimen">150dp</dimen>
+    <dimen name="cardheaderdimen_small">100dp</dimen>
 
+    <dimen name="buttontext">12sp</dimen>
 </resources>

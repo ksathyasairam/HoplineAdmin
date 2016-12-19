@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_weight="0.85"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/cardheaderdimen"
                 android:background="@drawable/round_bg"
                 android:gravity="center"
                 >
@@ -40,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/mediumtext"
                         android:gravity="center"
                         android:id="@+id/customer_order_number"
                         android:text="Order No #234"
@@ -55,7 +55,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:textColor="@android:color/white"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/smalltext"
                             android:gravity="left"
                             android:ellipsize="marquee"
                             android:id="@+id/customer_name"
@@ -66,11 +66,59 @@
                             android:layout_margin="5dp"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/smalltext"
                             android:gravity="right"
                             android:id="@+id/customer_phone"
                             android:text="9871398153"/>
-                        />
+
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#ffffff"
+
+                        >
+
+                    </View>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/mediumtext"
+                        android:gravity="center"
+                        android:text="Select Estimated Time"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                        <ImageButton
+                            android:id="@+id/decrease_time_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#00ffffff"
+
+                            android:layout_weight="1"
+                            android:src="@drawable/minus_time" />
+
+                        <TextView
+                            android:id="@+id/time_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-bold"
+                            android:gravity="center"
+                            android:text="10"
+                            android:textColor="#ffffff"
+                            android:textSize="@dimen/mediumtext" />
+
+                        <ImageButton
+                            android:id="@+id/increase_time_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="#00ffffff"
+                            android:src="@drawable/plus_time" />
                     </LinearLayout>
 
 
@@ -129,7 +177,7 @@
                         android:id="@+id/cancel"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="10sp"
+                        android:textSize="@dimen/buttontext"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp"
@@ -149,7 +197,7 @@
                         android:text="CONFIRM"
                         android:fontFamily="sans-serif-medium"
 
-                        android:textSize="10sp"
+                        android:textSize="@dimen/buttontext"
                         />
 
                     <Button
@@ -159,7 +207,7 @@
                         android:id="@+id/call"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="10sp"
+                        android:textSize="@dimen/buttontext"
                         android:theme="@style/AppTheme.Button"
                         android:textColor="@android:color/white"
                         android:layout_margin="5dp" />

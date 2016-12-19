@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -100,7 +101,9 @@ public class BigOrderPayFragment extends Fragment {
     private void initUi(List<OrderVo> orders) {
         adapter = createOrderReadyAdatper(orders);
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
+//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -114,12 +117,18 @@ public class BigOrderPayFragment extends Fragment {
                 int position = (Integer) v.getTag();
                 OrderVo order = adapter.getData().get(position);
 
+                if(order.getOrderCompleteTime()!=0) {
+
 //                if (PrinterHelperBackup.get().isBluetoothOn()){
                     markOrderPreparingAndPaid(order);
 //                } else {
 //                    Toast.makeText(getActivity(), "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
 //                }
-
+                }
+                 else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(),"Estimated time for preparation cannot be 0 mins",Toast.LENGTH_SHORT).show();
+                }
             }
 
 
@@ -130,9 +139,37 @@ public class BigOrderPayFragment extends Fragment {
                 OrderVo order = adapter.getData().get(position);
                 new RemoveOrder(order.getIdorder()).execute("");
             }
-        });
+        },new IncreaseTimeOnClickListener(),new DecreaseTimeOnClickListener());
+    }
+    private class IncreaseTimeOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+            int time=order.getOrderCompleteTime();
+
+
+            order.setOrderCompleteTime(time+5);
+            adapter.notifyDataSetChanged();
+        }
     }
 
+    private class DecreaseTimeOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int position = (Integer) v.getTag();
+            OrderVo order = adapter.getOrders().get(position);
+            int time=order.getOrderCompleteTime();
+
+            if((time-5)>0){
+                order.setOrderCompleteTime(time-5);
+                adapter.notifyDataSetChanged();
+
+            }
+        }
+    }
 
     private void markOrderPreparingAndPaid(OrderVo order) {
         new MarkOrderPreparingAndPaid(order).execute("");

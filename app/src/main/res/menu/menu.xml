@@ -2,31 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_total_price"
-        android:title="Total : "
-        app:showAsAction="ifRoom"
+    <!--<item-->
+        <!--android:id="@+id/action_total_price"-->
+        <!--android:title="Total : "-->
+        <!--app:showAsAction="ifRoom"-->
 
-        />
-    <item
-        android:id="@+id/action_total_qty"
-        android:title="Qty : "
-        app:showAsAction="ifRoom"
+        <!--/>-->
+    <!--<item-->
+        <!--android:id="@+id/action_total_qty"-->
+        <!--android:title="Qty : "-->
+        <!--app:showAsAction="ifRoom"-->
 
-        />
-    <item
-        android:id="@+id/action_clear_cart"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/clear_cart"
-        app:showAsAction="ifRoom"
+        <!--/>-->
+    <!--<item-->
+        <!--android:id="@+id/action_clear_cart"-->
+        <!--android:icon="@android:drawable/ic_menu_delete"-->
+        <!--android:title="@string/clear_cart"-->
+        <!--app:showAsAction="ifRoom"-->
 
-        />
+        <!--/>-->
 
 
-    <item android:id="@+id/offline_orders"
-        android:title="@string/offline_orders"
-        app:showAsAction="collapseActionView"
-    />
+    <!--<item android:id="@+id/offline_orders"-->
+        <!--android:title="@string/offline_orders"-->
+        <!--app:showAsAction="collapseActionView"-->
+    <!--/>-->
     <item android:id="@+id/inventory" android:title="@string/inventory"
         app:showAsAction="collapseActionView"/>
     <item android:id="@+id/order_history" android:title="@string/order_history"

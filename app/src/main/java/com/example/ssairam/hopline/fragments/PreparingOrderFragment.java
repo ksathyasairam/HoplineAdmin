@@ -24,6 +24,7 @@ import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.PreparingOrderAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 import java.util.List;
 
@@ -112,10 +113,12 @@ public class PreparingOrderFragment extends Fragment {
 
     private void initUi() {
         List<OrderVo> orderVoList = DataStore.getPreparingOrders();
-        adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList, new OrderReadyListener());
+        adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList, new OrderReadyListener(),new NotifyUserListener() );
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(5, 1);
+//        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(5, 1);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -131,6 +134,17 @@ public class PreparingOrderFragment extends Fragment {
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getData().get(position);
             new MarkOrderReady(order).execute("");
+
+
+        }
+    }
+    private class NotifyUserListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            int position = (Integer) v.getTag();
+            OrderVo order = adapter.getData().get(position);
+            Toast.makeText(getActivity().getApplicationContext(),"Notified " + order.getUser().getName()+" for pick up.",Toast.LENGTH_SHORT).show();
 
 
         }

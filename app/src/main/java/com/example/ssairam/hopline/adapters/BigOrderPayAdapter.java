@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ssairam.hopline.CustomLinearLayoutManager;
@@ -18,14 +19,20 @@ import java.util.List;
 public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.ViewHolder> {
     private final View.OnClickListener removeOrderListener;
     private final View.OnClickListener printBillListener;
+    private View.OnClickListener increaseTimeListner,decreaseTimeListner;
     private Context mContext;
     private List<OrderVo> orderVoList;
+    public List<OrderVo> getOrders(){
+        return orderVoList;
+    }
 
-    public BigOrderPayAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener printBillListener, View.OnClickListener removeOrderListener) {
+    public BigOrderPayAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener printBillListener, View.OnClickListener removeOrderListener,View.OnClickListener increaseTimeListner,View.OnClickListener decreaseTimeListner) {
         this.mContext = mContext;
         this.orderVoList = orderVoList;
         this.printBillListener = printBillListener;
         this.removeOrderListener = removeOrderListener;
+        this.increaseTimeListner=increaseTimeListner;
+        this.decreaseTimeListner=decreaseTimeListner;
     }
 
     public void updateData( List<OrderVo> orderVoList) {
@@ -41,6 +48,10 @@ public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.
         public Button buttonPrintBill, buttonRemoveOrder;
         public TextView customerOrderNo,customerPhone,customerName;
         public RecyclerView productList;
+        public ImageButton increaseTime;
+        public ImageButton decreaseTime;
+
+        public TextView time;
         public ViewHolder(View itemView) {
             super(itemView);
             buttonPrintBill =(Button)itemView.findViewById(R.id.button_print_bill);
@@ -49,6 +60,9 @@ public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.
             customerName = (TextView) itemView.findViewById(R.id.customer_name);
             customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
             productList = (RecyclerView) itemView.findViewById(R.id.bo_order_product_list);
+            increaseTime=(ImageButton) itemView.findViewById(R.id.increase_time_button) ;
+            decreaseTime=(ImageButton)itemView.findViewById(R.id.decrease_time_button);
+            time=(TextView) itemView.findViewById(R.id.time_display);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
             productList.setLayoutManager(layoutManager);
 
@@ -78,6 +92,22 @@ public class BigOrderPayAdapter extends RecyclerView.Adapter<BigOrderPayAdapter.
 
         holder.buttonRemoveOrder.setTag(position);
         holder.buttonRemoveOrder.setOnClickListener(removeOrderListener);
+
+        if(order.getOrderCompleteTime()!=null){
+            holder.time.setText(String.valueOf(order.getOrderCompleteTime()));
+
+        }
+        else {
+            order.setOrderCompleteTime(0);
+            holder.time.setText(String.valueOf(order.getOrderCompleteTime()));
+
+        }
+
+        holder.increaseTime.setTag(position);
+        holder.increaseTime.setOnClickListener(increaseTimeListner);
+        holder.decreaseTime.setTag(position);
+        holder.decreaseTime.setOnClickListener(decreaseTimeListner);
+
     }
 
 

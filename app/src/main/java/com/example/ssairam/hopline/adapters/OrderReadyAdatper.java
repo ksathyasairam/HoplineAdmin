@@ -77,11 +77,11 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
         holder.productList.setAdapter(new OrderProductItemAdaptor(order.getOrderProducts()));
 
 
-        if("Y".equals(order.getPaidYn())) {
+//        if("Y".equals(order.getPaidYn())) {
             holder.buttonFinalized.setText("ORDER COMPLETE");
-        } else {
-            holder.buttonFinalized.setText("PRINT BILL");
-        }
+//        } else {
+//            holder.buttonFinalized.setText("PRINT BILL");
+//        }
 
 
 

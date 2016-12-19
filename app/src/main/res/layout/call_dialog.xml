@@ -5,6 +5,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:background="#4DB6AC"
+    android:orientation="vertical"
     android:padding="5dp"
     android:layout_height="wrap_content">
     <TextView
@@ -16,6 +17,40 @@
         android:text="Order Confirmation Dialog"
         android:fontFamily="sans-serif-thin"
         android:textColor="@android:color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/decrease_time_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ffffff"
+
+            android:layout_weight="1"
+            android:src="@drawable/minus_time" />
+
+        <TextView
+            android:id="@+id/time_display_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-bold"
+            android:gravity="center"
+            android:text="10"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/mediumtext" />
+
+        <ImageButton
+            android:id="@+id/increase_time_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:src="@drawable/plus_time" />
+    </LinearLayout>
+
+
 </LinearLayout>
     <TextView
         android:layout_width="match_parent"

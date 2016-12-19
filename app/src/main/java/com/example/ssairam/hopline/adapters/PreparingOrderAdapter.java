@@ -17,14 +17,15 @@ import java.util.List;
 
 
 public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAdapter.ViewHolder> {
-    private final View.OnClickListener orderReadyListner;
+    private final View.OnClickListener orderReadyListner,notifyUserListner;
     private Context mContext;
     private List<OrderVo> orderVoList;
 
-    public PreparingOrderAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener orderReadyListner) {
+    public PreparingOrderAdapter(Context mContext, List<OrderVo> orderVoList, View.OnClickListener orderReadyListner,View.OnClickListener notifyUserListner) {
         this.mContext = mContext;
         this.orderVoList = orderVoList;
         this.orderReadyListner = orderReadyListner;
+        this.notifyUserListner=notifyUserListner;
     }
 
     public void updateData( List<OrderVo> orderVoList) {
@@ -39,6 +40,7 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView customerOrderNo,customerName,customerPhone;
         public Button buttonOrderReady;
+        public Button buttonnotifyUser;
         public RecyclerView productList;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -46,6 +48,7 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
             customerName = (TextView) itemView.findViewById(R.id.customer_name);
             customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
             buttonOrderReady=(Button)itemView.findViewById(R.id.button_order_ready);
+            buttonnotifyUser=(Button)itemView.findViewById(R.id.button_notify_customer);
 
             productList = (RecyclerView) itemView.findViewById(R.id.preparing_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
@@ -73,7 +76,8 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
 
         holder.buttonOrderReady.setTag(position);
         holder.buttonOrderReady.setOnClickListener(orderReadyListner);
-
+        holder.buttonnotifyUser.setTag(position);
+        holder.buttonnotifyUser.setOnClickListener(notifyUserListner);
 
     }
 

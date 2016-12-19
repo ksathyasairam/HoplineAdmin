@@ -95,13 +95,13 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
         AHBottomNavigationItem tab_incomingorder = new AHBottomNavigationItem(getResources().getString(R.string.tab_incomingorder), R.drawable.ic_incoming);
         AHBottomNavigationItem tab_pendingorder = new AHBottomNavigationItem(getResources().getString(R.string.tab_pendingorder), R.drawable.ic_pendingorder);
         AHBottomNavigationItem tab_billing = new AHBottomNavigationItem(getResources().getString(R.string.tab_billing), R.drawable.ic_billing);
-        AHBottomNavigationItem tab_neworder = new AHBottomNavigationItem(getResources().getString(R.string.tab_neworder), R.drawable.ic_neworder);
+//        AHBottomNavigationItem tab_neworder = new AHBottomNavigationItem(getResources().getString(R.string.tab_neworder), R.drawable.ic_neworder);
         AHBottomNavigationItem tab_defaulter = new AHBottomNavigationItem(getResources().getString(R.string.tab_big_order_pay), R.drawable.ic_defaulter);
 
         bottomNavigation.addItem(tab_incomingorder);
         bottomNavigation.addItem(tab_pendingorder);
         bottomNavigation.addItem(tab_billing);
-        bottomNavigation.addItem(tab_neworder);
+//        bottomNavigation.addItem(tab_neworder);
         bottomNavigation.addItem(tab_defaulter);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setBehaviorTranslationEnabled(false);
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 
             case 0:
                 if (!wasSelected) {
-                    restPriceAndQty();
+//                    restPriceAndQty();
                     IncomingOrderFragment fragment = new IncomingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 1:
                 if (!wasSelected) {
-                    restPriceAndQty();
+//                    restPriceAndQty();
                     PreparingOrderFragment fragment = new PreparingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -136,25 +136,25 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 2:
                 if (!wasSelected) {
-                    restPriceAndQty();
+//                    restPriceAndQty();
                     OrderReadyFragment fragment = new OrderReadyFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                 }
                 break;
+//            case 3:
+//                if (!wasSelected) {
+//                    restPriceAndQty();
+//                     fragment = new NewOrderFragment();
+//                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//
+//                }
+//                break;
             case 3:
                 if (!wasSelected) {
-                    restPriceAndQty();
-                     fragment = new NewOrderFragment();
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-
-                }
-                break;
-            case 4:
-                if (!wasSelected) {
-                    restPriceAndQty();
+//                    restPriceAndQty();
                     BigOrderPayFragment fragment = new BigOrderPayFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -185,9 +185,9 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.offline_orders:
-                startActivity(new Intent(this, OfflineOrder.class));
-                return true;
+//            case R.id.offline_orders:
+//                startActivity(new Intent(this, OfflineOrder.class));
+//                return true;
 
             case R.id.inventory:
                 startActivity(new Intent(this, Inventory.class));
@@ -199,12 +199,12 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             case R.id.feed_back :
                 startActivity(new Intent(this, FeedbackForm.class));
                 return true;
-            case R.id.action_clear_cart:
-                if(fragment!=null){
-
-                    fragment.clearAll();
-                }
-                return true;
+//            case R.id.action_clear_cart:
+//                if(fragment!=null){
+//
+//                    fragment.clearAll();
+//                }
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -231,24 +231,24 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 //    }
 //
 //
-
-    public void updateMenuPrice(String title) {
-        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
-        totalPrice.setTitle(title);
-
-    }
-    public void updateMenuQty(String title) {
-        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
-        totalQty.setTitle(title);
-
-
-    }
-    public void  restPriceAndQty (){
-        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
-        totalPrice.setTitle("Total : ");
-        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
-        totalQty.setTitle("Qty : ");
-    }
+//
+//    public void updateMenuPrice(String title) {
+////        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
+////        totalPrice.setTitle(title);
+//
+//    }
+//    public void updateMenuQty(String title) {
+////        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
+////        totalQty.setTitle(title);
+//
+//
+//    }
+//    public void  restPriceAndQty (){
+////        MenuItem totalPrice=actionBarMenu.findItem(R.id.action_total_price);
+////        totalPrice.setTitle("Total : ");
+////        MenuItem totalQty = actionBarMenu.findItem(R.id.action_total_qty);
+////        totalQty.setTitle("Qty : ");
+//    }
 
 
 
