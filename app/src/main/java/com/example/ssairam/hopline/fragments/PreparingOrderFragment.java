@@ -133,7 +133,7 @@ public class PreparingOrderFragment extends Fragment {
 
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getData().get(position);
-            new MarkOrderReady(order).execute("");
+            new MarkOrderReady(order.getIdorder()).execute("");
 
 
         }
@@ -144,40 +144,26 @@ public class PreparingOrderFragment extends Fragment {
         public void onClick(View v) {
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getData().get(position);
-            Toast.makeText(getActivity().getApplicationContext(),"Notified " + order.getUser().getName()+" for pick up.",Toast.LENGTH_SHORT).show();
+            new NotifyUserPartialOrder(order).execute("");
+//            Toast.makeText(getActivity().getApplicationContext(),"Notified " + order.getUser().getName()+" for pick up.",Toast.LENGTH_SHORT).show();
 
 
         }
     }
 
 
-    private class MarkOrderReady extends AsyncTask<String, Void, Boolean> {
+    private class NotifyUserPartialOrder extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-        OrderVo orderVo;
-        OrderStatusTo orderStatusFromServer;
 
-        MarkOrderReady(OrderVo orderVo) {
+        OrderVo orderVo;
+        NotifyUserPartialOrder(OrderVo orderVo) {
             this.orderVo = orderVo;
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            OrderStatusTo orderStatusTo = ServerHelper.markItemsPrepared(orderVo);
-            orderStatusFromServer = orderStatusTo;
-            if (!orderStatusTo.isSuccess()) return false;
-
-            if (orderStatusTo.getOrderStatus().equals(OrderStates.READY_FOR_PICKUP))
-            {
-                try {
-                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DataStore.setReadyOrders(null);
-                    return false;
-                }
-            }
-
-            return true;
+            boolean success = ServerHelper.notifyUserPartialOrder(orderVo);
+            return success;
 
         }
 
@@ -185,14 +171,55 @@ public class PreparingOrderFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
 
             if (success) {
-                orderVo.setOrderProducts(orderStatusFromServer.getOrderProductVoList());
+                Toast.makeText(getActivity(), "User Notified!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+            }
 
-                if (OrderStates.READY_FOR_PICKUP.equals(orderStatusFromServer.getOrderStatus())) {
-                    OrderVo deletedOrder = new OrderVo();
-                    deletedOrder.setIdorder(orderVo.getIdorder());
-                    DataStore.getPreparingOrders().remove(deletedOrder);
+            if (dialog != null)
+                dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog = Util.showProgressDialog(getActivity());
+        }
+    }
+
+    private class MarkOrderReady extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog dialog;
+        Integer orderId;
+
+        MarkOrderReady(Integer orderId) {
+            this.orderId = orderId;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean success = ServerHelper.markOrderReadyForPickup(orderId);
+
+            if (success) {
+
+                try {
+                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DataStore.setReadyOrders(null);
+                    return  false;
                 }
+            }
 
+            return success;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (success) {
+                OrderVo deletedOrder = new OrderVo();
+                deletedOrder.setIdorder(orderId);
+                DataStore.getPreparingOrders().remove(deletedOrder);
                 updateUi();
                 Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
             } else {
@@ -210,6 +237,67 @@ public class PreparingOrderFragment extends Fragment {
 
         }
     }
+
+
+//    private class MarkOrderReady extends AsyncTask<String, Void, Boolean> {
+//        ProgressDialog dialog;
+//        OrderVo orderVo;
+//        OrderStatusTo orderStatusFromServer;
+//
+//        MarkOrderReady(OrderVo orderVo) {
+//            this.orderVo = orderVo;
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(String... params) {
+//            OrderStatusTo orderStatusTo = ServerHelper.markItemsPrepared(orderVo);
+//            orderStatusFromServer = orderStatusTo;
+//            if (!orderStatusTo.isSuccess()) return false;
+//
+//            if (orderStatusTo.getOrderStatus().equals(OrderStates.READY_FOR_PICKUP))
+//            {
+//                try {
+//                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    DataStore.setReadyOrders(null);
+//                    return false;
+//                }
+//            }
+//
+//            return true;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean success) {
+//
+//            if (success) {
+//                orderVo.setOrderProducts(orderStatusFromServer.getOrderProductVoList());
+//
+//                if (OrderStates.READY_FOR_PICKUP.equals(orderStatusFromServer.getOrderStatus())) {
+//                    OrderVo deletedOrder = new OrderVo();
+//                    deletedOrder.setIdorder(orderVo.getIdorder());
+//                    DataStore.getPreparingOrders().remove(deletedOrder);
+//                }
+//
+//                updateUi();
+//                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(getActivity(), "Error communicating with server!!", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            if (dialog != null)
+//                dialog.dismiss();
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            dialog = Util.showProgressDialog(getActivity());
+//
+//
+//        }
+//    }
 
     private void updateUi() {
         if (adapter != null) adapter.updateData(DataStore.getPreparingOrders());
