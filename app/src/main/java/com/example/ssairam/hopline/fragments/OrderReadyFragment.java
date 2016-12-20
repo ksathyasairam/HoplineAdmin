@@ -112,8 +112,8 @@ public class OrderReadyFragment extends Fragment {
     private void initUi() {
         adapter = createOrderReadyAdatper();
 
-//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5, 1);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4, 1);
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
 
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));

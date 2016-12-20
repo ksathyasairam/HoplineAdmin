@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity_ui.MainActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,10 +27,10 @@
 
         <service android:name=".IncommingOrderBackgroudRefresh" />
 
-        <activity android:name=".activity_ui.Inventory" />
-        <activity android:name=".activity_ui.OfflineOrder" />
-        <activity android:name=".activity_ui.OrderHistoryActivity" />
-        <activity android:name=".activity_ui.FeedbackForm"></activity>
+        <activity android:name=".activity_ui.Inventory"     android:screenOrientation="landscape"/>
+        <activity android:name=".activity_ui.OfflineOrder"     android:screenOrientation="landscape" />
+        <activity android:name=".activity_ui.OrderHistoryActivity"      android:screenOrientation="landscape"/>
+        <activity android:name=".activity_ui.FeedbackForm"     android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

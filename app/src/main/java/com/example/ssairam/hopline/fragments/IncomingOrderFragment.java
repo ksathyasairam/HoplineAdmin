@@ -137,8 +137,8 @@ public class IncomingOrderFragment extends Fragment {
 
         adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner,increaseTimeListner,decreaseTimeListner);
 
-//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(5,1);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
 
         recyclerView.setLayoutManager(mLayoutManager);
         // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
