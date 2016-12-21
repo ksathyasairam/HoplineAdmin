@@ -20,8 +20,8 @@
     <dimen name="smalltext">18sp</dimen>
     <dimen name="largetext">24sp</dimen>
     <dimen name="mediumtext">20sp</dimen>
-    <dimen name="cardheaderdimen">150dp</dimen>
-    <dimen name="cardheaderdimen_small">100dp</dimen>
+    <dimen name="cardheaderdimen">170dp</dimen>
+    <dimen name="cardheaderdimen_small">120dp</dimen>
 
     <dimen name="buttontext">12sp</dimen>
 </resources>

@@ -122,7 +122,8 @@ public class IncommingOrderBackgroudRefresh extends Service {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_dot)
                         .setContentTitle("New Order")
-                        .setContentText("Order waiting for your conformation!");
+                        .setContentText("Order waiting for your conformation!")
+                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000,1000 });
 // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MainActivity.class);
 
@@ -143,7 +144,7 @@ public class IncommingOrderBackgroudRefresh extends Service {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        mBuilder.setSound(alarmSound);
+        mBuilder.setSound(alarmSound).setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000,1000 });
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

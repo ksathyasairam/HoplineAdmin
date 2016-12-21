@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 break;
             case 1:
                 if (!wasSelected) {
+
 //                    restPriceAndQty();
                     PreparingOrderFragment fragment = new PreparingOrderFragment();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -208,6 +209,28 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    public void setNotification (String text){
+        if(text==null){
+            if (bottomNavigation!=null){
+                bottomNavigation.setNotification("!", 0);
+
+            }
+        }
+        else
+        { if(bottomNavigation!=null){
+            bottomNavigation.setNotification(text, 0);
+
+        }
+
+        }
+    }
+    public void removeNotification (){
+        if (bottomNavigation!=null){
+            bottomNavigation.setNotification("", 0);
+
+        }
+
     }
 //
 //    public void showPopup(){
