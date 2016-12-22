@@ -31,9 +31,11 @@ import android.widget.Toast;
 
 import com.example.ssairam.hopline.DataStore;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
+import com.example.ssairam.hopline.MainPrefs;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
+import com.example.ssairam.hopline.activity_ui.MainActivity;
 import com.example.ssairam.hopline.adapters.CreateOrder_OrderProductAdaptor;
 import com.example.ssairam.hopline.adapters.IncomingOrdersAdapter;
 import com.example.ssairam.hopline.vo.OrderVo;
@@ -226,6 +228,7 @@ public class IncomingOrderFragment extends Fragment {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
                 mMessageReceiver);
+        updateUi();
     }
 
     @Override
@@ -247,7 +250,14 @@ public class IncomingOrderFragment extends Fragment {
 
     private void updateUi() {
         if (adapter != null) adapter.updateData(DataStore.getIncomingOrders());
+
+        if (DataStore.getIncomingOrders() != null && DataStore.getIncomingOrders().size() > 0) {
+//            ((MainActivity) getActivity()).setNotification(null);
+        } else {
+            ((MainActivity) getActivity()).removeNotification();
+        }
     }
+
 
     private class CallOnclickListner implements View.OnClickListener {
 

@@ -1,10 +1,15 @@
 package com.example.ssairam.hopline.activity_ui;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -279,14 +284,29 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 
     @Override
     protected void onPause() {
-
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                mMessageReceiver);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         initBottomNavigationBar();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, new IntentFilter("newIncomingOrder"));
         super.onResume();
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setNotification(null);
+        }
+    };
+
+
+
+
+
+
 }
