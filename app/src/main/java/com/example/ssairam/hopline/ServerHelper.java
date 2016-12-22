@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ServerHelper {
 
-    public static final String BASE_URL = "http://demo.hopline.in/";
+    public static final String BASE_URL = "http://hopline.in/";
     public static final String BASE_REST_URL = BASE_URL + "rest/";
 
     private static List<OrderVo> retrieveOrdersFromServer(List<String> orderStates) throws Exception {

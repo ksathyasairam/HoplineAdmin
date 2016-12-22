@@ -1,5 +1,6 @@
 package com.example.ssairam.hopline;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -123,7 +124,7 @@ public class IncommingOrderBackgroudRefresh extends Service {
                         .setSmallIcon(R.drawable.ic_dot)
                         .setContentTitle("New Order")
                         .setContentText("Order waiting for your conformation!")
-                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000,1000 });
+                        ;
 // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MainActivity.class);
 
@@ -143,8 +144,14 @@ public class IncommingOrderBackgroudRefresh extends Service {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        mBuilder.setSound(alarmSound).setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000,1000 });
+//        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+       Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notificationsound);
+//        notification.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE;
+
+
+
+        mBuilder.setSound(alarmSound);
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

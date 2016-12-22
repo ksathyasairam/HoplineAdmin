@@ -252,7 +252,7 @@ public class IncomingOrderFragment extends Fragment {
         if (adapter != null) adapter.updateData(DataStore.getIncomingOrders());
 
         if (DataStore.getIncomingOrders() != null && DataStore.getIncomingOrders().size() > 0) {
-//            ((MainActivity) getActivity()).setNotification(null);
+            ((MainActivity) getActivity()).setNotification(null);
         } else {
             ((MainActivity) getActivity()).removeNotification();
         }
