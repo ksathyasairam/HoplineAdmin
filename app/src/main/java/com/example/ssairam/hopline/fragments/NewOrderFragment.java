@@ -451,7 +451,7 @@ public class NewOrderFragment extends Fragment {
         protected Boolean doInBackground(String... params) {
 
             try {
-                orderFromServer = ServerHelper.createWalkInOrder(order);
+                orderFromServer = ServerHelper.createWalkInOrder(order,getActivity());
                 return  true;
             } catch (Exception e) {
                 e.printStackTrace();

@@ -116,8 +116,8 @@ public class PreparingOrderFragment extends Fragment {
         adapter = new PreparingOrderAdapter(this.getActivity().getApplicationContext(), orderVoList, new OrderReadyListener(),new NotifyUserListener() );
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(4, 1);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+//        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(4, 1);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
 
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -201,7 +201,7 @@ public class PreparingOrderFragment extends Fragment {
             if (success) {
 
                 try {
-                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders());
+                    DataStore.setReadyOrders(ServerHelper.retrieveReadyOrders(getActivity()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     DataStore.setReadyOrders(null);

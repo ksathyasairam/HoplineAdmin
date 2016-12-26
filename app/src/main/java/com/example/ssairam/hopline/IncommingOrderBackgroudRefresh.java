@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class IncommingOrderBackgroudRefresh extends Service {
     private static volatile boolean locallyUpdated;
-
+    private static final String TAG = "IncommingOrderBackgroundRefresh";
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,13 +39,28 @@ public class IncommingOrderBackgroudRefresh extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        M.log(TAG, "onCreate start");
 
+
+
+        Intent notificationIntent = new Intent(this, IncommingOrderBackgroudRefresh.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Receiving Orders")
+                .setSmallIcon(R.drawable.ic_hopline)
+                .setContentIntent(pendingIntent)
+                .build();
+
+       startForeground(562, notification);
+
+        M.log(TAG, "onCreate end");
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("servcie", "enterned onstart command");
+        M.log(TAG, "onStartComnand");
         startIncomingOrdersRefresh();
         return START_STICKY;
     }
@@ -52,10 +68,17 @@ public class IncommingOrderBackgroudRefresh extends Service {
 
     private void startIncomingOrdersRefresh() {
 
+
         new Thread() {
             public void run() {
 
+                PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+                PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                        "MyWakelockTaggggg");
+                wakeLock.acquire();
 
+
+                M.log(TAG, "New thread started");
                 while (true) {
 
                     try {
@@ -69,12 +92,12 @@ public class IncommingOrderBackgroudRefresh extends Service {
 
                         setLocallyUpdated(false);
                         if (DataStore.getIncomingOrders() == null) {
-                            Log.d("servcie", "Local data null!! going to refresh everyting");
+                            M.log(TAG, "Local data null!! going to refresh everyting");
                             DataStore.loadEverythingFromServer(getApplicationContext());
                         }
 
-                        Log.d("servcie", "Going to refresh Conformation List");
-                        List<OrderVo> serverOrders = ServerHelper.retrieveIncomingOrders();
+                        M.log(TAG, "Going to refresh Conformation List");
+                        List<OrderVo> serverOrders = ServerHelper.retrieveIncomingOrders(getApplicationContext());
 
                         List<OrderVo> localOrders = DataStore.getIncomingOrders();
 
@@ -84,7 +107,7 @@ public class IncommingOrderBackgroudRefresh extends Service {
                         serverOrders.removeAll(localOrders);
 
                         if (!serverOrders.isEmpty()) {
-                            Log.d("servcie", "New item added on server");
+                            M.log(TAG, "New item added on server");
 
                             if(isLocallyUpdated()) continue;
                             DataStore.setIncomingOrders(serverBackup);
@@ -93,7 +116,7 @@ public class IncommingOrderBackgroudRefresh extends Service {
                             sendNotification();
                         }
 
-                        Log.d("servcie", "Refresh done, sleeeping for 10 secs");
+                        M.log(TAG, "Refresh done, sleeeping for 10 secs");
 
                     }  catch (Exception e) {
                         e.printStackTrace();
@@ -157,24 +180,31 @@ public class IncommingOrderBackgroudRefresh extends Service {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
         mNotificationManager.notify(2351, mBuilder.build());
+        M.log(TAG,"Notification sent");
     }
 
 
+    @Override
+    public void onDestroy() {
+        M.log(TAG,"destroyed");
+        super.onDestroy();
+    }
 
+    @Override
+    public void onLowMemory() {
+        M.log(TAG,"low memory");
+        super.onLowMemory();
+    }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        M.log(TAG,"unbind");
+        return super.onUnbind(intent);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public void onRebind(Intent intent) {
+        M.log(TAG,"rebind");
+        super.onRebind(intent);
+    }
 }

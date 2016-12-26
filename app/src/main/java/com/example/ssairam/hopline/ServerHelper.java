@@ -1,8 +1,11 @@
 package com.example.ssairam.hopline;
 
+import android.content.Context;
+
 import com.example.ssairam.hopline.adapters.OrderReadyAdatper;
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.ShopVo;
 import com.example.ssairam.hopline.vo.Stock;
 import com.google.gson.Gson;
 
@@ -16,14 +19,14 @@ import java.util.List;
 
 public class ServerHelper {
 
-    public static final String BASE_URL = "http://hopline.in/";
+    public static final String BASE_URL = "http://demo.hopline.in/";
     public static final String BASE_REST_URL = BASE_URL + "rest/";
 
-    private static List<OrderVo> retrieveOrdersFromServer(List<String> orderStates) throws Exception {
+    private static List<OrderVo> retrieveOrdersFromServer(List<String> orderStates, Context context) throws Exception {
 
         FetchOrderTo fetchOrderTo = new FetchOrderTo();
         fetchOrderTo.setOrderStates(orderStates);
-        fetchOrderTo.setShopId(1);
+        fetchOrderTo.setShopId(MainPrefs.getShopId(context));
 
         DummyModel dm = new DummyModel();
         dm.setFetchOrder(fetchOrderTo);
@@ -39,10 +42,23 @@ public class ServerHelper {
         return fetchOrderTo.getOrders();
     }
 
-    public static List<OrderVo> retrieveOrderHistory() throws Exception {
+    public static ShopVo login(ShopVo shopVo) throws Exception {
+
+        DummyModel dm = new DummyModel();
+        dm.setShop(shopVo);
+
+
+        final String url = BASE_REST_URL + "vendorLogin";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        shopVo = restTemplate.postForObject(url,dm, ShopVo.class);
+        return shopVo;
+    }
+
+    public static List<OrderVo> retrieveOrderHistory(Context context) throws Exception {
 
         FetchOrderTo fetchOrderTo = new FetchOrderTo();
-        fetchOrderTo.setShopId(1);
+        fetchOrderTo.setShopId(MainPrefs.getShopId(context));
 
         DummyModel dm = new DummyModel();
         dm.setFetchOrder(fetchOrderTo);
@@ -58,9 +74,12 @@ public class ServerHelper {
         return fetchOrderTo.getOrders();
     }
 
-    public static List<CategoryVo> retrieveMenu() throws Exception {
+
+    //TODO : test
+    public static List<CategoryVo> retrieveMenu(Context context) throws Exception {
 
         DummyModel dm = new DummyModel();
+        dm.setShopId(MainPrefs.getShopId(context));
 
         final String url = BASE_REST_URL + "retrieveMenu";
         RestTemplate restTemplate = new RestTemplate();
@@ -72,10 +91,14 @@ public class ServerHelper {
         return Arrays.asList(categoryVos);
     }
 
-    public static OrderVo createWalkInOrder(OrderVo order) throws Exception {
+    public static OrderVo createWalkInOrder(OrderVo order, Context context) throws Exception {
 
         DummyModel dm = new DummyModel();
         dm.setOrder(order);
+
+        ShopVo shopVo = new ShopVo();
+        shopVo.setIdshop(MainPrefs.getShopId(context));
+        order.setShop(shopVo);
 
         final String url = BASE_REST_URL + "createWalkinOrder";
         RestTemplate restTemplate = new RestTemplate();
@@ -95,7 +118,6 @@ public class ServerHelper {
         try {
             DummyModel dm = new DummyModel();
             dm.setOrderStatus(orderStatusTo);
-
 
             final String url = BASE_REST_URL + "udpateOrderStatus";
             RestTemplate restTemplate = new RestTemplate();
@@ -235,38 +257,38 @@ public class ServerHelper {
         return updateOrderStatus(ordrOrderStatusTo);
     }
 
-    public static List<OrderVo> retrieveIncomingOrders() throws  Exception{
+    public static List<OrderVo> retrieveIncomingOrders(Context context) throws  Exception{
 
         List<String> states = new ArrayList<>();
         states.add(OrderStates.OK_ORDER);
         states.add(OrderStates.BIG_ORDER_CALL);
         states.add(OrderStates.DEFAULTER_CALL);
 
-        return retrieveOrdersFromServer(states);
+        return retrieveOrdersFromServer(states, context);
     }
 
-    public static List<OrderVo> retrievePreparingOrders() throws  Exception{
+    public static List<OrderVo> retrievePreparingOrders(Context context) throws  Exception{
 
         List<String> states = new ArrayList<>();
         states.add(OrderStates.PREPARING);
 
-        return retrieveOrdersFromServer(states);
+        return retrieveOrdersFromServer(states, context);
     }
 
-    public static List<OrderVo> retrieveReadyOrders() throws  Exception {
+    public static List<OrderVo> retrieveReadyOrders(Context context) throws  Exception {
 
         List<String> states = new ArrayList<>();
         states.add(OrderStates.READY_FOR_PICKUP);
 
-        return retrieveOrdersFromServer(states);
+        return retrieveOrdersFromServer(states, context);
     }
 
-    public static List<OrderVo> retrieveBigOrderPayOrders() throws  Exception {
+    public static List<OrderVo> retrieveBigOrderPayOrders(Context context) throws  Exception {
 
         List<String> states = new ArrayList<>();
         states.add(OrderStates.BIG_ORDER_PAY);
 
-        return retrieveOrdersFromServer(states);
+        return retrieveOrdersFromServer(states, context);
     }
 
 

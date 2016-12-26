@@ -101,8 +101,8 @@ public class BigOrderPayFragment extends Fragment {
     private void initUi(List<OrderVo> orders) {
         adapter = createOrderReadyAdatper(orders);
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
 
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -191,7 +191,7 @@ public class BigOrderPayFragment extends Fragment {
             if (success) {
 
                 try {
-                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders());
+                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders(getActivity()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     DataStore.setPreparingOrders(null);
@@ -325,7 +325,7 @@ public class BigOrderPayFragment extends Fragment {
         protected Boolean doInBackground(String... params) {
 
             try {
-                orders = ServerHelper.retrieveBigOrderPayOrders();
+                orders = ServerHelper.retrieveBigOrderPayOrders(activity);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

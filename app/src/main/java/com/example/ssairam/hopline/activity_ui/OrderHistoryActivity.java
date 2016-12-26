@@ -44,8 +44,8 @@ public class OrderHistoryActivity extends BaseActivity {
             }
         });
 
-        RecyclerView.LayoutManager layoutManager=new StaggeredGridLayoutManager(4,1);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        RecyclerView.LayoutManager layoutManager=new StaggeredGridLayoutManager(4,1);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -78,7 +78,7 @@ public class OrderHistoryActivity extends BaseActivity {
         protected Boolean doInBackground(String... params) {
 
             try {
-                orders = ServerHelper.retrieveOrderHistory();
+                orders = ServerHelper.retrieveOrderHistory(context);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

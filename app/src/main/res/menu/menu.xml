@@ -27,6 +27,8 @@
         <!--android:title="@string/offline_orders"-->
         <!--app:showAsAction="collapseActionView"-->
     <!--/>-->
+
+
     <item android:id="@+id/inventory" android:title="@string/inventory"
         app:showAsAction="collapseActionView"/>
     <item android:id="@+id/order_history" android:title="@string/order_history"

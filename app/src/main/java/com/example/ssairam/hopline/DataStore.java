@@ -59,10 +59,10 @@ public class DataStore {
 
     public static synchronized void loadEverythingFromServer(Context applicationContext) throws  Exception{
 
-        setIncomingOrders(ServerHelper.retrieveIncomingOrders());
-        setPreparingOrders(ServerHelper.retrievePreparingOrders());
-        setReadyOrders(ServerHelper.retrieveReadyOrders());
-        setMenuCategories(ServerHelper.retrieveMenu(),applicationContext);
+        setIncomingOrders(ServerHelper.retrieveIncomingOrders(applicationContext));
+        setPreparingOrders(ServerHelper.retrievePreparingOrders(applicationContext));
+        setReadyOrders(ServerHelper.retrieveReadyOrders(applicationContext));
+        setMenuCategories(ServerHelper.retrieveMenu(applicationContext),applicationContext);
     }
 
     public static boolean isDataInilitised() {

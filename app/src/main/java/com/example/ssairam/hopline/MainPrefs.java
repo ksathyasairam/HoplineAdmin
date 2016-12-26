@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.ssairam.hopline.vo.CategoryVo;
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.ShopVo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -83,6 +84,16 @@ public class MainPrefs {
         Type listType = new TypeToken<List<OrderVo>>() {}.getType();
         List<OrderVo> orderVos = gson.fromJson(json, listType);
         return orderVos;
+    }
+
+    public static void saveShopId(Integer shopId, Context context) {
+        initPrefInstance(context);
+        prefs.edit().putInt("shopId",shopId).commit();
+    }
+
+    public static int getShopId(Context context) {
+        initPrefInstance(context);
+        return prefs.getInt("shopId", -1);
     }
 
 

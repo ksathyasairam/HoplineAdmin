@@ -139,8 +139,8 @@ public class IncomingOrderFragment extends Fragment {
 
         adapter = new IncomingOrdersAdapter(this.getActivity().getApplicationContext(), orderVoList, callListner, cancelListner, confirmListner,increaseTimeListner,decreaseTimeListner);
 
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
+//        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(4,1);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity().getApplicationContext());
 
         recyclerView.setLayoutManager(mLayoutManager);
         // recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -282,6 +282,7 @@ public class IncomingOrderFragment extends Fragment {
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getOrders().get(position);
 
+            order.setOrderCompleteTime(15);
             if(order.getOrderCompleteTime()!=0){
                 new MarkOrderPreparing(order.getIdorder(),order.getOrderCompleteTime()).execute("");
             }
@@ -611,7 +612,7 @@ public class IncomingOrderFragment extends Fragment {
             if (success) {
 
                 try {
-                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders());
+                    DataStore.setPreparingOrders(ServerHelper.retrievePreparingOrders(getActivity()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     DataStore.setPreparingOrders(null);

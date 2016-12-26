@@ -98,7 +98,7 @@ ListView inventoryList;
             boolean success = ServerHelper.updateStock(stock);
             if(success){
                 try {
-                    DataStore.setMenuCategories(ServerHelper.retrieveMenu(),getApplicationContext());
+                    DataStore.setMenuCategories(ServerHelper.retrieveMenu(getApplicationContext()),getApplicationContext());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

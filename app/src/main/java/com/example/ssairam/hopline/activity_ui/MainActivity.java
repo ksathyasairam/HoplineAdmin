@@ -1,13 +1,20 @@
 package com.example.ssairam.hopline.activity_ui;
 
 
+import android.Manifest;
+import android.app.Application;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
@@ -34,11 +41,15 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
     AHBottomNavigation bottomNavigation;
     Menu actionBarMenu;
     NewOrderFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+       takePermission();
+
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
@@ -51,6 +62,10 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 //        } else {
 //            Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
 //        }
+
+        Intent intent = new Intent(this, IncommingOrderBackgroudRefresh.class);
+        startService(intent);
+
 
         if (!DataStore.isDataInilitised()) {
             new InitialiseDataFromServer(this) {
@@ -65,8 +80,8 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                         initUi();
                     }
 
-                    Intent intent = new Intent(activity, IncommingOrderBackgroudRefresh.class);
-                    startService(intent);
+
+//
 
                     super.onPostExecute(success);
                 }
@@ -74,6 +89,27 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             }.execute("");
         } else {
             initUi();
+        }
+
+    }
+
+    private void takePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WAKE_LOCK},
+                    2);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.VIBRATE},
+                    3);
         }
 
     }
@@ -183,7 +219,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        actionBarMenu=menu;
+        actionBarMenu = menu;
         return true;
     }
 
@@ -202,7 +238,7 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             case R.id.order_history:
                 startActivity(new Intent(this, OrderHistoryActivity.class));
                 return true;
-            case R.id.feed_back :
+            case R.id.feed_back:
                 startActivity(new Intent(this, FeedbackForm.class));
                 return true;
 //            case R.id.action_clear_cart:
@@ -215,23 +251,24 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void setNotification (String text){
-        if(text==null){
-            if (bottomNavigation!=null){
+
+    public void setNotification(String text) {
+        if (text == null) {
+            if (bottomNavigation != null) {
                 bottomNavigation.setNotification("!", 0);
 
             }
-        }
-        else
-        { if(bottomNavigation!=null){
-            bottomNavigation.setNotification(text, 0);
+        } else {
+            if (bottomNavigation != null) {
+                bottomNavigation.setNotification(text, 0);
 
-        }
+            }
 
         }
     }
-    public void removeNotification (){
-        if (bottomNavigation!=null){
+
+    public void removeNotification() {
+        if (bottomNavigation != null) {
             bottomNavigation.setNotification("", 0);
 
         }
@@ -279,9 +316,6 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 //    }
 
 
-
-
-
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(
@@ -303,10 +337,6 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
             setNotification(null);
         }
     };
-
-
-
-
 
 
 }

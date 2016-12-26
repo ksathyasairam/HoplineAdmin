@@ -1,6 +1,7 @@
 package com.example.ssairam.hopline;
 
 import com.example.ssairam.hopline.vo.OrderVo;
+import com.example.ssairam.hopline.vo.ShopVo;
 import com.example.ssairam.hopline.vo.Stock;
 
 /**
@@ -13,6 +14,8 @@ public class DummyModel {
     private Stock stock;
     private OrderVo order;
     private OfflineOrderLogTo offlineOrderLogTo;
+    private ShopVo shop;
+    private Integer shopId;
 
     public Stock getStock() {
         return stock;
@@ -52,5 +55,21 @@ public class DummyModel {
 
     public void setOfflineOrderLogTo(OfflineOrderLogTo offlineOrderLogTo) {
         this.offlineOrderLogTo = offlineOrderLogTo;
+    }
+
+    public ShopVo getShop() {
+        return shop;
+    }
+
+    public void setShop(ShopVo shop) {
+        this.shop = shop;
+    }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 }
