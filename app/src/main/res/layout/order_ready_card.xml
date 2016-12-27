@@ -112,7 +112,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Complete Order"
+                        android:text="READY FOR PICKUP"
                         android:id="@+id/button_finalized"
                         android:layout_weight="1"
                         android:layout_gravity="center"

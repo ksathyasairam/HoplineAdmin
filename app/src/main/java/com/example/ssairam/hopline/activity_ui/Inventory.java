@@ -2,11 +2,15 @@ package com.example.ssairam.hopline.activity_ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -17,7 +21,6 @@ import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.InventoryAdapter;
 import com.example.ssairam.hopline.vo.CategoryVo;
-import com.example.ssairam.hopline.vo.OrderVo;
 import com.example.ssairam.hopline.vo.ProductVo;
 import com.example.ssairam.hopline.vo.Stock;
 
@@ -26,7 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Inventory extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class Inventory extends BaseActivity implements CompoundButton.OnCheckedChangeListener, SearchView.OnQueryTextListener {
 ListView inventoryList;
     List<ProductVo> data;
     InventoryAdapter adapter;
@@ -55,6 +58,8 @@ ListView inventoryList;
         Collections.sort(data, new LexicographicComparator());
 
     }
+
+
 
     class LexicographicComparator implements Comparator<ProductVo> {
         @Override
@@ -136,5 +141,35 @@ ListView inventoryList;
 
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d("sdf","text change " + newText);
+        adapter.getFilter().filter(newText);
+        return true;
     }
 }
