@@ -14,8 +14,9 @@ public class ProductVo implements java.io.Serializable {
 	private String stockYn;
 	private List<AddOnVo> addOns;
 	private String singleAddonYN;
-
-
+	private String timeUnavailable;
+	private boolean unavailableNow;
+	private String unavailableMsg;
 
 
 	//For UI frontEnd
@@ -107,5 +108,30 @@ public class ProductVo implements java.io.Serializable {
 
 	public void setSingleAddonYN(String singleAddonYN) {
 		this.singleAddonYN = singleAddonYN;
+	}
+
+
+	public String getTimeUnavailable() {
+		return timeUnavailable;
+	}
+
+	public void setTimeUnavailable(String timeUnavailable) {
+		this.timeUnavailable = timeUnavailable;
+	}
+
+	public boolean isUnavailableNow() {
+		return unavailableNow;
+	}
+
+	public void setUnavailableNow(boolean unavailableNow) {
+		this.unavailableNow = unavailableNow;
+	}
+
+	public String getUnavailableMsg() {
+		return unavailableMsg;
+	}
+
+	public void setUnavailableMsg(String unavailableMsg) {
+		this.unavailableMsg = unavailableMsg;
 	}
 }

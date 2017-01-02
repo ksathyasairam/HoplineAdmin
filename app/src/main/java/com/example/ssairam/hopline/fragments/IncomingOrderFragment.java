@@ -282,7 +282,7 @@ public class IncomingOrderFragment extends Fragment {
             int position = (Integer) v.getTag();
             OrderVo order = adapter.getOrders().get(position);
 
-            order.setOrderCompleteTime(15);
+//            order.setOrderCompleteTime(15);
             if(order.getOrderCompleteTime()!=0){
                 new MarkOrderPreparing(order.getIdorder(),order.getOrderCompleteTime()).execute("");
             }
