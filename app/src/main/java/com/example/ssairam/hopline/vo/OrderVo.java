@@ -39,6 +39,7 @@ public class OrderVo implements java.io.Serializable {
 	private Integer numUnitInProgressBar;
 	private Integer currentProgress;
 	private Integer orderCompleteTime;
+	private Date settledDate;
 
 
 
@@ -144,4 +145,11 @@ public class OrderVo implements java.io.Serializable {
 
 	}
 
+	public Date getSettledDate() {
+		return settledDate;
+	}
+
+	public void setSettledDate(Date settledDate) {
+		this.settledDate = settledDate;
+	}
 }

@@ -12,7 +12,7 @@ public class ProductVo implements java.io.Serializable {
 	private BigDecimal price;
 	private String vegYn;
 	private String stockYn;
-	private List<AddOnVo> addOns;
+	private List<AddonGroupVo> addonGroups;
 	private String singleAddonYN;
 	private String timeUnavailable;
 	private boolean unavailableNow;
@@ -22,7 +22,34 @@ public class ProductVo implements java.io.Serializable {
 	//For UI frontEnd
 	private boolean isExpanded;
 	private int quantity = 1;
-	
+
+	private String menuDisplayName;
+	private String variationName;
+	private Integer variationGroupId;
+
+	public String getMenuDisplayName() {
+		return menuDisplayName;
+	}
+
+	public void setMenuDisplayName(String menuDisplayName) {
+		this.menuDisplayName = menuDisplayName;
+	}
+
+	public String getVariationName() {
+		return variationName;
+	}
+
+	public void setVariationName(String variationName) {
+		this.variationName = variationName;
+	}
+
+	public Integer getVariationGroupId() {
+		return variationGroupId;
+	}
+
+	public void setVariationGroupId(Integer variationGroupId) {
+		this.variationGroupId = variationGroupId;
+	}
 	 
 	
 	public int getQuantity() {
@@ -72,12 +99,6 @@ public class ProductVo implements java.io.Serializable {
 	}
 	public void setStockYn(String stockYn) {
 		this.stockYn = stockYn;
-	}
-	public List<AddOnVo> getAddOns() {
-		return addOns;
-	}
-	public void setAddOns(List<AddOnVo> addOns) {
-		this.addOns = addOns;
 	}
 	public boolean isExpanded() {
 		return isExpanded;
@@ -133,5 +154,13 @@ public class ProductVo implements java.io.Serializable {
 
 	public void setUnavailableMsg(String unavailableMsg) {
 		this.unavailableMsg = unavailableMsg;
+	}
+
+	public List<AddonGroupVo> getAddonGroups() {
+		return addonGroups;
+	}
+
+	public void setAddonGroups(List<AddonGroupVo> addonGroups) {
+		this.addonGroups = addonGroups;
 	}
 }
