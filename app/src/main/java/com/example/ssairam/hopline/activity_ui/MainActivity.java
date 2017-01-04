@@ -2,9 +2,6 @@ package com.example.ssairam.hopline.activity_ui;
 
 
 import android.Manifest;
-import android.app.Application;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +22,6 @@ import android.widget.Toast;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.ssairam.hopline.DataStore;
-import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
@@ -33,6 +29,7 @@ import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
 import com.example.ssairam.hopline.fragments.NewOrderFragment;
 import com.example.ssairam.hopline.fragments.OrderReadyFragment;
 import com.example.ssairam.hopline.fragments.PreparingOrderFragment;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class MainActivity extends BaseActivity implements IncomingOrderFragment.OnFragmentInteractionListener
@@ -45,10 +42,9 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-       takePermission();
+//        takePermission();
 
 
         if (findViewById(R.id.fragment_container) != null) {
@@ -62,9 +58,9 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 //        } else {
 //            Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
 //        }
-
-        Intent intent = new Intent(this, IncommingOrderBackgroudRefresh.class);
-        startService(intent);
+        Log.d("main", FirebaseInstanceId.getInstance().getToken() + " akki");
+//        Intent intent = new Intent(this, IncommingOrderBackgroudRefresh.class);
+//        startService(intent);
 
 
         if (!DataStore.isDataInilitised()) {

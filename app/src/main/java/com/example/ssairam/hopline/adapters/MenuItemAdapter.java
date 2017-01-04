@@ -19,6 +19,9 @@ import com.example.ssairam.hopline.vo.ProductVo;
 /**
  * Created by ssairam on 10/23/2016.
  */
+
+
+// Will not work
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
 
     private final View.OnClickListener customizeButtonListner;
@@ -33,7 +36,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
     public void setCategory(CategoryVo category) {
         this.category = category;
-        for (ProductVo i : category.getProducts()) {
+        for (ProductVo i : category.getProductGroups().get(0).getProducts()) {
             i.setQuantity(0);
         }
         notifyDataSetChanged();
@@ -42,7 +45,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
     public void resetProductCountById(int productId) {
 
 
-        for (ProductVo productVo : category.getProducts()) {
+        for (ProductVo productVo : category.getProductGroups().get(0).getProducts()) {
             if (productVo.getProductId().equals(productId)){
                 productVo.setQuantity(0);
                 break;
@@ -54,7 +57,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
     public void resetAllProductCount() {
 
-        for (ProductVo productVo : category.getProducts()) {
+        for (ProductVo productVo : category.getProductGroups().get(0).getProducts()) {
                 productVo.setQuantity(0);
         }
         notifyDataSetChanged();
@@ -107,7 +110,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        ProductVo productVo = category.getProducts().get(position);
+        ProductVo productVo = null;
 
         holder.itemName.setText(productVo.getName());
         holder.price.setText(String.valueOf(productVo.getPrice()));
@@ -138,7 +141,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return category.getProducts().size();
+        return category.getProductGroups().get(0).getProducts().size();
     }
 
 }

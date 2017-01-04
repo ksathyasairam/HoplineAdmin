@@ -16,6 +16,7 @@ public class DummyModel {
     private OfflineOrderLogTo offlineOrderLogTo;
     private ShopVo shop;
     private Integer shopId;
+    private String firebaseId;
 
     public Stock getStock() {
         return stock;
@@ -71,5 +72,13 @@ public class DummyModel {
 
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+
+    public String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
     }
 }

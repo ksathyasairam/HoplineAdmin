@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 /**
  * Created by root on 23/10/16.
  */
@@ -22,6 +24,7 @@ public class InitialiseDataFromServer extends AsyncTask<String, Void, Boolean> {
 
         try {
             DataStore.loadEverythingFromServer(activity.getApplicationContext());
+            ServerHelper.updateFirebaseId( FirebaseInstanceId.getInstance().getToken(),activity.getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

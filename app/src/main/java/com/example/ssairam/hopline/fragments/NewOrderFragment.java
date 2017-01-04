@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+//This thing wont work until you fix todo.
 public class NewOrderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -146,7 +148,7 @@ public class NewOrderFragment extends Fragment {
 
 
                 int position = (Integer) v.getTag();
-                ProductVo productVo = itemAdapter.getCategory().getProducts().get(position);
+                ProductVo productVo = null; //TODO : fix
 
                 int quantity = productVo.getQuantity();
                 productVo.setQuantity(quantity + 1);
@@ -172,7 +174,8 @@ public class NewOrderFragment extends Fragment {
             public void onClick(View v) {   //decrease quantity
 
                 int position = (Integer) v.getTag();
-                ProductVo productVo = itemAdapter.getCategory().getProducts().get(position);
+//                ProductVo productVo = itemAdapter.getCategory().getProducts().get(position);
+                ProductVo productVo = null; //TODO : fix
 
                 int quantity = productVo.getQuantity();
                 if ((quantity-1) < 0) return;
@@ -204,7 +207,7 @@ public class NewOrderFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 CustomizeDialog dialog = new CustomizeDialog();
                 OrderVo order=cartAdapter.getOrder();
-                ProductVo productVo=itemAdapter.getCategory().getProducts().get(position);
+                ProductVo productVo=null;
                 dialog.setOrderVo(order,productVo);
                 dialog.setListners(new OkOnClickListner());
                 Util.showDialogImmersive(getActivity(),dialog.createDialog());
@@ -278,16 +281,21 @@ public class NewOrderFragment extends Fragment {
             this.okListener = okListener;
 
         }
-        private List<AddOnVo> getaddOns(ProductVo productVo) {
-            List<AddOnVo> addOnVos= new ArrayList<>();
-            List<AddOnVo> addons=productVo.getAddOns();
-            for (AddOnVo addon : addons){
-                if(addon.isSelected()){
-                    addOnVos.add(addon);
-                }
-            }
 
-            return addOnVos;
+
+        //TODO : It will not work
+        private List<AddOnVo> getaddOns(ProductVo productVo) {
+//            List<AddOnVo> addOnVos= new ArrayList<>();
+//            List<AddOnVo> addons=productVo.getAddOns();
+//            for (AddOnVo addon : addons){
+//                if(addon.isSelected()){
+//                    addOnVos.add(addon);
+//                }
+//            }
+//
+//            return addOnVos;
+
+            return null;
         }
 
         public AlertDialog createDialog() {

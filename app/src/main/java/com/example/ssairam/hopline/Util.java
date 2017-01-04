@@ -30,7 +30,6 @@ public class Util {
         List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
 
         localOrderVoCopy.remove(deletedOrder);
-        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
         DataStore.setIncomingOrders(localOrderVoCopy);
     }
 
@@ -39,7 +38,6 @@ public class Util {
         List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
 
         localOrderVoCopy.add(fullyInitializedOrder);
-        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
         DataStore.setIncomingOrders(localOrderVoCopy);
     }
 
@@ -51,7 +49,6 @@ public class Util {
         List<OrderVo> localOrderVoCopy = new ArrayList<OrderVo>(DataStore.getIncomingOrders());
 
         localOrderVoCopy.remove(deletedOrder);
-        IncommingOrderBackgroudRefresh.setLocallyUpdated(true);
         DataStore.setIncomingOrders(localOrderVoCopy);
     }
 //

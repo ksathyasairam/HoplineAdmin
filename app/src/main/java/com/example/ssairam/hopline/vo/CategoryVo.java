@@ -12,7 +12,7 @@ public class CategoryVo implements java.io.Serializable {
 	private String subCategoryName;
 	private int sortId;
 	private String imgUrl;
-	private List<ProductVo> products;
+	private List<ProductGroupVo> productGroups;
 	
 	public Integer getIdcategory() {
 		return idcategory;
@@ -44,12 +44,6 @@ public class CategoryVo implements java.io.Serializable {
 	public void setSortId(int sortId) {
 		this.sortId = sortId;
 	}
-	public List<ProductVo> getProducts() {
-		return products;
-	}
-	public void setProducts(List<ProductVo> products) {
-		this.products = products;
-	}
 	public String getImgUrl() {
 		return imgUrl;
 	}
@@ -58,5 +52,11 @@ public class CategoryVo implements java.io.Serializable {
 	}
 
 
+	public List<ProductGroupVo> getProductGroups() {
+		return productGroups;
+	}
 
+	public void setProductGroups(List<ProductGroupVo> productGroups) {
+		this.productGroups = productGroups;
+	}
 }

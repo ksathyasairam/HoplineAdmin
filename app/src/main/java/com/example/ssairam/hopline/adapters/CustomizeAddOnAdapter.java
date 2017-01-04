@@ -33,14 +33,18 @@ public class CustomizeAddOnAdapter extends BaseAdapter implements CompoundButton
     }
 
 
+    //TODO : fix
     @Override
     public int getCount() {
-        return productVo.getAddOns().size();
+//        return productVo.getAddOns().size();
+        return  0;
     }
 
+//TODO : fix
     @Override
     public Object getItem(int position) {
-        return productVo.getAddOns().get(position);
+//        return productVo.getAddOns().get(position);
+        return null;
     }
 
     @Override
@@ -48,36 +52,38 @@ public class CustomizeAddOnAdapter extends BaseAdapter implements CompoundButton
         return position;
     }
 
+
+    //TODO : fix
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = mInflater.inflate(R.layout.customize_add_on_row, null);//set layout for displaying items
-
-        ((TextView)convertView.findViewById(R.id.addOn_item_name)).setText(productVo.getAddOns().get(position).getName());
-        CheckBox flag=(CheckBox) convertView.findViewById((R.id.checkBoxAddOn));
-
-
-        flag.setChecked(productVo.getAddOns().get(position).isSelected());
-//        Stock stock = new Stock();
-//        stock.setProductId(menu.get(position).getProductId());
+//        convertView = mInflater.inflate(R.layout.customize_add_on_row, null);//set layout for displaying items
 //
-        flag.setTag(position);
-        flag.setOnCheckedChangeListener(this);
+//        ((TextView)convertView.findViewById(R.id.addOn_item_name)).setText(productVo.getAddOns().get(position).getName());
+//        CheckBox flag=(CheckBox) convertView.findViewById((R.id.checkBoxAddOn));
+//
+//
+//        flag.setChecked(productVo.getAddOns().get(position).isSelected());
+////        Stock stock = new Stock();
+////        stock.setProductId(menu.get(position).getProductId());
+////
+//        flag.setTag(position);
+//        flag.setOnCheckedChangeListener(this);
         return convertView;
     }
 
 
 
-
+//TODO: FIX
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        if(isChecked){
-            productVo.getAddOns().get((Integer) buttonView.getTag()).setSelected(isChecked);
-        }
-        if(!isChecked){
-            productVo.getAddOns().get((Integer) buttonView.getTag()).setSelected(isChecked);
-
-        }
+//
+//        if(isChecked){
+//            productVo.getAddOns().get((Integer) buttonView.getTag()).setSelected(isChecked);
+//        }
+//        if(!isChecked){
+//            productVo.getAddOns().get((Integer) buttonView.getTag()).setSelected(isChecked);
+//
+//        }
 
     }
 }

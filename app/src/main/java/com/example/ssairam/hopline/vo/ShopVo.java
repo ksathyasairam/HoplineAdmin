@@ -11,6 +11,7 @@ public class ShopVo implements java.io.Serializable {
 	private String onlinePayYn;
 	private String description;
 
+
 	public double getOurCutOnline() {
 		return ourCutOnline;
 	}
@@ -32,6 +33,8 @@ public class ShopVo implements java.io.Serializable {
 
 	private Boolean success;
 	private String msg;
+
+	private  String firebaseId;
 
 	public ShopVo() {
 	}
@@ -142,5 +145,13 @@ public class ShopVo implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFirebaseId() {
+		return firebaseId;
+	}
+
+	public void setFirebaseId(String firebaseId) {
+		this.firebaseId = firebaseId;
 	}
 }

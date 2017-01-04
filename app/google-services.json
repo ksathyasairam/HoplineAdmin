@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "882547001800",
+    "firebase_url": "https://hopline-1ed31.firebaseio.com",
+    "project_id": "hopline-1ed31",
+    "storage_bucket": "hopline-1ed31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882547001800:android:bc1174ebeacf1182",
+        "android_client_info": {
+          "package_name": "com.example.ssairam.hopline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882547001800-0ereee9j6qkc0stkhoevk299af7rt6hq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ssairam.hopline",
+            "certificate_hash": "8EAC8D0BCF772622A21FDF036825A39D7A0A4637"
+          }
+        },
+        {
+          "client_id": "882547001800-11c6p0664pucguigka8mf8n57scoc0r5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB_VyNsGRl7r_o2pD4WFFvjVLHxrRRzfM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882547001800-11c6p0664pucguigka8mf8n57scoc0r5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

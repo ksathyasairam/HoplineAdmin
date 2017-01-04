@@ -21,6 +21,7 @@ import com.example.ssairam.hopline.ServerHelper;
 import com.example.ssairam.hopline.Util;
 import com.example.ssairam.hopline.adapters.InventoryAdapter;
 import com.example.ssairam.hopline.vo.CategoryVo;
+import com.example.ssairam.hopline.vo.ProductGroupVo;
 import com.example.ssairam.hopline.vo.ProductVo;
 import com.example.ssairam.hopline.vo.Stock;
 
@@ -52,7 +53,10 @@ ListView inventoryList;
 
         for (CategoryVo i :DataStore.getMenuCategories(this.getApplicationContext()))
         {
-            temp.addAll( i.getProducts());
+            for (ProductGroupVo productGroupVo : i.getProductGroups()) {
+
+                temp.addAll( productGroupVo.getProducts());
+            }
         }
         data=temp;
         Collections.sort(data, new LexicographicComparator());

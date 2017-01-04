@@ -185,6 +185,23 @@ public class ServerHelper {
         }
     }
 
+    public static boolean updateFirebaseId(String firebaseId, Context context){
+        try {
+            DummyModel dm = new DummyModel();
+            dm.setFirebaseId(firebaseId);
+            dm.setShopId(MainPrefs.getShopId(context));
+            final String url = BASE_REST_URL + "updateFirebaseId";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Boolean success = restTemplate.postForObject(url, dm, Boolean.class);
+
+            return success;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean logCompleteOfflineOrder(List<OrderVo> orderVos){
 
         OfflineOrderLogTo offlineOrderLogTo = new OfflineOrderLogTo();
