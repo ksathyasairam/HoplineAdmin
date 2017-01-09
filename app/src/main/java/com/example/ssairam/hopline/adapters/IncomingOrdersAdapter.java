@@ -35,6 +35,8 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         this.increaseTimeListner=increaseTimeListner;
         this.decreaseTimeListner=decreaseTimeListner;
 
+
+
     }
 
     public void updateData( List<OrderVo> orderVoList) {
@@ -47,7 +49,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView title, count, customerOrderNo,customerName,customerPhone;
+        public TextView title, count, customerOrderNo,customerName,customerPhone,paid;
         public Button confirm;
         public Button call;
         public Button cancel;
@@ -69,6 +71,7 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
             increaseTime=(ImageButton) itemView.findViewById(R.id.increase_time_button) ;
             decreaseTime=(ImageButton)itemView.findViewById(R.id.decrease_time_button);
             time=(TextView) itemView.findViewById(R.id.time_display);
+            paid=(TextView) itemView.findViewById(R.id.paidYN);
 
 
             productList = (RecyclerView) itemView.findViewById(R.id.incoming_order_product_list);
@@ -94,6 +97,12 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         holder.customerName.setText(order.getUser().getName());
         holder.customerPhone.setTag(position);
         holder.customerPhone.setOnClickListener(new dialListener());
+
+        if ("Y".equals(order.getPaidYn())) {
+            holder.paid.setVisibility(View.VISIBLE);
+        } else {
+            holder.paid.setVisibility(View.GONE);
+        }
 
 
         if (OrderStates.BIG_ORDER_CALL.equals(order.getOrderState()) || OrderStates.DEFAULTER_CALL.equals(order.getOrderState())) {
@@ -154,3 +163,4 @@ public class IncomingOrdersAdapter extends RecyclerView.Adapter<IncomingOrdersAd
         return orderVoList.size();
     }
 }
+

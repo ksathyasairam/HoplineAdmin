@@ -2,6 +2,8 @@ package com.example.ssairam.hopline.activity_ui;
 
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -22,7 +25,9 @@ import android.widget.Toast;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.ssairam.hopline.DataStore;
+import com.example.ssairam.hopline.IncommingOrderBackgroudRefresh;
 import com.example.ssairam.hopline.InitialiseDataFromServer;
+import com.example.ssairam.hopline.M;
 import com.example.ssairam.hopline.R;
 import com.example.ssairam.hopline.fragments.BigOrderPayFragment;
 import com.example.ssairam.hopline.fragments.IncomingOrderFragment;
@@ -44,7 +49,8 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        takePermission();
+        takePermission();
+
 
 
         if (findViewById(R.id.fragment_container) != null) {
@@ -58,12 +64,13 @@ public class MainActivity extends BaseActivity implements IncomingOrderFragment.
 //        } else {
 //            Toast.makeText(this, "Printer connection FAILED! MAKE SURE BLUETOOTH IS TURNED ON AND CONNECTED TO PRINTER", Toast.LENGTH_LONG).show();
 //        }
-        Log.d("main", FirebaseInstanceId.getInstance().getToken() + " akki");
-//        Intent intent = new Intent(this, IncommingOrderBackgroudRefresh.class);
-//        startService(intent);
+        M.log("main", FirebaseInstanceId.getInstance().getToken() + " akki");
+        Intent intent = new Intent(this, IncommingOrderBackgroudRefresh.class);
+        startService(intent);
 
 
         if (!DataStore.isDataInilitised()) {
+            IncommingOrderBackgroudRefresh.setAlarm(this);
             new InitialiseDataFromServer(this) {
 
 

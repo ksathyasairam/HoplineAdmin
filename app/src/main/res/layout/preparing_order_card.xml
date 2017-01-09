@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_weight="0.85"
-                android:layout_height="@dimen/cardheaderdimen_small"
+                android:layout_height="wrap_content"
                 android:background="@drawable/round_bg"
                 android:gravity="center"
                 >
@@ -35,6 +35,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textSize="@dimen/mediumtext"
+                        android:gravity="center"
+                        android:id="@+id/paidYN"
+                        android:text="PAID"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

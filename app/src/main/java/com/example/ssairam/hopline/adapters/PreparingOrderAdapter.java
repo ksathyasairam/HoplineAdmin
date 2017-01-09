@@ -38,7 +38,7 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView customerOrderNo,customerName,customerPhone;
+        public TextView customerOrderNo,customerName,customerPhone, paid;
         public Button buttonOrderReady;
         public Button buttonnotifyUser;
         public RecyclerView productList;
@@ -49,6 +49,7 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
             customerPhone = (TextView) itemView.findViewById(R.id.customer_phone);
             buttonOrderReady=(Button)itemView.findViewById(R.id.button_order_ready);
             buttonnotifyUser=(Button)itemView.findViewById(R.id.button_notify_customer);
+            paid=(TextView) itemView.findViewById(R.id.paidYN);
 
             productList = (RecyclerView) itemView.findViewById(R.id.preparing_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
@@ -78,6 +79,13 @@ public class PreparingOrderAdapter extends RecyclerView.Adapter<PreparingOrderAd
         holder.buttonOrderReady.setOnClickListener(orderReadyListner);
         holder.buttonnotifyUser.setTag(position);
         holder.buttonnotifyUser.setOnClickListener(notifyUserListner);
+
+
+        if ("Y".equals(order.getPaidYn())) {
+            holder.paid.setVisibility(View.VISIBLE);
+        } else {
+            holder.paid.setVisibility(View.GONE);
+        }
 
     }
 

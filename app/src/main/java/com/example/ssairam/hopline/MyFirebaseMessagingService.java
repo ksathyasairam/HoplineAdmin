@@ -47,11 +47,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        sendNotification("Order waiting for your conformation!");
+//        sendNotification("Order waiting for your conformation!");
 
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        refreshIncommingOrder();
+//        refreshIncommingOrder();
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {

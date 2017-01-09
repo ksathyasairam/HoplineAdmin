@@ -42,7 +42,7 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public Button buttonFinalized,buttonUnpicked;
-        public TextView customerOrderNo,customerName,customerPhone;
+        public TextView customerOrderNo,customerName,customerPhone,paid;
 
         public RecyclerView productList;
         public ViewHolder(View itemView) {
@@ -55,6 +55,8 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
             productList = (RecyclerView) itemView.findViewById(R.id.ready_order_product_list);
             RecyclerView.LayoutManager layoutManager= new CustomLinearLayoutManager(itemView.getContext().getApplicationContext());
             productList.setLayoutManager(layoutManager);
+
+            paid=(TextView) itemView.findViewById(R.id.paidYN);
 
 
         }
@@ -98,6 +100,14 @@ public class OrderReadyAdatper extends RecyclerView.Adapter<OrderReadyAdatper.Vi
 
         holder.buttonUnpicked.setTag(position);
         holder.buttonUnpicked.setOnClickListener(unpickedListener);
+
+
+
+        if ("Y".equals(order.getPaidYn())) {
+            holder.paid.setVisibility(View.VISIBLE);
+        } else {
+            holder.paid.setVisibility(View.GONE);
+        }
     }
 
 
